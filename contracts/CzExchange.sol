@@ -18,18 +18,12 @@ contract ProxyRegistry {
 
 contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
 
+
     using SafeMath for uint256;
 
     uint256 public tokenId;
 
-    // address proxyRegistryAddress;
-    // uint256 private _currentTokenId = 0;
-
-    // constructor(string memory _name, string memory _symbol, address _proxyRegistryAddress) ERC721Full(_name, _symbol) public {
-    //     proxyRegistryAddress = _proxyRegistryAddress;
-    // }
-
-
+    string ipfsHash;
 
     constructor(
         string memory _name, 
@@ -47,6 +41,22 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
         _mint(msg.sender, tokenId);
         _setTokenURI(tokenId, _tokenURI);
     }
+
+
+    /**
+     * @dev Post/Upload images to IPFS
+     */
+    function set(string memory x) public {
+        ipfsHash = x;
+    }
+
+    /**
+     * @dev Get uploaded images from IPFS
+     */
+    function get() public view returns (string memory) {
+        return ipfsHash;
+    }
+
 
 
     function checkOwnerAddr(uint256 _tokenId) public returns (address) {
