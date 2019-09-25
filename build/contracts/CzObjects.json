@@ -1,0 +1,413 @@
+{
+  "contractName": "CzObjects",
+  "abi": [],
+  "bytecode": "0x6080604052348015600f57600080fd5b50603580601d6000396000f3fe6080604052600080fdfea165627a7a723058205b7cf2999d94f910a82dff56d7e7579614e4b401c859b086397497f7769886d90029",
+  "deployedBytecode": "0x6080604052600080fdfea165627a7a723058205b7cf2999d94f910a82dff56d7e7579614e4b401c859b086397497f7769886d90029",
+  "sourceMap": "26:221:53:-;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;26:221:53;;;;;;;",
+  "deployedSourceMap": "26:221:53:-;;;;;",
+  "source": "pragma solidity ^0.5.0;\n\n\ncontract CzObjects {\n\n    struct NftTicket {\n        uint256 tokenId;\n        address ownerAddr;\n    }\n\n\n    struct ExampleObject {\n        uint exampleId;\n        string exampleName;\n        address exampleAddr;\n    }\n\n}\n",
+  "sourcePath": "/Users/unomasanori/projects/DEMO_MVP/Devcon5_Hackathon/NFT-based-photo-marketplace/contracts/storage/CzObjects.sol",
+  "ast": {
+    "absolutePath": "/Users/unomasanori/projects/DEMO_MVP/Devcon5_Hackathon/NFT-based-photo-marketplace/contracts/storage/CzObjects.sol",
+    "exportedSymbols": {
+      "CzObjects": [
+        11188
+      ]
+    },
+    "id": 11189,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 11175,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:53"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 11188,
+        "linearizedBaseContracts": [
+          11188
+        ],
+        "name": "CzObjects",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "CzObjects.NftTicket",
+            "id": 11180,
+            "members": [
+              {
+                "constant": false,
+                "id": 11177,
+                "name": "tokenId",
+                "nodeType": "VariableDeclaration",
+                "scope": 11180,
+                "src": "79:15:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 11176,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "79:7:53",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 11179,
+                "name": "ownerAddr",
+                "nodeType": "VariableDeclaration",
+                "scope": 11180,
+                "src": "104:17:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 11178,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "104:7:53",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "NftTicket",
+            "nodeType": "StructDefinition",
+            "scope": 11188,
+            "src": "52:76:53",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "CzObjects.ExampleObject",
+            "id": 11187,
+            "members": [
+              {
+                "constant": false,
+                "id": 11182,
+                "name": "exampleId",
+                "nodeType": "VariableDeclaration",
+                "scope": 11187,
+                "src": "166:14:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 11181,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "166:4:53",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 11184,
+                "name": "exampleName",
+                "nodeType": "VariableDeclaration",
+                "scope": 11187,
+                "src": "190:18:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 11183,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "190:6:53",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 11186,
+                "name": "exampleAddr",
+                "nodeType": "VariableDeclaration",
+                "scope": 11187,
+                "src": "218:19:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 11185,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "218:7:53",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "ExampleObject",
+            "nodeType": "StructDefinition",
+            "scope": 11188,
+            "src": "135:109:53",
+            "visibility": "public"
+          }
+        ],
+        "scope": 11189,
+        "src": "26:221:53"
+      }
+    ],
+    "src": "0:248:53"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/unomasanori/projects/DEMO_MVP/Devcon5_Hackathon/NFT-based-photo-marketplace/contracts/storage/CzObjects.sol",
+    "exportedSymbols": {
+      "CzObjects": [
+        11188
+      ]
+    },
+    "id": 11189,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 11175,
+        "literals": [
+          "solidity",
+          "^",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:23:53"
+      },
+      {
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 11188,
+        "linearizedBaseContracts": [
+          11188
+        ],
+        "name": "CzObjects",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "canonicalName": "CzObjects.NftTicket",
+            "id": 11180,
+            "members": [
+              {
+                "constant": false,
+                "id": 11177,
+                "name": "tokenId",
+                "nodeType": "VariableDeclaration",
+                "scope": 11180,
+                "src": "79:15:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 11176,
+                  "name": "uint256",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "79:7:53",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 11179,
+                "name": "ownerAddr",
+                "nodeType": "VariableDeclaration",
+                "scope": 11180,
+                "src": "104:17:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 11178,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "104:7:53",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "NftTicket",
+            "nodeType": "StructDefinition",
+            "scope": 11188,
+            "src": "52:76:53",
+            "visibility": "public"
+          },
+          {
+            "canonicalName": "CzObjects.ExampleObject",
+            "id": 11187,
+            "members": [
+              {
+                "constant": false,
+                "id": 11182,
+                "name": "exampleId",
+                "nodeType": "VariableDeclaration",
+                "scope": 11187,
+                "src": "166:14:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_uint256",
+                  "typeString": "uint256"
+                },
+                "typeName": {
+                  "id": 11181,
+                  "name": "uint",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "166:4:53",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 11184,
+                "name": "exampleName",
+                "nodeType": "VariableDeclaration",
+                "scope": 11187,
+                "src": "190:18:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_string_storage_ptr",
+                  "typeString": "string"
+                },
+                "typeName": {
+                  "id": 11183,
+                  "name": "string",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "190:6:53",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_storage_ptr",
+                    "typeString": "string"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 11186,
+                "name": "exampleAddr",
+                "nodeType": "VariableDeclaration",
+                "scope": 11187,
+                "src": "218:19:53",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 11185,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "218:7:53",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "value": null,
+                "visibility": "internal"
+              }
+            ],
+            "name": "ExampleObject",
+            "nodeType": "StructDefinition",
+            "scope": 11188,
+            "src": "135:109:53",
+            "visibility": "public"
+          }
+        ],
+        "scope": 11189,
+        "src": "26:221:53"
+      }
+    ],
+    "src": "0:248:53"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.0.1",
+  "updatedAt": "2019-09-25T10:48:05.295Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

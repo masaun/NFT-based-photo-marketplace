@@ -1,0 +1,78 @@
+@import '../../layout/variables.scss';
+.footer {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: $white;
+  border-top: 1px solid #D8D8D8;
+  padding: 25px 100px;
+
+  .brand {
+    display: flex;
+    flex-flow: column nowrap;
+    color: $primary;
+    .created {
+      width: 100%;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      width: 400px;
+      color: $primary;
+
+      img {
+        width: 33px;
+        margin-right: 14px;
+      }
+
+      a {
+        color: $white;
+        margin-top: 4px;
+      }
+
+      span {
+        color: $white;
+        margin-left: 60px;
+        line-height: 30px;
+
+        a {
+          color: $purple-aux;
+        }
+      }
+    }
+
+    .copyright {
+      font-size: 14px;
+      margin-top: 10px;
+      text-align: left;
+      color: rgba(0,0,0, 0.6);
+    }
+  }
+
+  .links {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: flex-start;
+    a {
+      margin: 0 10px;
+    }
+    img {
+      width: 21px;
+    }
+  }
+}
+
+@media only screen and (max-width: $screen-sm-max) {
+
+  .footer {
+    padding: 80px 40px;
+
+    .links {
+      margin-top: 20px;
+      width: 100%;
+    }
+  }
+}

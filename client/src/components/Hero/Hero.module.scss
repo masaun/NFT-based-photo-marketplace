@@ -1,0 +1,101 @@
+@import '../../layout/variables.scss';
+
+.Hero {
+  padding: 60px 20px;
+  width: 100%;
+  color: white;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: space-around;
+  background: linear-gradient(to bottom, #3C4653 , #212830);
+
+  .hwrapper {
+    display: flex;
+    flex-flow: row wrap;
+    max-width: 1180px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .left, .right {
+    display: flex;
+    flex-flow: column nowrap;
+    width: calc(50% - 80px);
+    min-width: 400px;
+    justify-content: flex-end;
+    align-items: flex-start;
+    text-align: left;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 0 20px;
+
+    h1 {
+      font-size: 46px;
+      line-height: 50px;
+      margin-top: 0px;
+      font-weight: 300;
+    }
+
+    h2 {
+      font-size: 1em;
+      line-height: 1.6;
+      font-weight: 500;
+      max-width: 400px;
+      color: #39e6e0;
+    }
+
+    img {
+      width: 92%;
+    }
+  }
+
+  .sellingpoints {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    flex-flow: column nowrap;
+
+    .feature {
+      margin: 6px 0;
+      font-size: 1em;
+      font-weight: 400;
+      opacity: 0.9;
+
+      a {
+        color: $white;
+        font-weight: 600;
+        text-decoration: none;
+
+        &:hover {
+          text-decoration: none;
+          border-bottom: 2px solid #fff;
+        }
+      }
+    }
+  }
+
+  .ctas {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 40px 0 0;
+    justify-content: flex-start;
+
+    .mainLink {
+      text-decoration: none;
+      color: $blue;
+      font-weight: bold;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .Hero .left, .Hero .right {
+    min-width: 92%;
+  }
+}

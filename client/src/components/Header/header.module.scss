@@ -1,0 +1,92 @@
+@import '../../layout/variables.scss';
+
+.header {
+  width: 100%;
+  background: #3C4653;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  height: auto;
+  display: flex;
+  justify-content: center;
+
+  nav {
+    width: 100%;
+    max-width: 1180px;
+    padding: 0 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .brand {
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: flex-start;
+      align-items: center;
+      width: 300px;
+
+      img {
+        width: 120px;
+        margin-right: 14px;
+      }
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-flow: row nowrap;
+      height: 60px;
+      list-style: none;
+
+      li {
+        padding: 15px;
+        margin: 0;
+        margin-right: 60px;
+        text-decoration: none;
+        a {
+          color: $white;
+          text-transform: uppercase;
+          font-size: 14px;
+          letter-spacing: 2px;
+          text-decoration: none;
+          font-family: 'Roboto Mono', monospace;
+          letter-spacing: 0.8px;
+          opacity: 0.8;
+
+          &:hover {
+            opacity: 1;
+            text-decoration: none;
+            border-bottom: 2px solid $white;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: $screen-sm-max) {
+
+  .header nav ul .brand {
+    width: 100%;
+    margin-right: 0px;
+    justify-content: flex-start;
+  }
+}
+@media only screen and (max-width: $screen-sm-min) {
+  .header {
+
+    nav {
+      flex-flow: row wrap;
+      margin-top: 10px;
+    }
+
+    nav ul {
+      flex-flow: row wrap;
+      height: auto;
+      li {
+        width: 100%;
+        text-align: left;
+        padding: 3px 0;
+      }
+    }
+  }
+}

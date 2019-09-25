@@ -1,0 +1,36 @@
+import { TransactionReceipt } from 'web3/types';
+import { Eth, Block, Transaction } from 'web3-eth';
+import { Contract } from 'web3-eth-contract';
+export default class ZWeb3 {
+    static provider: any;
+    static initialize(provider: any): void;
+    static web3(): any;
+    static sha3(value: string): string;
+    static isAddress(address: string): boolean;
+    static eth(): Eth;
+    static version(): string;
+    static contract(abi: any, atAddress?: string, options?: any): Contract;
+    static accounts(): Promise<string[]>;
+    static defaultAccount(): Promise<string>;
+    static toChecksumAddress(address: string): string;
+    static estimateGas(params: any): Promise<number>;
+    static getBalance(address: string): Promise<string>;
+    static getCode(address: string): Promise<string>;
+    static hasBytecode(address: any): Promise<boolean>;
+    static getStorageAt(address: string, position: string): Promise<string>;
+    static getNode(): Promise<string>;
+    static isGanacheNode(): Promise<boolean>;
+    static getBlock(filter: string | number): Promise<Block>;
+    static getLatestBlock(): Promise<Block>;
+    static getLatestBlockNumber(): Promise<number>;
+    static isMainnet(): Promise<boolean>;
+    static getNetwork(): Promise<number>;
+    static getNetworkName(): Promise<string>;
+    static sendTransaction(params: any): Promise<TransactionReceipt>;
+    static sendTransactionWithoutReceipt(params: any): Promise<string>;
+    static getTransaction(txHash: string): Promise<Transaction>;
+    static getTransactionReceipt(txHash: string): Promise<TransactionReceipt>;
+    static getTransactionReceiptWithTimeout(tx: string, timeout: number): Promise<TransactionReceipt>;
+    private static _getTransactionReceiptWithTimeout;
+    private static _tryGettingTransactionReceipt;
+}

@@ -1,0 +1,78 @@
+@import './layout/variables.scss';
+
+.App {
+  text-align: center;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+code {
+  background: #fefefe;
+  box-shadow: 0 0px 2px 0px #ccc;
+  padding: 8px 16px;
+  font-size: 14px;
+  width: 100%;
+  font-family: source-code-pro,Menlo,Monaco,Consolas,Courier New, monospace;
+}
+
+.wrapper {
+  min-height: 80vh;
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.setup, .contracts {
+  width: 100%;
+  padding: 40px 0;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+
+  .notice {
+    margin: 15px 0;
+
+    p {
+      padding: 10px;
+      background: #ededed;
+      box-shadow: 0 1px 1px 2px #ccc;
+      border: 1px solid #ddd;
+      color: #444;
+    }
+  }
+
+  .widgets {
+    display: flex;
+    max-width: 1200px;
+    width: 100%;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px 0;
+  }
+}
+
+.loader {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 40px 0;
+  h3 {
+    margin-top: 30px;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
