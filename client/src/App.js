@@ -4,6 +4,8 @@ import Header from "./components/Header/index.js";
 import Footer from "./components/Footer/index.js";
 import Hero from "./components/Hero/index.js";
 import Web3Info from "./components/Web3Info/index.js";
+import ipfs from './components/ipfs/ipfsApi.js'
+
 import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image } from 'rimble-ui';
 import { zeppelinSolidityHotLoaderOptions } from '../config/webpack';
 import styles from './App.module.scss';
@@ -24,10 +26,17 @@ class App extends Component {
       web3: null,
       accounts: null,
       route: window.location.pathname.replace("/", ""),
+
+      /////// Ipfs Upload
+      buffer: null,
+      ipfsHash: ''
     };
 
     this.getTestData = this.getTestData.bind(this);
 
+    /////// Ipfs Upload
+    this.captureFile = this.captureFile.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
 
@@ -60,6 +69,37 @@ class App extends Component {
 
   }
 
+
+  ///////--------------------- Functions of ipfsUpload ---------------------------  
+  captureFile(event) {
+    event.preventDefault()
+    const file = event.target.files[0]
+    
+    const reader = new window.FileReader()
+    reader.readAsArrayBuffer(file)  // Read bufffered file
+
+    // Callback
+    reader.onloadend = () => {
+      this.setState({ buffer: Buffer(reader.result) })
+      console.log('=== buffer ===', this.state.buffer)
+    }
+  }
+  
+  onSubmit(event) {
+    event.preventDefault()
+
+    ipfs.files.add(this.state.buffer, (error, result) => {
+      // In case of fail to upload to IPFS
+      if (error) {
+        console.error(error)
+        return
+      }
+
+      // In case of successful to upload to IPFS
+      this.setState({ ipfsHash: result[0].hash })
+      console.log('=== ipfsHash ===', this.state.ipfsHash)
+    })
+  }  
 
 
 
@@ -217,8 +257,14 @@ class App extends Component {
       )}
       {this.state.web3 && this.state.cz_exchange && (
         <div className={styles.contracts}>
-          <h2>Photo Upload to IPFS</h2>
+          <h2>Photo Upload to IPFS</h2>          
+          <img src={ `https://ipfs.io/ipfs/${this.state.ipfsHash}` } alt="" />
 
+          <form onSubmit={this.onSubmit}>
+            <input type='file' onChange={this.captureFile} />
+            <input type='submit' />
+          </form>
+          
           <hr />
 
 
