@@ -1,0 +1,13 @@
+node_modules
+keys.json
+*.log
+*.tmp
+*.swp
+*.lock
+.node*
+config/db.json
+database/*
+config/instance/*
+!database/.keep
+!config/instance/.keep
+!yarn.lock
