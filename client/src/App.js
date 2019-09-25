@@ -88,6 +88,8 @@ class App extends Component {
   }
   
   onSubmit(event) {
+    const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+
     event.preventDefault()
 
     ipfs.files.add(this.state.buffer, (error, result) => {
@@ -100,24 +102,37 @@ class App extends Component {
       // In case of successful to upload to IPFS
       this.setState({ ipfsHash: result[0].hash })
       console.log('=== ipfsHash ===', this.state.ipfsHash)
+
+      const color = this.state.ipfsHash
+
+      // Append to array of NFT
+      this.state.cz_exchange.methods.mint(color).send({ from: accounts[0] })
+      .once('receipt', (recipt) => {
+        this.setState({
+          colors: [...this.state.colors, color]
+        })
+      })
+
+      console.log('=== colors ===', this.state.colors)
+
     })
   }  
 
 
   ///////--------------------- Functions of NFT ---------------------------  
   // mint button in form
-  mint = (color) => {
-    const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+  // mint = (color) => {
+  //   const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
 
-    console.log('=== color ===', color)
+  //   console.log('=== color ===', color)
     
-    this.state.cz_exchange.methods.mint(color).send({ from: accounts[0] })
-    .once('receipt', (recipt) => {
-      this.setState({
-        colors: [...this.state.colors, color]
-      })
-    })
-  }
+  //   this.state.cz_exchange.methods.mint(color).send({ from: accounts[0] })
+  //   .once('receipt', (recipt) => {
+  //     this.setState({
+  //       colors: [...this.state.colors, color]
+  //     })
+  //   })
+  // }
 
 
 
@@ -303,27 +318,6 @@ class App extends Component {
 
           <hr />
 
-          <form onSubmit={(event) => {
-              event.preventDefault()
-              const color = this.color.value
-              this.mint(color)
-          }}>
-            <input
-              type='text'
-              className='form-control mb-1'
-              placeholder='e.g. #FFFFFF'
-              ref={(input) => { this.color = input }}
-            />
-            <input
-              type='submit'
-              className='btn btn-block btn-primary'
-              value='MINT'
-            />
-          </form>
-          
-          <hr />
-
-
           <h2>NFT based Photo MarketPlace</h2>
 
           <div className={styles.widgets}>
@@ -441,16 +435,32 @@ class App extends Component {
 
           <hr />
 
-          <div className="">
-            { this.state.colors.map((color, key) => {
-              return (
-                <div key={key} className="">
-                  <div className={styles.colorRadius} style={{ backgroundColor: color }}></div>
-                  <div>{ color }</div>
+          { this.state.colors.map((color, key) => {
+            return (
+              <div key={key} className="">
+                <div className={styles.widgets}>
+                  <Card width={'30%'} bg="primary">
+
+                    <h4>Photo #{ key + 1 }</h4>
+
+                    <Image
+                      alt="random unsplash image"
+                      borderRadius={8}
+                      height="100%"
+                      maxWidth='100%'
+                      src={ `https://ipfs.io/ipfs/${color}` }
+                    />
+
+                    <span style={{ padding: "20px" }}></span>
+
+                    <br />
+
+                    <Button size={'small'} onClick={this.getTestData}>Buy</Button>
+                  </Card>
                 </div>
-              )
-            }) }
-          </div>
+              </div>
+            )
+          }) }
 
 
         </div>
