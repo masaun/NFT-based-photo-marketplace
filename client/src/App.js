@@ -112,30 +112,12 @@ class App extends Component {
           colors: [...this.state.colors, color]
         })
       })
-
       console.log('=== colors ===', this.state.colors)
-
     })
   }  
 
 
-  ///////--------------------- Functions of NFT ---------------------------  
-  // mint button in form
-  // mint = (color) => {
-  //   const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
-
-  //   console.log('=== color ===', color)
-    
-  //   this.state.cz_exchange.methods.mint(color).send({ from: accounts[0] })
-  //   .once('receipt', (recipt) => {
-  //     this.setState({
-  //       colors: [...this.state.colors, color]
-  //     })
-  //   })
-  // }
-
-
-
+ 
   //////////////////////////////////// 
   ///// Ganache
   ////////////////////////////////////
@@ -227,7 +209,7 @@ class App extends Component {
 
 
         //---------------- NFT ------------------
-        const { cz_exchange, eth_price } = this.state;
+        const { cz_exchange } = this.state;
 
         const totalSupply = await cz_exchange.methods.totalSupply().call()
         this.setState({ totalSupply: totalSupply })
@@ -308,8 +290,7 @@ class App extends Component {
       )}
       {this.state.web3 && this.state.cz_exchange && (
         <div className={styles.contracts}>
-          <h2>Photo Upload to IPFS</h2>          
-          <img src={ `https://ipfs.io/ipfs/${this.state.ipfsHash}` } alt="" />
+          <h2>Photo Upload to IPFS</h2>
 
           <form onSubmit={this.onSubmit}>
             <input type='file' onChange={this.captureFile} />
@@ -319,121 +300,6 @@ class App extends Component {
           <hr />
 
           <h2>NFT based Photo MarketPlace</h2>
-
-          <div className={styles.widgets}>
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #1</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src={ `https://ipfs.io/ipfs/${this.state.ipfsHash}` }
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-   
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #2</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #3</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-          </div>
-
-
-          <div className={styles.widgets}>
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #4</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-   
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #5</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #6</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-          </div>
-
-          <hr />
 
           { this.state.colors.map((color, key) => {
             return (
