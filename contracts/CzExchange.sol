@@ -21,10 +21,16 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
 
     using SafeMath for uint256;
 
-    uint256 public tokenId;
-
+    /*+ 
+     * @dev Global variable
+     */ 
+    uint256 tokenId;
     string ipfsHash;
 
+
+    /**
+     * @dev Constructor
+     */ 
     constructor(
         string memory _name, 
         string memory _symbol,
@@ -34,9 +40,7 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
         ERC721Full(_name, _symbol)
         public
     {
-        /**
-         * @dev Create seed-data (Connect ownerAddress with tokenId == 1) in constructor
-         */ 
+        // Create seed-data (Connect ownerAddress with tokenId == 1) in constructor 
         tokenId = _tokenId;
         _mint(msg.sender, tokenId);
         _setTokenURI(tokenId, _tokenURI);
