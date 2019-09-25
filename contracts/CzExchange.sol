@@ -9,37 +9,41 @@ import './openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol';
 import './openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
 
-contract OwnableDelegateProxy {}
-
-contract ProxyRegistry {
-    mapping(address => OwnableDelegateProxy) public proxies;
-}
-
-
 contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
 
 
     using SafeMath for uint256;
 
-    uint256 public tokenId;
-
+    /*+ 
+     * @dev Global variable
+     */ 
+    uint256 tokenId;
     string ipfsHash;
+    string[] public colors;  // Manage all token by using array
 
-    constructor(
-        string memory _name, 
-        string memory _symbol,
-        uint _tokenId,
-        string memory _tokenURI
-    )
-        ERC721Full(_name, _symbol)
-        public
-    {
-        /**
-         * @dev Create seed-data (Connect ownerAddress with tokenId == 1) in constructor
-         */ 
-        tokenId = _tokenId;
-        _mint(msg.sender, tokenId);
-        _setTokenURI(tokenId, _tokenURI);
+    /**
+     * @dev Constructor
+     */ 
+    mapping (string => bool) _colorExists;
+    
+    
+    constructor() public ERC721Full("Photo", "PHT") {}
+
+
+    /** 
+     * @dev mint function is that create a new token.
+     */
+    function mint(string memory _color) public {
+        // Check value is empty
+        require(!_colorExists[_color]);
+
+        // Require unique color
+        uint _id = colors.push(_color);
+        _mint(msg.sender, _id); 
+        _colorExists[_color] = true; // if it mint new token, it assign true
+
+        
+        // Color - track it
     }
 
 
@@ -59,6 +63,22 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /***
+     * @dev Old codes
+     */
     function checkOwnerAddr(uint256 _tokenId) public returns (address) {
         // This ownnerOf() function is inherited ERC721.sol
         return ownerOf(_tokenId);

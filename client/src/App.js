@@ -8,8 +8,9 @@ import ipfs from './components/ipfs/ipfsApi.js'
 
 import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image } from 'rimble-ui';
 import { zeppelinSolidityHotLoaderOptions } from '../config/webpack';
-import styles from './App.module.scss';
 
+import styles from './App.module.scss';
+//import './App.css';
 
 import ethPriceContract from '../../contracts/oracle/EthPrice.sol';
 import { waitForEvent } from '../../test/1_test_utils.js';
@@ -29,7 +30,12 @@ class App extends Component {
 
       /////// Ipfs Upload
       buffer: null,
-      ipfsHash: ''
+      ipfsHash: '',
+
+      /////// NFT
+      cz_exchange: null, // Instance of contract
+      totalSupply: 0,
+      colors: []         // Array for NFT
     };
 
     this.getTestData = this.getTestData.bind(this);
@@ -38,10 +44,6 @@ class App extends Component {
     this.captureFile = this.captureFile.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
-
-
-  ///////--------------------- Functions of CzExchange ---------------------------
-
 
 
   ///////--------------------- Functions of testFunc ---------------------------  
@@ -100,6 +102,22 @@ class App extends Component {
       console.log('=== ipfsHash ===', this.state.ipfsHash)
     })
   }  
+
+
+  ///////--------------------- Functions of NFT ---------------------------  
+  // mint button in form
+  mint = (color) => {
+    const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+
+    console.log('=== color ===', color)
+    
+    this.state.cz_exchange.methods.mint(color).send({ from: accounts[0] })
+    .once('receipt', (recipt) => {
+      this.setState({
+        colors: [...this.state.colors, color]
+      })
+    })
+  }
 
 
 
@@ -191,6 +209,24 @@ class App extends Component {
         else {
           this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled, isMetaMask });
         }
+
+
+        //---------------- NFT ------------------
+        const { cz_exchange, eth_price } = this.state;
+
+        const totalSupply = await cz_exchange.methods.totalSupply().call()
+        this.setState({ totalSupply: totalSupply })
+
+        // Load Colors
+        for (var i=1; i<=totalSupply; i++) {
+          const color = await cz_exchange.methods.colors(i - 1).call()
+          this.setState({
+            colors: [...this.state.colors, color]
+          })
+        }
+        console.log('======== colors ========', this.state.colors)
+
+
       }
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -264,6 +300,26 @@ class App extends Component {
             <input type='file' onChange={this.captureFile} />
             <input type='submit' />
           </form>
+
+          <hr />
+
+          <form onSubmit={(event) => {
+              event.preventDefault()
+              const color = this.color.value
+              this.mint(color)
+          }}>
+            <input
+              type='text'
+              className='form-control mb-1'
+              placeholder='e.g. #FFFFFF'
+              ref={(input) => { this.color = input }}
+            />
+            <input
+              type='submit'
+              className='btn btn-block btn-primary'
+              value='MINT'
+            />
+          </form>
           
           <hr />
 
@@ -279,7 +335,7 @@ class App extends Component {
                 borderRadius={8}
                 height="auto"
                 maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
+                src={ `https://ipfs.io/ipfs/${this.state.ipfsHash}` }
               />
 
               <span style={{ padding: "20px" }}></span>
@@ -381,6 +437,19 @@ class App extends Component {
 
               <Button size={'small'} onClick={this.getTestData}>Buy</Button>
             </Card>
+          </div>
+
+          <hr />
+
+          <div className="">
+            { this.state.colors.map((color, key) => {
+              return (
+                <div key={key} className="">
+                  <div className={styles.colorRadius} style={{ backgroundColor: color }}></div>
+                  <div>{ color }</div>
+                </div>
+              )
+            }) }
           </div>
 
 
