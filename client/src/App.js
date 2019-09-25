@@ -279,7 +279,7 @@ class App extends Component {
                 borderRadius={8}
                 height="auto"
                 maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
+                src={ `https://ipfs.io/ipfs/${this.state.ipfsHash}` }
               />
 
               <span style={{ padding: "20px" }}></span>
