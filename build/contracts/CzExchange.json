@@ -4089,12 +4089,12 @@
         }
       },
       "links": {},
-      "address": "0x7Bb7C71a521851f79A5641944E9e814851173885",
-      "transactionHash": "0x3d4805f1593708c6034e0a9705a0b9086ae40c783a49bb3f417a499d18911b16"
+      "address": "0xBE356F21B6D28D372a306765f84605A6beaA1D62",
+      "transactionHash": "0xab93bc921e06fee8d81c5882305ed6e497ba29f4b110465f703737bfc0fd2e70"
     }
   },
   "schemaVersion": "3.0.1",
-  "updatedAt": "2019-09-25T10:50:59.375Z",
+  "updatedAt": "2019-09-25T11:43:15.377Z",
   "devdoc": {
     "methods": {
       "approve(address,uint256)": {
