@@ -217,12 +217,16 @@ class App extends Component {
       )}
       {this.state.web3 && this.state.cz_exchange && (
         <div className={styles.contracts}>
+          <h2>Photo Upload to IPFS</h2>
 
-          <h2>Boston Proof Oracler</h2>
+          <hr />
+
+
+          <h2>NFT based Photo MarketPlace</h2>
 
           <div className={styles.widgets}>
             <Card width={'30%'} bg="primary">
-              <h4>Goods #1</h4>
+              <h4>Photo #1</h4>
 
               <Image
                 alt="random unsplash image"
@@ -240,7 +244,7 @@ class App extends Component {
             </Card>
    
             <Card width={'30%'} bg="primary">
-              <h4>Goods #2</h4>
+              <h4>Photo #2</h4>
 
               <Image
                 alt="random unsplash image"
@@ -258,7 +262,7 @@ class App extends Component {
             </Card>
 
             <Card width={'30%'} bg="primary">
-              <h4>Goods #3</h4>
+              <h4>Photo #3</h4>
 
               <Image
                 alt="random unsplash image"
@@ -279,7 +283,7 @@ class App extends Component {
 
           <div className={styles.widgets}>
             <Card width={'30%'} bg="primary">
-              <h4>Goods #4</h4>
+              <h4>Photo #4</h4>
 
               <Image
                 alt="random unsplash image"
@@ -297,7 +301,7 @@ class App extends Component {
             </Card>
    
             <Card width={'30%'} bg="primary">
-              <h4>Goods #5</h4>
+              <h4>Photo #5</h4>
 
               <Image
                 alt="random unsplash image"
@@ -315,7 +319,7 @@ class App extends Component {
             </Card>
 
             <Card width={'30%'} bg="primary">
-              <h4>Goods #6</h4>
+              <h4>Photo #6</h4>
 
               <Image
                 alt="random unsplash image"
