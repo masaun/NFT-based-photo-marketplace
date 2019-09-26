@@ -3,9 +3,11 @@ pragma solidity ^0.5.0;
 
 contract CzObjects {
 
-    struct NftTicket {
+    struct Photo {
         uint256 tokenId;
-        address ownerAddr;
+        address curretOwnerAddr;
+        string ipfsHash;
+        uint256 reputation;
     }
 
 
