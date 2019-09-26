@@ -50,6 +50,8 @@ class App extends Component {
   getTestData = async () => {
 
     const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+    console.log('=== accounts[0] ===', accounts[0]);      // Debug
+
 
     const { events: websocketsEvents } = new web3.eth.Contract(
       abi,
@@ -328,6 +330,14 @@ class App extends Component {
                     <br />
 
                     <Button size={'small'} onClick={this.getTestData}>Buy</Button>
+
+                    <span style={{ padding: "5px" }}></span>
+
+                    <Button size={'small'} onClick={this.getTestData}>Rep</Button> 
+
+                    <span style={{ padding: "2px" }}></span>
+
+                    <p>Reputation Count: 1</p>
                   </Card>
                 </div>
               </div>
