@@ -57,10 +57,10 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
 
 
     /** 
-     * @dev rep function is that reputation
+     * @dev reputation function is that gives reputation to user who posted photo.
      */
-    function buy(address from, address to, uint256 tokenId) public returns (bool) {
-        transferFrom(from, to, tokenId);
+    function reputation(address from, address to, uint256 tokenId) public returns (bool) {
+        reputationCount++;
 
         return true;
     }
