@@ -11,7 +11,6 @@ import './openzeppelin-solidity/contracts/ownership/Ownable.sol';
 
 contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
 
-
     using SafeMath for uint256;
 
     /*+ 
@@ -47,6 +46,27 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
     }
 
 
+    /** 
+     * @dev buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
+     */
+    function buy(address from, address to, uint256 tokenId) public returns (bool) {
+        transferFrom(from, to, tokenId);
+
+        return true;
+    }
+
+
+    /** 
+     * @dev reputation function is that gives reputation to user who posted photo.
+     */
+    function reputation(address from, address to, uint256 tokenId) public returns (bool) {
+        reputationCount++;
+
+        return true;
+    }
+    
+
+
     /**
      * @dev Post/Upload images to IPFS
      */
@@ -60,6 +80,7 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
     function get() public view returns (string memory) {
         return ipfsHash;
     }
+
 
 
 

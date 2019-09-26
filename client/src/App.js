@@ -50,11 +50,21 @@ class App extends Component {
   getTestData = async () => {
 
     const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+    console.log('=== accounts[0] ===', accounts[0]);      // Debug
+
 
     const { events: websocketsEvents } = new web3.eth.Contract(
       abi,
       address
     )
+
+
+    let _from = accounts[0]
+    let _to = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
+    let _tokenId = 1
+    const response_buy = await cz_exchange.methods.buy(_from, _to, _tokenId).send({ from: accounts[0] })
+    console.log('=== response of buy function ===', response_buy);      // Debug
+
 
     const response_1 = await cz_exchange.methods.testFunc().send({ from: accounts[0] })
     console.log('=== response of testFunc function ===', response_1);      // Debug
@@ -67,8 +77,7 @@ class App extends Component {
     await callProvableAndWaitForResult()
 
     const resultFromContract = await eth_price.methods.ethPriceCents().call()
-    console.log('=== response of fetchEthPriceViaProvable function ===', resultFromContract);    
-
+    console.log('=== response of fetchEthPriceViaProvable function ===', resultFromContract);        
   }
 
 
@@ -88,6 +97,8 @@ class App extends Component {
   }
   
   onSubmit(event) {
+    const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+
     event.preventDefault()
 
     ipfs.files.add(this.state.buffer, (error, result) => {
@@ -100,27 +111,22 @@ class App extends Component {
       // In case of successful to upload to IPFS
       this.setState({ ipfsHash: result[0].hash })
       console.log('=== ipfsHash ===', this.state.ipfsHash)
+
+      const color = this.state.ipfsHash
+
+      // Append to array of NFT
+      this.state.cz_exchange.methods.mint(color).send({ from: accounts[0] })
+      .once('receipt', (recipt) => {
+        this.setState({
+          colors: [...this.state.colors, color]
+        })
+      })
+      console.log('=== colors ===', this.state.colors)
     })
   }  
 
 
-  ///////--------------------- Functions of NFT ---------------------------  
-  // mint button in form
-  mint = (color) => {
-    const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
-
-    console.log('=== color ===', color)
-    
-    this.state.cz_exchange.methods.mint(color).send({ from: accounts[0] })
-    .once('receipt', (recipt) => {
-      this.setState({
-        colors: [...this.state.colors, color]
-      })
-    })
-  }
-
-
-
+ 
   //////////////////////////////////// 
   ///// Ganache
   ////////////////////////////////////
@@ -141,8 +147,8 @@ class App extends Component {
     let EthPrice = {};
 
     try {
-      CzExchange = require("../../build/contracts/CzExchange.json");              // Load ABI of contract of CzExchange
-      EthPrice = require("../../build/contracts/EthPrice.json");  // Load ABI of contract of EthPrice
+      CzExchange = require("../../build/contracts/CzExchange.json"); // Load ABI of contract of CzExchange
+      EthPrice = require("../../build/contracts/EthPrice.json");     // Load ABI of contract of EthPrice
     } catch (e) {
       console.log(e);
     }
@@ -211,8 +217,8 @@ class App extends Component {
         }
 
 
-        //---------------- NFT ------------------
-        const { cz_exchange, eth_price } = this.state;
+        //---------------- NFT（Always load listed NFT data）------------------
+        const { cz_exchange } = this.state;
 
         const totalSupply = await cz_exchange.methods.totalSupply().call()
         this.setState({ totalSupply: totalSupply })
@@ -225,7 +231,6 @@ class App extends Component {
           })
         }
         console.log('======== colors ========', this.state.colors)
-
 
       }
     } catch (error) {
@@ -293,8 +298,7 @@ class App extends Component {
       )}
       {this.state.web3 && this.state.cz_exchange && (
         <div className={styles.contracts}>
-          <h2>Photo Upload to IPFS</h2>          
-          <img src={ `https://ipfs.io/ipfs/${this.state.ipfsHash}` } alt="" />
+          <h2>Photo Upload to IPFS</h2>
 
           <form onSubmit={this.onSubmit}>
             <input type='file' onChange={this.captureFile} />
@@ -303,154 +307,42 @@ class App extends Component {
 
           <hr />
 
-          <form onSubmit={(event) => {
-              event.preventDefault()
-              const color = this.color.value
-              this.mint(color)
-          }}>
-            <input
-              type='text'
-              className='form-control mb-1'
-              placeholder='e.g. #FFFFFF'
-              ref={(input) => { this.color = input }}
-            />
-            <input
-              type='submit'
-              className='btn btn-block btn-primary'
-              value='MINT'
-            />
-          </form>
-          
-          <hr />
-
-
           <h2>NFT based Photo MarketPlace</h2>
 
-          <div className={styles.widgets}>
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #1</h4>
+          { this.state.colors.map((color, key) => {
+            return (
+              <div key={key} className="">
+                <div className={styles.widgets}>
+                  <Card width={'30%'} bg="primary">
 
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src={ `https://ipfs.io/ipfs/${this.state.ipfsHash}` }
-              />
+                    <h4>Photo #{ key + 1 }</h4>
 
-              <span style={{ padding: "20px" }}></span>
+                    <Image
+                      alt="random unsplash image"
+                      borderRadius={8}
+                      height="100%"
+                      maxWidth='100%'
+                      src={ `https://ipfs.io/ipfs/${color}` }
+                    />
 
-              <br />
+                    <span style={{ padding: "20px" }}></span>
 
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-   
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #2</h4>
+                    <br />
 
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
+                    <Button size={'small'} onClick={this.getTestData}>Buy</Button>
 
-              <span style={{ padding: "20px" }}></span>
+                    <span style={{ padding: "5px" }}></span>
 
-              <br />
+                    <Button size={'small'} onClick={this.getTestData}>Rep</Button> 
 
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
+                    <span style={{ padding: "2px" }}></span>
 
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #3</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-          </div>
-
-
-          <div className={styles.widgets}>
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #4</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-   
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #5</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-
-            <Card width={'30%'} bg="primary">
-              <h4>Photo #6</h4>
-
-              <Image
-                alt="random unsplash image"
-                borderRadius={8}
-                height="auto"
-                maxWidth='100%'
-                src="https://source.unsplash.com/random/1280x720"
-              />
-
-              <span style={{ padding: "20px" }}></span>
-
-              <br />
-
-              <Button size={'small'} onClick={this.getTestData}>Buy</Button>
-            </Card>
-          </div>
-
-          <hr />
-
-          <div className="">
-            { this.state.colors.map((color, key) => {
-              return (
-                <div key={key} className="">
-                  <div className={styles.colorRadius} style={{ backgroundColor: color }}></div>
-                  <div>{ color }</div>
+                    <p>Reputation Count: 1</p>
+                  </Card>
                 </div>
-              )
-            }) }
-          </div>
+              </div>
+            )
+          }) }
 
 
         </div>
