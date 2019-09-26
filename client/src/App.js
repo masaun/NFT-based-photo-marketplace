@@ -56,6 +56,14 @@ class App extends Component {
       address
     )
 
+
+    let _from = accounts[0]
+    let _to = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
+    let _tokenId = 1
+    const response_buy = await cz_exchange.methods.buy(_from, _to, _tokenId).send({ from: accounts[0] })
+    console.log('=== response of buy function ===', response_buy);      // Debug
+
+
     const response_1 = await cz_exchange.methods.testFunc().send({ from: accounts[0] })
     console.log('=== response of testFunc function ===', response_1);      // Debug
 
@@ -67,8 +75,7 @@ class App extends Component {
     await callProvableAndWaitForResult()
 
     const resultFromContract = await eth_price.methods.ethPriceCents().call()
-    console.log('=== response of fetchEthPriceViaProvable function ===', resultFromContract);    
-
+    console.log('=== response of fetchEthPriceViaProvable function ===', resultFromContract);        
   }
 
 
@@ -138,8 +145,8 @@ class App extends Component {
     let EthPrice = {};
 
     try {
-      CzExchange = require("../../build/contracts/CzExchange.json");              // Load ABI of contract of CzExchange
-      EthPrice = require("../../build/contracts/EthPrice.json");  // Load ABI of contract of EthPrice
+      CzExchange = require("../../build/contracts/CzExchange.json"); // Load ABI of contract of CzExchange
+      EthPrice = require("../../build/contracts/EthPrice.json");     // Load ABI of contract of EthPrice
     } catch (e) {
       console.log(e);
     }
@@ -208,7 +215,7 @@ class App extends Component {
         }
 
 
-        //---------------- NFT ------------------
+        //---------------- NFT（Always load listed NFT data）------------------
         const { cz_exchange } = this.state;
 
         const totalSupply = await cz_exchange.methods.totalSupply().call()
@@ -222,7 +229,6 @@ class App extends Component {
           })
         }
         console.log('======== colors ========', this.state.colors)
-
 
       }
     } catch (error) {
