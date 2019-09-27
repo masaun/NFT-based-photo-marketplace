@@ -10,6 +10,9 @@ import "./CzEvents.sol";
 // shared storage
 contract CzStorage is CzObjects, CzEvents, Ownable {
 
+    Photo[] public photos;
+    
+
     mapping (uint => ExampleObject) examples;
 
 }
