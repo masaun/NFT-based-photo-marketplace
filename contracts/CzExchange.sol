@@ -70,8 +70,8 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
      */
     function reputation(address from, address to, uint256 tokenId) public returns (uint256, uint256) {
 
-        Photo memory photo = photos[tokenId];
-        photo.reputation = photo.reputation++;
+        Photo storage photo = photos[tokenId];
+        photo.reputation = photo.reputation + 1;
 
         emit AddReputation(tokenId, photo.reputation);
 
