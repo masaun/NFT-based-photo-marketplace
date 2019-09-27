@@ -39,10 +39,23 @@ class App extends Component {
     };
 
     this.getTestData = this.getTestData.bind(this);
+    //this.addReputation = this.addReputaion.bind(this);
 
     /////// Ipfs Upload
     this.captureFile = this.captureFile.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+  }
+
+
+  ///////--------------------- Functions of reputation ---------------------------
+  addReputation = async () => {
+    const { accounts, cz_exchange } = this.state;
+
+    let _from2 = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
+    let _to2 = accounts[0]
+    let _tokenId2 = 1
+    const response_buy = await cz_exchange.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
+    console.log('=== response of reputation function ===', response_buy);      // Debug
   }
 
 
@@ -64,6 +77,13 @@ class App extends Component {
     let _tokenId = 1
     const response_buy = await cz_exchange.methods.buy(_from, _to, _tokenId).send({ from: accounts[0] })
     console.log('=== response of buy function ===', response_buy);      // Debug
+
+
+    let _from2 = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
+    let _to2 = accounts[0]
+    let _tokenId2 = 1
+    const response_rep = await cz_exchange.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
+    console.log('=== response of reputation function ===', response_rep);      // Debug
 
 
     const response_1 = await cz_exchange.methods.testFunc().send({ from: accounts[0] })
@@ -124,6 +144,7 @@ class App extends Component {
       console.log('=== colors ===', this.state.colors)
     })
   }  
+
 
 
  
@@ -329,11 +350,11 @@ class App extends Component {
 
                     <br />
 
-                    <Button size={'small'} onClick={this.getTestData}>Buy</Button>
+                    <Button size={'small'} onClick={this.getTestData}> Buy </Button>
 
                     <span style={{ padding: "5px" }}></span>
 
-                    <Button size={'small'} onClick={this.getTestData}>Rep</Button> 
+                    <Button size={'small'} onClick={this.addReputation}> Rep </Button> 
 
                     <span style={{ padding: "2px" }}></span>
 
