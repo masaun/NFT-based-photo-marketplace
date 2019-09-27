@@ -42,6 +42,15 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
         _colorExists[_color] = true; // if it mint new token, it assign true
 
         // Color - track it
+
+        // Save NFT of photo
+        Photo memory photo = Photo({
+            tokenId: _id,
+            curretOwnerAddr: msg.sender,
+            ipfsHash: '',
+            reputation: 0
+        });
+        photos.push(photo);
     }
 
 
