@@ -39,7 +39,7 @@ class App extends Component {
     };
 
     this.getTestData = this.getTestData.bind(this);
-    //this.addReputation = this.addReputaion.bind(this);
+    this.addReputation = this.addReputation.bind(this);
 
     /////// Ipfs Upload
     this.captureFile = this.captureFile.bind(this);
@@ -77,13 +77,6 @@ class App extends Component {
     let _tokenId = 1
     const response_buy = await cz_exchange.methods.buy(_from, _to, _tokenId).send({ from: accounts[0] })
     console.log('=== response of buy function ===', response_buy);      // Debug
-
-
-    let _from2 = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
-    let _to2 = accounts[0]
-    let _tokenId2 = 1
-    const response_rep = await cz_exchange.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
-    console.log('=== response of reputation function ===', response_rep);      // Debug
 
 
     const response_1 = await cz_exchange.methods.testFunc().send({ from: accounts[0] })
