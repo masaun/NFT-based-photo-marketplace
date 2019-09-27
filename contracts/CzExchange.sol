@@ -41,7 +41,6 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
         _mint(msg.sender, _id); 
         _colorExists[_color] = true; // if it mint new token, it assign true
 
-        
         // Color - track it
     }
 
@@ -60,11 +59,12 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
      * @dev reputation function is that gives reputation to a user who has ownership of being posted photo.
      * @dev Each user has reputation data in struct
      */
-    uint256 reputationCount;
-    function reputation(address from, address to, uint256 tokenId) public returns (bool) {
-        reputationCount++;
+    function reputation(address from, address to, uint256 tokenId) public returns (uint256) {
 
-        return true;
+        Photo memory photo = photos[tokenId];
+        photo.reputation = photo.reputation++;
+
+        return photo.reputation;
     }
     
 
