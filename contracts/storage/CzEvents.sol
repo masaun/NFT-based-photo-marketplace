@@ -3,9 +3,9 @@ pragma solidity ^0.5.0;
 
 contract CzEvents {
 
-
-    event TestEvent (
-        uint testResultOfCalculate
+    event AddReputation (
+        uint256 tokenId,
+        uint256 reputationCount
     );
 
     event ExampleEvent (

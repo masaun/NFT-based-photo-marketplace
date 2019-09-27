@@ -68,12 +68,14 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
      * @dev reputation function is that gives reputation to a user who has ownership of being posted photo.
      * @dev Each user has reputation data in struct
      */
-    function reputation(address from, address to, uint256 tokenId) public returns (uint256) {
+    function reputation(address from, address to, uint256 tokenId) public returns (uint256, uint256) {
 
         Photo memory photo = photos[tokenId];
         photo.reputation = photo.reputation++;
 
-        return photo.reputation;
+        emit AddReputation(tokenId, photo.reputation);
+
+        return (tokenId, photo.reputation);
     }
     
 
