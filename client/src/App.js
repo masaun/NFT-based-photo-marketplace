@@ -31,7 +31,10 @@ class App extends Component {
       /////// NFT
       cz_exchange: null, // Instance of contract
       totalSupply: 0,
-      colors: []         // Array for NFT
+      colors: [],         // Array for NFT
+
+      photoData: [],
+      photoDataAll: []
     };
 
     this.getTestData = this.getTestData.bind(this);
@@ -116,8 +119,19 @@ class App extends Component {
         this.setState({
           colors: [...this.state.colors, color]
         })
+
+        console.log('=== recipt ===', recipt);
+        console.log('=== recipt.events.Transfer.returnValues.tokenId ===', recipt.events.Transfer.returnValues.tokenId);
+        console.log('=== recipt.events.Transfer.returnValues.to ===', recipt.events.Transfer.returnValues.to);
+
+        let tokenId = recipt.events.Transfer.returnValues.tokenId
+        let ownerAddr = recipt.events.Transfer.returnValues.to
+        this.setState({ photoData: [tokenId, ownerAddr] })
+        this.setState({ photoDataAll: [...this.state.photoDataAll, this.state.photoData] })
       })
       console.log('=== colors ===', this.state.colors)
+      console.log('=== photoData ===', this.state.photoData)      
+      console.log('=== photoDataAll ===', this.state.photoDataAll)
     })
   }  
 
