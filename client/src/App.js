@@ -58,7 +58,7 @@ class App extends Component {
   ///////--------------------- Functions of testFunc ---------------------------  
   getTestData = async () => {
 
-    const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+    const { accounts, cz_exchange, web3 } = this.state;
     console.log('=== accounts[0] ===', accounts[0]);      // Debug
 
 
@@ -90,7 +90,7 @@ class App extends Component {
   }
   
   onSubmit(event) {
-    const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+    const { accounts, cz_exchange, web3 } = this.state;
 
     event.preventDefault()
 

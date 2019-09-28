@@ -32,7 +32,7 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
     /** 
      * @dev mint function is that create a new token.
      */
-    function mint(string memory _color) public {
+    function mint(string memory _color) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
         // Check value is empty
         require(!_colorExists[_color]);
 
@@ -47,10 +47,12 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
         Photo memory photo = Photo({
             tokenId: _id,
             curretOwnerAddr: msg.sender,
-            ipfsHash: '',
+            ipfsHash: _color,
             reputation: 0
         });
         photos.push(photo);
+
+        return (photo.tokenId, photo.curretOwnerAddr, photo.ipfsHash, photo.reputation);
     }
 
 
