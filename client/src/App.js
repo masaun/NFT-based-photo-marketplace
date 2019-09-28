@@ -167,7 +167,6 @@ class App extends Component {
         balance = web3.utils.fromWei(balance, 'ether');
 
         let instanceCzExchange = null;
-        let instanceEthPrice = null;
         let deployedNetwork = null;
 
         // Create instance of contracts
@@ -187,9 +186,9 @@ class App extends Component {
           // example of interacting with the contract's methods.
           this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled,
             isMetaMask, cz_exchange: instanceCzExchange }, () => {
-              this.refreshValues(instanceCzExchange, instanceEthPrice);
+              this.refreshValues(instanceCzExchange);
               setInterval(() => {
-                this.refreshValues(instanceCzExchange, instanceEthPrice);
+                this.refreshValues(instanceCzExchange);
               }, 5000);
             });
         }
