@@ -82,6 +82,16 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
     }
     
 
+    function getReputationCount(uint256 tokenId) public view returns (uint256) {
+        uint256 curretReputationCount;
+
+        Photo memory photo = photos[tokenId];
+        curretReputationCount = photo.reputation;
+
+        return curretReputationCount;
+    }
+    
+
 
     /**
      * @dev Post/Upload images to IPFS
