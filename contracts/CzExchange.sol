@@ -32,7 +32,7 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
     /** 
      * @dev mint function is that create a new token.
      */
-    function mint(string memory _color) public {
+    function mint(string memory _color) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
         // Check value is empty
         require(!_colorExists[_color]);
 
@@ -47,10 +47,12 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
         Photo memory photo = Photo({
             tokenId: _id,
             curretOwnerAddr: msg.sender,
-            ipfsHash: '',
+            ipfsHash: _color,
             reputation: 0
         });
         photos.push(photo);
+
+        return (photo.tokenId, photo.curretOwnerAddr, photo.ipfsHash, photo.reputation);
     }
 
 
@@ -68,12 +70,25 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
      * @dev reputation function is that gives reputation to a user who has ownership of being posted photo.
      * @dev Each user has reputation data in struct
      */
-    function reputation(address from, address to, uint256 tokenId) public returns (uint256) {
+    function reputation(address from, address to, uint256 tokenId) public returns (uint256, uint256) {
+
+        Photo storage photo = photos[tokenId];
+        photo.reputation = photo.reputation.add(1);
+        //photo.reputation = photo.reputation + 1;
+
+        emit AddReputation(tokenId, photo.reputation);
+
+        return (tokenId, photo.reputation);
+    }
+    
+
+    function getReputationCount(uint256 tokenId) public view returns (uint256) {
+        uint256 curretReputationCount;
 
         Photo memory photo = photos[tokenId];
-        photo.reputation = photo.reputation++;
+        curretReputationCount = photo.reputation;
 
-        return photo.reputation;
+        return curretReputationCount;
     }
     
 

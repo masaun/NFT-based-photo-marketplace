@@ -12,10 +12,6 @@ import { zeppelinSolidityHotLoaderOptions } from '../config/webpack';
 import styles from './App.module.scss';
 //import './App.css';
 
-import ethPriceContract from '../../contracts/oracle/EthPrice.sol';
-import { waitForEvent } from '../../test/1_test_utils.js';
-
-
 
 class App extends Component {
   constructor(props) {    
@@ -35,11 +31,14 @@ class App extends Component {
       /////// NFT
       cz_exchange: null, // Instance of contract
       totalSupply: 0,
-      colors: []         // Array for NFT
+      colors: [],         // Array for NFT
+
+      photoData: [],
+      photoDataAll: []
     };
 
     this.getTestData = this.getTestData.bind(this);
-    //this.addReputation = this.addReputaion.bind(this);
+    this.addReputation = this.addReputation.bind(this);
 
     /////// Ipfs Upload
     this.captureFile = this.captureFile.bind(this);
@@ -54,22 +53,19 @@ class App extends Component {
     let _from2 = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
     let _to2 = accounts[0]
     let _tokenId2 = 1
-    const response_buy = await cz_exchange.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
-    console.log('=== response of reputation function ===', response_buy);      // Debug
+    const response_1 = await cz_exchange.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
+    console.log('=== response of reputation function ===', response_1);      // Debug
+
+    const response_2 = await cz_exchange.methods.getReputationCount(_tokenId2).call()
+    console.log('=== response of getReputationCount function ===', response_2);      // Debug
   }
 
 
   ///////--------------------- Functions of testFunc ---------------------------  
   getTestData = async () => {
 
-    const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+    const { accounts, cz_exchange, web3 } = this.state;
     console.log('=== accounts[0] ===', accounts[0]);      // Debug
-
-
-    const { events: websocketsEvents } = new web3.eth.Contract(
-      abi,
-      address
-    )
 
 
     let _from = accounts[0]
@@ -79,25 +75,8 @@ class App extends Component {
     console.log('=== response of buy function ===', response_buy);      // Debug
 
 
-    let _from2 = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
-    let _to2 = accounts[0]
-    let _tokenId2 = 1
-    const response_rep = await cz_exchange.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
-    console.log('=== response of reputation function ===', response_rep);      // Debug
-
-
     const response_1 = await cz_exchange.methods.testFunc().send({ from: accounts[0] })
-    console.log('=== response of testFunc function ===', response_1);      // Debug
-
-    const callProvableAndWaitForResult = _ => 
-      eth_price.methods.fetchEthPriceViaProvable()
-        .send({ from: accounts[0], value: 1e17 })
-        .then(_ => waitForEvent(websocketsEvents.LogNewEthPrice))
-
-    await callProvableAndWaitForResult()
-
-    const resultFromContract = await eth_price.methods.ethPriceCents().call()
-    console.log('=== response of fetchEthPriceViaProvable function ===', resultFromContract);        
+    console.log('=== response of testFunc function ===', response_1);      // Debug   
   }
 
 
@@ -117,7 +96,7 @@ class App extends Component {
   }
   
   onSubmit(event) {
-    const { accounts, cz_exchange, eth_price, abi, address, web3 } = this.state;
+    const { accounts, cz_exchange, web3 } = this.state;
 
     event.preventDefault()
 
@@ -140,8 +119,19 @@ class App extends Component {
         this.setState({
           colors: [...this.state.colors, color]
         })
+
+        console.log('=== recipt ===', recipt);
+        console.log('=== recipt.events.Transfer.returnValues.tokenId ===', recipt.events.Transfer.returnValues.tokenId);
+        console.log('=== recipt.events.Transfer.returnValues.to ===', recipt.events.Transfer.returnValues.to);
+
+        let tokenId = recipt.events.Transfer.returnValues.tokenId
+        let ownerAddr = recipt.events.Transfer.returnValues.to
+        this.setState({ photoData: [tokenId, ownerAddr] })
+        this.setState({ photoDataAll: [...this.state.photoDataAll, this.state.photoData] })
       })
       console.log('=== colors ===', this.state.colors)
+      console.log('=== photoData ===', this.state.photoData)      
+      console.log('=== photoDataAll ===', this.state.photoDataAll)
     })
   }  
 
@@ -165,11 +155,8 @@ class App extends Component {
     const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
  
     let CzExchange = {};
-    let EthPrice = {};
-
     try {
       CzExchange = require("../../build/contracts/CzExchange.json"); // Load ABI of contract of CzExchange
-      EthPrice = require("../../build/contracts/EthPrice.json");     // Load ABI of contract of EthPrice
     } catch (e) {
       console.log(e);
     }
@@ -197,7 +184,6 @@ class App extends Component {
         balance = web3.utils.fromWei(balance, 'ether');
 
         let instanceCzExchange = null;
-        let instanceEthPrice = null;
         let deployedNetwork = null;
 
         // Create instance of contracts
@@ -211,25 +197,15 @@ class App extends Component {
             console.log('=== instanceCzExchange ===', instanceCzExchange);
           }
         }
-        if (EthPrice.networks) {
-          deployedNetwork = EthPrice.networks[networkId.toString()];
-          if (deployedNetwork) {
-            instanceEthPrice = new web3.eth.Contract(
-              EthPrice.abi,
-              deployedNetwork && deployedNetwork.address,
-            );
-            console.log('=== instanceEthPrice ===', instanceEthPrice);
-          }
-        }
 
-        if (instanceCzExchange || instanceEthPrice) {
+        if (instanceCzExchange) {
           // Set web3, accounts, and contract to the state, and then proceed with an
           // example of interacting with the contract's methods.
           this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled,
-            isMetaMask, cz_exchange: instanceCzExchange, eth_price: instanceEthPrice, abi: EthPrice.abi, address: deployedNetwork.address }, () => {
-              this.refreshValues(instanceCzExchange, instanceEthPrice);
+            isMetaMask, cz_exchange: instanceCzExchange }, () => {
+              this.refreshValues(instanceCzExchange);
               setInterval(() => {
-                this.refreshValues(instanceCzExchange, instanceEthPrice);
+                this.refreshValues(instanceCzExchange);
               }, 5000);
             });
         }
@@ -269,12 +245,9 @@ class App extends Component {
     }
   }
 
-  refreshValues = (instanceCzExchange, instanceEthPrice) => {
+  refreshValues = (instanceCzExchange) => {
     if (instanceCzExchange) {
       console.log('refreshValues of instanceCzExchange');
-    }
-    if (instanceEthPrice) {
-      console.log('refreshValues of instanceEthPrice');
     }
   }
 
