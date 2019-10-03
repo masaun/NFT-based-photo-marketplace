@@ -8,8 +8,10 @@ import './openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol';
 import './openzeppelin-solidity/contracts/ownership/Ownable.sol';
 import './openzeppelin-solidity/contracts/payment/PullPayment.sol';
 
+import './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
-contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment {
+
+contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment, ERC20 {
 
     using SafeMath for uint256;
 
@@ -20,13 +22,17 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment {
     string ipfsHash;
     string[] public colors;  // Manage all token by using array
 
+    address DaiContractAddr; // Contract address of DAI at Ropsten
+
     /**
      * @dev Constructor
      */ 
     mapping (string => bool) _colorExists;
     
     
-    constructor() public ERC721Full("Photo", "PHT") {}
+    constructor(address _DaiContractAddr) public ERC721Full("Photo", "PHT") {
+        DaiContractAddr = _DaiContractAddr;
+    }
 
 
     /** 
@@ -59,12 +65,14 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment {
     /** 
      * @dev buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
      */
-    function buy(address from, address to, uint256 tokenId) public returns (bool) {
+    function buy(address from, address to, uint256 tokenId, DaiContractAddr) public returns (uint256 fromAddrBalanceOf) {
+        uint256 fromAddrBalanceOf; 
+
         transferFrom(from, to, tokenId);
 
-        
+        fromAddrBalanceOf = DaiContractAddr.balanceOf(from);
 
-        return true;
+        return fromAddrBalanceOf;
     }
 
 
