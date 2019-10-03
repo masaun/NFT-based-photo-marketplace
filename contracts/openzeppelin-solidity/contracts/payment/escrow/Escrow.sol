@@ -51,33 +51,4 @@ contract Escrow is Secondary {
 
         emit Withdrawn(payee, payment);
     }
-
-
-
-    /************************ Extend implementation for school connectivity ********************/
-    event TransferReward(address payable ispAddr, uint ispBalance);
-
-    //mapping(address => uint256) private _deposits;
-
-    function transferReward(address payable _ispAddr, uint256 _rewardAmount) public onlyPrimary {
-        _deposits[_ispAddr] = _rewardAmount;
-
-        uint256 payment = _deposits[_ispAddr];
-
-        _deposits[_ispAddr] = 0;
-
-        //payment.add(10000);
-
-        //_ispAddr.transfer(uint(10));
-        //_ispAddr.transfer(uint(_rewardAmount));
-        //_ispAddr.transfer(payment);
-
-        //_ispAddr.transfer(_rewardAmount);
-
-        uint _ispBalance = _ispAddr.balance;
-
-        emit TransferReward(_ispAddr, _ispBalance);
-    }
-
-
 }

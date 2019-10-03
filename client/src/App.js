@@ -126,7 +126,8 @@ class App extends Component {
 
         let tokenId = recipt.events.Transfer.returnValues.tokenId
         let ownerAddr = recipt.events.Transfer.returnValues.to
-        this.setState({ photoData: [tokenId, ownerAddr] })
+        let reputationCount = 0
+        this.setState({ photoData: [tokenId, ownerAddr, reputationCount] })
         this.setState({ photoDataAll: [...this.state.photoDataAll, this.state.photoData] })
       })
       console.log('=== colors ===', this.state.colors)
@@ -152,6 +153,9 @@ class App extends Component {
   }
 
   componentDidMount = async () => {
+    console.log('=== photoData（＠componentDidMount）===', this.state.photoData)      
+    console.log('=== photoDataAll（＠componentDidMount）===', this.state.photoDataAll)
+
     const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
  
     let CzExchange = {};
@@ -329,7 +333,7 @@ class App extends Component {
 
                     <Button size={'small'} onClick={this.addReputation}> Rep </Button> 
 
-                    <span style={{ padding: "2px" }}></span>
+                    <span style={{ padding: "5px" }}></span>
 
                     <p>Reputation Count: 1</p>
                   </Card>

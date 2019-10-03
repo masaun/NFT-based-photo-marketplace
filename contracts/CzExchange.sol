@@ -4,12 +4,12 @@ import "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./storage/CzStorage.sol";
 import "./modifiers/CzOwnable.sol";
 
-
 import './openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol';
 import './openzeppelin-solidity/contracts/ownership/Ownable.sol';
+import './openzeppelin-solidity/contracts/payment/PullPayment.sol';
 
 
-contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable {
+contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment {
 
     using SafeMath for uint256;
 
