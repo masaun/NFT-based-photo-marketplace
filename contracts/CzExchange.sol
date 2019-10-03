@@ -62,6 +62,8 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment {
     function buy(address from, address to, uint256 tokenId) public returns (bool) {
         transferFrom(from, to, tokenId);
 
+        
+
         return true;
     }
 

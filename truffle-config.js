@@ -23,7 +23,7 @@ module.exports = {
     },
     ropsten: {
       provider: function() {
-        return new HDWalletProvider(MNENOMIC, 'https://ropsten.infura.io/v3/' + process.env.INFURA_API_KEY)
+        return new HDWalletProvider("Put your mnemonic of Metamask", 'https://ropsten.infura.io/v3/' + process.env.INFURA_API_KEY)
       },
       network_id: '3',
       gas: 4465030,
