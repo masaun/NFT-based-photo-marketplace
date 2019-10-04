@@ -296,14 +296,19 @@ class App extends Component {
       )}
       {this.state.web3 && this.state.photo_marketplace && (
         <div className={styles.contracts}>
-          <h2>Photo Upload to IPFS</h2>
 
-          <form onSubmit={this.onSubmit}>
-            <input type='file' onChange={this.captureFile} />
-            <Button size={'small'}><input type='submit' /></Button>
-          </form>
+          <Box bg="salmon" color="white" fontSize={4} p={3} width={[1, 1, 0.5]}>
+            <h2>Photo Upload to IPFS</h2>
+
+            <form onSubmit={this.onSubmit}>
+              <input type='file' onChange={this.captureFile} />
+              <Button size={'small'}><input type='submit' /></Button>
+            </form>
+          </Box>
 
           <hr />
+
+          <span style={{ padding: "30px" }}></span>
 
           <h2>NFT based Photo MarketPlace</h2>
 
