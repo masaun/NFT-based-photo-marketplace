@@ -3,12 +3,12 @@ pragma solidity ^0.5.0;
 //import "../openzeppelin-solidity/ReentrancyGuard.sol";
 import "../openzeppelin-solidity/contracts/ownership/Ownable.sol";
 
-import "./CzObjects.sol";
-import "./CzEvents.sol";
+import "./PhObjects.sol";
+import "./PhEvents.sol";
 
 
 // shared storage
-contract CzStorage is CzObjects, CzEvents, Ownable {
+contract PhStorage is PhObjects, PhEvents, Ownable {
 
     Photo[] public photos;
     

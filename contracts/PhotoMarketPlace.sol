@@ -1,17 +1,17 @@
 pragma solidity >=0.4.22 <0.6.0;
 
 import "./openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./storage/CzStorage.sol";
-import "./modifiers/CzOwnable.sol";
+import "./storage/PhStorage.sol";
+import "./modifiers/PhOwnable.sol";
 
 import './openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol';
 import './openzeppelin-solidity/contracts/ownership/Ownable.sol';
 import './openzeppelin-solidity/contracts/payment/PullPayment.sol';
 
-import './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
+//import './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
 
-contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment, ERC20 {
+contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPayment {
 
     using SafeMath for uint256;
 
@@ -65,14 +65,12 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment, E
     /** 
      * @dev buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
      */
-    function buy(address from, address to, uint256 tokenId, DaiContractAddr) public returns (uint256 fromAddrBalanceOf) {
-        uint256 fromAddrBalanceOf; 
-
+    function buy(address from, address to, uint256 tokenId) public returns (bool) {
         transferFrom(from, to, tokenId);
 
-        fromAddrBalanceOf = DaiContractAddr.balanceOf(from);
+        //fromAddrBalanceOf = DaiContractAddr.balanceOf(from);
 
-        return fromAddrBalanceOf;
+        return true;
     }
 
 

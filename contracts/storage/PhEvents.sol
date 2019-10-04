@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
 
-contract CzEvents {
+contract PhEvents {
 
     event AddReputation (
         uint256 tokenId,
