@@ -8,6 +8,7 @@
 - Even if user has smartphone which include function of camera, anyone can become sellers by uploading photos in this MarketPlace.
   - It mean that if user who is seller live in poor region and doesn't has bank account and so on, they can earn money by selling photos in this marketplace.
 - All of being uploaded photos are tokenized as NFT（Non-Fungible token). 
+- Uploaded photos buy/sell by using DAI for preventing risk of high volatility of crypto currency.
 
 
 &nbsp;
