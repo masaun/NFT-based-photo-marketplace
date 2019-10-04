@@ -1,7 +1,7 @@
 pragma solidity ^0.5.0;
 
 
-contract CzObjects {
+contract PhObjects {
 
     struct Photo {
         uint256 tokenId;

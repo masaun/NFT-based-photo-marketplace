@@ -1,15 +1,17 @@
 pragma solidity >=0.4.22 <0.6.0;
 
 import "./openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./storage/CzStorage.sol";
-import "./modifiers/CzOwnable.sol";
+import "./storage/PhStorage.sol";
+import "./modifiers/PhOwnable.sol";
 
 import './openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol';
 import './openzeppelin-solidity/contracts/ownership/Ownable.sol';
 import './openzeppelin-solidity/contracts/payment/PullPayment.sol';
 
+//import './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
-contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment {
+
+contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPayment {
 
     using SafeMath for uint256;
 
@@ -20,13 +22,17 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment {
     string ipfsHash;
     string[] public colors;  // Manage all token by using array
 
+    address DaiContractAddr; // Contract address of DAI at Ropsten
+
     /**
      * @dev Constructor
      */ 
     mapping (string => bool) _colorExists;
     
     
-    constructor() public ERC721Full("Photo", "PHT") {}
+    constructor(address _DaiContractAddr) public ERC721Full("Photo", "PHT") {
+        DaiContractAddr = _DaiContractAddr;
+    }
 
 
     /** 
@@ -61,6 +67,8 @@ contract CzExchange is ERC721Full, Ownable, CzStorage, CzOwnable, PullPayment {
      */
     function buy(address from, address to, uint256 tokenId) public returns (bool) {
         transferFrom(from, to, tokenId);
+
+        //fromAddrBalanceOf = DaiContractAddr.balanceOf(from);
 
         return true;
     }

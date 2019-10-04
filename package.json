@@ -11,6 +11,7 @@
     "push": "zos push --deploy-dependencies",
     "session": "zos session --network development --expires 7200",
     "migrate": "truffle migrate --reset --network development",
+    "migrate:ropsten": "truffle migrate --reset --network ropsten",
     "migrate:kovan": "truffle migrate --reset --network kovan",
     "migrate:rinkeby": "truffle migrate --reset --network rinkeby",
     "bridge": "./node_modules/.bin/ethereum-bridge -a 9 -H 127.0.0.1 -p 9545 --dev"
