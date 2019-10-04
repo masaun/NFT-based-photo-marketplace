@@ -29,7 +29,7 @@ class App extends Component {
       ipfsHash: '',
 
       /////// NFT
-      cz_exchange: null, // Instance of contract
+      photo_marketplace: null, // Instance of contract
       totalSupply: 0,
       colors: [],         // Array for NFT
 
@@ -48,15 +48,15 @@ class App extends Component {
 
   ///////--------------------- Functions of reputation ---------------------------
   addReputation = async () => {
-    const { accounts, cz_exchange } = this.state;
+    const { accounts, photo_marketplace } = this.state;
 
     let _from2 = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
     let _to2 = accounts[0]
     let _tokenId2 = 1
-    const response_1 = await cz_exchange.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
+    const response_1 = await photo_marketplace.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
     console.log('=== response of reputation function ===', response_1);      // Debug
 
-    const response_2 = await cz_exchange.methods.getReputationCount(_tokenId2).call()
+    const response_2 = await photo_marketplace.methods.getReputationCount(_tokenId2).call()
     console.log('=== response of getReputationCount function ===', response_2);      // Debug
   }
 
@@ -64,18 +64,18 @@ class App extends Component {
   ///////--------------------- Functions of testFunc ---------------------------  
   getTestData = async () => {
 
-    const { accounts, cz_exchange, web3 } = this.state;
+    const { accounts, photo_marketplace, web3 } = this.state;
     console.log('=== accounts[0] ===', accounts[0]);      // Debug
 
 
     let _from = accounts[0]
     let _to = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
     let _tokenId = 1
-    const response_buy = await cz_exchange.methods.buy(_from, _to, _tokenId).send({ from: accounts[0] })
+    const response_buy = await photo_marketplace.methods.buy(_from, _to, _tokenId).send({ from: accounts[0] })
     console.log('=== response of buy function ===', response_buy);      // Debug
 
 
-    const response_1 = await cz_exchange.methods.testFunc().send({ from: accounts[0] })
+    const response_1 = await photo_marketplace.methods.testFunc().send({ from: accounts[0] })
     console.log('=== response of testFunc function ===', response_1);      // Debug   
   }
 
@@ -96,7 +96,7 @@ class App extends Component {
   }
   
   onSubmit(event) {
-    const { accounts, cz_exchange, web3 } = this.state;
+    const { accounts, photo_marketplace, web3 } = this.state;
 
     event.preventDefault()
 
@@ -114,7 +114,7 @@ class App extends Component {
       const color = this.state.ipfsHash
 
       // Append to array of NFT
-      this.state.cz_exchange.methods.mint(color).send({ from: accounts[0] })
+      this.state.photo_marketplace.methods.mint(color).send({ from: accounts[0] })
       .once('receipt', (recipt) => {
         this.setState({
           colors: [...this.state.colors, color]
@@ -158,9 +158,9 @@ class App extends Component {
 
     const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
  
-    let CzExchange = {};
+    let PhotoMarketPlace = {};
     try {
-      CzExchange = require("../../build/contracts/CzExchange.json"); // Load ABI of contract of CzExchange
+      PhotoMarketPlace = require("../../build/contracts/PhotoMarketPlace.json"); // Load ABI of contract of PhotoMarketPlace
     } catch (e) {
       console.log(e);
     }
@@ -187,29 +187,29 @@ class App extends Component {
         let balance = accounts.length > 0 ? await web3.eth.getBalance(accounts[0]): web3.utils.toWei('0');
         balance = web3.utils.fromWei(balance, 'ether');
 
-        let instanceCzExchange = null;
+        let instancePhotoMarketPlace = null;
         let deployedNetwork = null;
 
         // Create instance of contracts
-        if (CzExchange.networks) {
-          deployedNetwork = CzExchange.networks[networkId.toString()];
+        if (PhotoMarketPlace.networks) {
+          deployedNetwork = PhotoMarketPlace.networks[networkId.toString()];
           if (deployedNetwork) {
-            instanceCzExchange = new web3.eth.Contract(
-              CzExchange.abi,
+            instancePhotoMarketPlace = new web3.eth.Contract(
+              PhotoMarketPlace.abi,
               deployedNetwork && deployedNetwork.address,
             );
-            console.log('=== instanceCzExchange ===', instanceCzExchange);
+            console.log('=== instancePhotoMarketPlace ===', instancePhotoMarketPlace);
           }
         }
 
-        if (instanceCzExchange) {
+        if (instancePhotoMarketPlace) {
           // Set web3, accounts, and contract to the state, and then proceed with an
           // example of interacting with the contract's methods.
           this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled,
-            isMetaMask, cz_exchange: instanceCzExchange }, () => {
-              this.refreshValues(instanceCzExchange);
+            isMetaMask, photo_marketplace: instancePhotoMarketPlace }, () => {
+              this.refreshValues(instancePhotoMarketPlace);
               setInterval(() => {
-                this.refreshValues(instanceCzExchange);
+                this.refreshValues(instancePhotoMarketPlace);
               }, 5000);
             });
         }
@@ -219,14 +219,14 @@ class App extends Component {
 
 
         //---------------- NFT（Always load listed NFT data）------------------
-        const { cz_exchange } = this.state;
+        const { photo_marketplace } = this.state;
 
-        const totalSupply = await cz_exchange.methods.totalSupply().call()
+        const totalSupply = await photo_marketplace.methods.totalSupply().call()
         this.setState({ totalSupply: totalSupply })
 
         // Load Colors
         for (var i=1; i<=totalSupply; i++) {
-          const color = await cz_exchange.methods.colors(i - 1).call()
+          const color = await photo_marketplace.methods.colors(i - 1).call()
           this.setState({
             colors: [...this.state.colors, color]
           })
@@ -249,9 +249,9 @@ class App extends Component {
     }
   }
 
-  refreshValues = (instanceCzExchange) => {
-    if (instanceCzExchange) {
-      console.log('refreshValues of instanceCzExchange');
+  refreshValues = (instancePhotoMarketPlace) => {
+    if (instancePhotoMarketPlace) {
+      console.log('refreshValues of instancePhotoMarketPlace');
     }
   }
 
@@ -287,20 +287,20 @@ class App extends Component {
     );
   }
 
-  renderCzExchange() {
+  renderPhotoMarketPlace() {
     return (
       <div className={styles.wrapper}>
       {!this.state.web3 && this.renderLoader()}
-      {this.state.web3 && !this.state.cz_exchange && (
-        this.renderDeployCheck('cz_exchange')
+      {this.state.web3 && !this.state.photo_marketplace && (
+        this.renderDeployCheck('photo_marketplace')
       )}
-      {this.state.web3 && this.state.cz_exchange && (
+      {this.state.web3 && this.state.photo_marketplace && (
         <div className={styles.contracts}>
           <h2>Photo Upload to IPFS</h2>
 
           <form onSubmit={this.onSubmit}>
             <input type='file' onChange={this.captureFile} />
-            <input type='submit' />
+            <Button size={'small'}><input type='submit' /></Button>
           </form>
 
           <hr />
@@ -354,7 +354,7 @@ class App extends Component {
       <div className={styles.App}>
         <Header />
           {this.state.route === '' && this.renderInstructions()}
-          {this.state.route === 'cz_exchange' && this.renderCzExchange()}
+          {this.state.route === 'photo_marketplace' && this.renderPhotoMarketPlace()}
         <Footer />
       </div>
     );
