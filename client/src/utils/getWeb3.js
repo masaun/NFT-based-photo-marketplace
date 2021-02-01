@@ -3,8 +3,8 @@ import Web3 from "web3";
 // const INFURA_API_KEY = process.env.INFURA_API_KEY;
 
 //const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'https://rinkeby.infura.io/v3/' + INFURA_API_KEY;    // Rinkeby
-const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'http://0.0.0.0:7545';                                 // Ganache-GUI
-//const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'http://0.0.0.0:8545';
+//const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'http://0.0.0.0:7545';                                 // Ganache-GUI
+const FALLBACK_WEB3_PROVIDER = process.env.REACT_APP_NETWORK || 'http://0.0.0.0:8545';
 
 
 const getWeb3 = () =>
@@ -49,8 +49,8 @@ const getGanacheWeb3 = () => {
   }
   const provider = new Web3.providers.HttpProvider(
     //'https://rinkeby.infura.io/v3/' + INFURA_API_KEY  // Rinkeby
-    'http://0.0.0.0:7545'  // Ganache-GUI
-    //'http://0.0.0.0:8545'  // Ganache-CLI
+    //'http://0.0.0.0:7545'  // Ganache-GUI
+    'http://0.0.0.0:8545'  // Ganache-CLI
   );
   const web3 = new Web3(provider);
   console.log("No local ganache found.");

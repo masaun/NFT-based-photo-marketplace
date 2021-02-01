@@ -25,8 +25,9 @@ https://www.trufflesuite.com/ganache
 
 2. Execute Ganache   
 ```
-$ ganache-cli
+$ ganache-cli -d
 ```
+※ `-d` option is the option in order to be able to use same address on Ganache-CLI every time.
 
 &nbsp;
 
