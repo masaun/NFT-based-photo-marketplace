@@ -7,9 +7,6 @@ const HDWalletProvider = require('@truffle/hdwallet-provider');  // @notice - Sh
 // Create your own key for Production environments (https://infura.io/)
 const INFURA_API_KEY = process.env.INFURA_API_KEY;
 
-//Provide your SKALE endpoint address
-const skale = process.env.SKALE_CHAIN_TRUFFLE;
-
 
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
@@ -17,8 +14,8 @@ module.exports = {
   networks: {
     development: {
       host: "127.0.0.1",
-      port: 7545,     // Ganache-GUI
-      //port: 8545,   // Ganache-CLI
+      //port: 7545,     // Ganache-GUI
+      port: 8545,   // Ganache-CLI
       network_id: "*",
     },
     ropsten: {
@@ -51,11 +48,6 @@ module.exports = {
       network_id: 1,
       gas: 3000000,
       gasPrice: 10000000000
-    },
-    skale: {
-        provider: () => new HDWalletProvider(process.env.PRIVATE_KEY, skale),
-        gasPrice: 0,
-        network_id: "*"
     }
   }
 };

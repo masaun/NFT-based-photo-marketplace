@@ -18,15 +18,17 @@
 
 ## 【Setup】
 
-### Setup private network by using Ganache
-1. Download Ganache from link below  
+### Setup private network by using Ganache-CLI
+1. Download Ganache-CLI from link below  
 https://www.trufflesuite.com/ganache  
 
 
 2. Execute Ganache   
+```
+$ ganache-cli
+```
 
 &nbsp;
-
 
 
 ### Setup wallet by using Metamask
@@ -36,8 +38,7 @@ https://metamask.io/
 
 2. Adjust appropriate newwork below 
 ```
-http://127.0.0.1:7545
-
+http://127.0.0.1:8545
 ```
 
 &nbsp;
