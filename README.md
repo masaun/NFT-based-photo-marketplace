@@ -55,13 +55,19 @@ $ npm run migrate
 
 
 ### Setup frontend
-1. Execute command below in root directory.
+1. NPM modules install
+```
+$ cd client
+$ npm install
 ```
 
+2. Execute command below in root directory.
+```
+$ cd ..
 $ npm run client
 ```
 
-2. Access to browser by using link 
+3. Access to browser by using link 
 ```
 http://127.0.0.1:3000
 ```

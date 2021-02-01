@@ -2,7 +2,7 @@ const path = require("path");
 require('dotenv').config();
 
 //const mnemonic = process.env.MNENOMIC;
-const HDWalletProvider = require("truffle-hdwallet-provider");
+const HDWalletProvider = require('@truffle/hdwallet-provider');  // @notice - Should use new module.
 
 // Create your own key for Production environments (https://infura.io/)
 const INFURA_API_KEY = process.env.INFURA_API_KEY;
