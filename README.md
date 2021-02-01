@@ -18,15 +18,18 @@
 
 ## 【Setup】
 
-### Setup private network by using Ganache
-1. Download Ganache from link below  
+### Setup private network by using Ganache-CLI
+1. Download Ganache-CLI from link below  
 https://www.trufflesuite.com/ganache  
 
 
 2. Execute Ganache   
+```
+$ ganache-cli -d
+```
+※ `-d` option is the option in order to be able to use same address on Ganache-CLI every time.
 
 &nbsp;
-
 
 
 ### Setup wallet by using Metamask
@@ -36,8 +39,7 @@ https://metamask.io/
 
 2. Adjust appropriate newwork below 
 ```
-http://127.0.0.1:7545
-
+http://127.0.0.1:8545
 ```
 
 &nbsp;
@@ -55,13 +57,19 @@ $ npm run migrate
 
 
 ### Setup frontend
-1. Execute command below in root directory.
+1. NPM modules install
+```
+$ cd client
+$ npm install
 ```
 
+2. Execute command below in root directory.
+```
+$ cd ..
 $ npm run client
 ```
 
-2. Access to browser by using link 
+3. Access to browser by using link 
 ```
 http://127.0.0.1:3000
 ```
