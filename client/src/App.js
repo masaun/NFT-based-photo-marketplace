@@ -342,6 +342,8 @@ class App extends Component {
 
                     <p>Price: 1.5 ETH (e.g.)</p>
 
+                    <p>NFT Address: 0x5bc111G543B66E331fFaC7FFB0463d91fd9FE8G7 (e.g.)</p>
+
                     <p>Owner: 0x1cb241G111B66E331fFaC7FFB0463d91fd8FE8F5 (e.g.)</p>
 
                     <p>Reputation Count: 1</p>
