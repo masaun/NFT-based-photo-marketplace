@@ -340,6 +340,10 @@ class App extends Component {
 
                     <span style={{ padding: "5px" }}></span>
 
+                    <p>Price: 1.5 ETH (e.g.)</p>
+
+                    <p>Owner: 0x1cb241G111B66E331fFaC7FFB0463d91fd8FE8F5 (e.g.)</p>
+
                     <p>Reputation Count: 1</p>
                   </Card>
                 </div>
