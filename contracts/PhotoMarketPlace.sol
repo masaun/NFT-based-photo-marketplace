@@ -98,7 +98,6 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
 
         return curretReputationCount;
     }
-    
 
 
     /**
@@ -114,21 +113,6 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
     function get() public view returns (string memory) {
         return ipfsHash;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /***

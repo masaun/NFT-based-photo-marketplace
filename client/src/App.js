@@ -298,7 +298,7 @@ class App extends Component {
         <div className={styles.contracts}>
 
           <Box bg="salmon" color="white" fontSize={4} p={3} width={[1, 1, 0.5]}>
-            <h2>Photo Upload to IPFS</h2>
+            <h2>Upload your photo to IPFS</h2>
 
             <form onSubmit={this.onSubmit}>
               <input type='file' onChange={this.captureFile} />
