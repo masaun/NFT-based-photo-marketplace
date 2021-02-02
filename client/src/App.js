@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import getWeb3, { getGanacheWeb3, Web3 } from "./utils/getWeb3";
 import Header from "./components/Header/index.js";
 import Footer from "./components/Footer/index.js";
-import Hero from "./components/Hero/index.js";
-import Web3Info from "./components/Web3Info/index.js";
+import Publish from "./components/Publish/index.js";
 import ipfs from './components/ipfs/ipfsApi.js'
 
 import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image } from 'rimble-ui';
@@ -282,7 +281,7 @@ class App extends Component {
   renderInstructions() {
     return (
       <div className={styles.wrapper}>
-        <Hero />
+        <Publish />
       </div>
     );
   }
