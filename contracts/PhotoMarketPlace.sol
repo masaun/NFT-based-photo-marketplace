@@ -28,7 +28,7 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
     /**
      * @dev Constructor
      */ 
-    mapping (string => bool) _colorExists;
+    mapping (string => bool) _photoExists;
     
     
     constructor(address _DaiContractAddr) public ERC721Full("Photo", "PHT") {
@@ -41,12 +41,12 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
      */
     function mint(string memory _color) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
         // Check value is empty
-        require(!_colorExists[_color]);
+        require(!_photoExlsts[_color]);
 
         // Require unique color
         uint _id = photoslist.push(_color);
         _mint(msg.sender, _id); 
-        _colorExists[_color] = true; // if it mint new token, it assign true
+        _photoExlsts[_color] = true; // if it mint new token, it assign true
 
         // Color - track it
 
