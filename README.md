@@ -50,7 +50,7 @@ http://127.0.0.1:8545
 ```
 (root directory)
 
-$ npm run migrate
+$ npm run migrate:local
 ```
 
 &nbsp;
