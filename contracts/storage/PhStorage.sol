@@ -11,9 +11,6 @@ import "./PhEvents.sol";
 contract PhStorage is PhObjects, PhEvents, Ownable {
 
     Photo[] public photos;
-    
-
-    mapping (uint => ExampleObject) examples;
 
 }
 

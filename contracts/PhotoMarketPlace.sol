@@ -20,7 +20,8 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
      */ 
     uint256 tokenId;
     string ipfsHash;
-    string[] public colors;  // Manage all token by using array
+    //string[] public colors;  // Manage all token by using array
+    string[] public photoslist;  // Manage all token by using array
 
     address DaiContractAddr; // Contract address of DAI at Ropsten
 
@@ -43,7 +44,7 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
         require(!_colorExists[_color]);
 
         // Require unique color
-        uint _id = colors.push(_color);
+        uint _id = photoslist.push(_color);
         _mint(msg.sender, _id); 
         _colorExists[_color] = true; // if it mint new token, it assign true
 

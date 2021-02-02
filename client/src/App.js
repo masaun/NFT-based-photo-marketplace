@@ -31,7 +31,7 @@ class App extends Component {
       /////// NFT
       photo_marketplace: null, // Instance of contract
       totalSupply: 0,
-      colors: [],         // Array for NFT
+      photoslist: [],         // Array for NFT
 
       photoData: [],
       photoDataAll: []
@@ -117,7 +117,7 @@ class App extends Component {
       this.state.photo_marketplace.methods.mint(color).send({ from: accounts[0] })
       .once('receipt', (recipt) => {
         this.setState({
-          colors: [...this.state.colors, color]
+          photoslist: [...this.state.photoslist, color]
         })
 
         console.log('=== recipt ===', recipt);
@@ -130,7 +130,7 @@ class App extends Component {
         this.setState({ photoData: [tokenId, ownerAddr, reputationCount] })
         this.setState({ photoDataAll: [...this.state.photoDataAll, this.state.photoData] })
       })
-      console.log('=== colors ===', this.state.colors)
+      console.log('=== photoslist ===', this.state.photoslist)
       console.log('=== photoData ===', this.state.photoData)      
       console.log('=== photoDataAll ===', this.state.photoDataAll)
     })
@@ -224,14 +224,14 @@ class App extends Component {
         const totalSupply = await photo_marketplace.methods.totalSupply().call()
         this.setState({ totalSupply: totalSupply })
 
-        // Load Colors
+        // Load photoslist
         for (var i=1; i<=totalSupply; i++) {
-          const color = await photo_marketplace.methods.colors(i - 1).call()
+          const color = await photo_marketplace.methods.photoslist(i - 1).call()
           this.setState({
-            colors: [...this.state.colors, color]
+            photoslist: [...this.state.photoslist, color]
           })
         }
-        console.log('======== colors ========', this.state.colors)
+        console.log('======== photoslist ========', this.state.photoslist)
 
       }
     } catch (error) {
@@ -312,7 +312,7 @@ class App extends Component {
 
           <h2>NFT based Photo MarketPlace</h2>
 
-          { this.state.colors.map((color, key) => {
+          { this.state.photoslist.map((color, key) => {
             return (
               <div key={key} className="">
                 <div className={styles.widgets}>
