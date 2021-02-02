@@ -1,19 +1,13 @@
 import React, { Component } from "react";
-import getWeb3, { getGanacheWeb3, Web3 } from "./utils/getWeb3";
-import Header from "./components/Header/index.js";
-import Footer from "./components/Footer/index.js";
-import Publish from "./components/Publish/index.js";
-import PhotoMarketplace from "./components/PhotoMarketplace/index.js";
-import ipfs from './components/ipfs/ipfsApi.js'
+import getWeb3, { getGanacheWeb3, Web3 } from "../../utils/getWeb3";
 
 import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image } from 'rimble-ui';
-import { zeppelinSolidityHotLoaderOptions } from '../config/webpack';
+import { zeppelinSolidityHotLoaderOptions } from '../../../config/webpack';
 
-import styles from './App.module.scss';
-//import './App.css';
+import styles from '../../App.module.scss';
 
 
-class App extends Component {
+export default class PhotoMarketplace extends Component {
   constructor(props) {    
     super(props);
 
@@ -39,10 +33,6 @@ class App extends Component {
 
     this.getTestData = this.getTestData.bind(this);
     this.addReputation = this.addReputation.bind(this);
-
-    /////// Ipfs Upload
-    this.captureFile = this.captureFile.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
   }
 
 
@@ -79,65 +69,6 @@ class App extends Component {
     console.log('=== response of testFunc function ===', response_1);      // Debug   
   }
 
-
-  ///////--------------------- Functions of ipfsUpload ---------------------------  
-  captureFile(event) {
-    event.preventDefault()
-    const file = event.target.files[0]
-    
-    const reader = new window.FileReader()
-    reader.readAsArrayBuffer(file)  // Read bufffered file
-
-    // Callback
-    reader.onloadend = () => {
-      this.setState({ buffer: Buffer(reader.result) })
-      console.log('=== buffer ===', this.state.buffer)
-    }
-  }
-  
-  onSubmit(event) {
-    const { accounts, photo_marketplace, web3 } = this.state;
-
-    event.preventDefault()
-
-    ipfs.files.add(this.state.buffer, (error, result) => {
-      // In case of fail to upload to IPFS
-      if (error) {
-        console.error(error)
-        return
-      }
-
-      // In case of successful to upload to IPFS
-      this.setState({ ipfsHash: result[0].hash })
-      console.log('=== ipfsHash ===', this.state.ipfsHash)
-
-      const color = this.state.ipfsHash
-
-      // Append to array of NFT
-      this.state.photo_marketplace.methods.mint(color).send({ from: accounts[0] })
-      .once('receipt', (recipt) => {
-        this.setState({
-          photoslist: [...this.state.photoslist, color]
-        })
-
-        console.log('=== recipt ===', recipt);
-        console.log('=== recipt.events.Transfer.returnValues.tokenId ===', recipt.events.Transfer.returnValues.tokenId);
-        console.log('=== recipt.events.Transfer.returnValues.to ===', recipt.events.Transfer.returnValues.to);
-
-        let tokenId = recipt.events.Transfer.returnValues.tokenId
-        let ownerAddr = recipt.events.Transfer.returnValues.to
-        let reputationCount = 0
-        this.setState({ photoData: [tokenId, ownerAddr, reputationCount] })
-        this.setState({ photoDataAll: [...this.state.photoDataAll, this.state.photoData] })
-      })
-      console.log('=== photoslist ===', this.state.photoslist)
-      console.log('=== photoData ===', this.state.photoData)      
-      console.log('=== photoDataAll ===', this.state.photoDataAll)
-    })
-  }  
-
-
-
  
   //////////////////////////////////// 
   ///// Ganache
@@ -160,7 +91,7 @@ class App extends Component {
  
     let PhotoMarketPlace = {};
     try {
-      PhotoMarketPlace = require("../../build/contracts/PhotoMarketPlace.json"); // Load ABI of contract of PhotoMarketPlace
+      PhotoMarketPlace = require("../../../../build/contracts/PhotoMarketPlace.json"); // Load ABI of contract of PhotoMarketPlace
     } catch (e) {
       console.log(e);
     }
@@ -255,56 +186,55 @@ class App extends Component {
     }
   }
 
-  renderLoader() {
-    return (
-      <div className={styles.loader}>
-        <Loader size="80px" color="red" />
-        <h3> Loading Web3, accounts, and contract...</h3>
-        <p> Unlock your metamask </p>
-      </div>
-    );
-  }
-
-  renderDeployCheck(instructionsKey) {
-    return (
-      <div className={styles.setup}>
-        <div className={styles.notice}>
-          Your <b> contracts are not deployed</b> in this network. Two potential reasons: <br />
-          <p>
-            Maybe you are in the wrong network? Point Metamask to localhost.<br />
-            You contract is not deployed. Follow the instructions below.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  renderPublish() {
-    return (
-      <div className={styles.wrapper}>
-        <Publish />
-      </div>
-    );
-  }
-
-  renderPhotoMarketPlace() {
-    return (
-      <div className={styles.wrapper}>
-        <PhotoMarketplace />
-      </div>    
-    );
-  }
-
   render() {
+    const {} = this.state;
+
     return (
-      <div className={styles.App}>
-        <Header />
-          {this.state.route === 'publish' && this.renderPublish()}
-          {this.state.route === 'photo_marketplace' && this.renderPhotoMarketPlace()}
-        <Footer />
-      </div>
+        <div className={styles.contracts}>
+
+          <h2>NFT based Photo MarketPlace</h2>
+
+          { this.state.photoslist.map((photo, key) => {
+            return (
+              <div key={key} className="">
+                <div className={styles.widgets}>
+                  <Card width={'30%'} bg="primary">
+
+                    <h4>Photo #{ key + 1 }</h4>
+
+                    <Image
+                      alt="random unsplash image"
+                      borderRadius={8}
+                      height="100%"
+                      maxWidth='100%'
+                      src={ `https://ipfs.io/ipfs/${photo}` }
+                    />
+
+                    <span style={{ padding: "20px" }}></span>
+
+                    <br />
+
+                    <Button size={'small'} onClick={this.getTestData}> Buy </Button>
+
+                    <span style={{ padding: "5px" }}></span>
+
+                    <Button size={'small'} onClick={this.addReputation}> Rep </Button> 
+
+                    <span style={{ padding: "5px" }}></span>
+
+                    <p>Price: 1.5 ETH (e.g.)</p>
+
+                    <p>NFT Address: 0x5bc111G543B66E331fFaC7FFB0463d91fd9FE8G7 (e.g.)</p>
+
+                    <p>Owner: 0x1cb241G111B66E331fFaC7FFB0463d91fd8FE8F5 (e.g.)</p>
+
+                    <p>Reputation Count: 1</p>
+                  </Card>
+                </div>
+              </div>
+            )
+          }) }
+        </div>
     );
   }
 }
-
-export default App;
