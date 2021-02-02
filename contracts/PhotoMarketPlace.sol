@@ -97,67 +97,6 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
         curretReputationCount = photo.reputation;
 
         return curretReputationCount;
-    }
-
-
-    /**
-     * @dev Post/Upload images to IPFS
-     */
-    function set(string memory x) public {
-        ipfsHash = x;
-    }
-
-    /**
-     * @dev Get uploaded images from IPFS
-     */
-    function get() public view returns (string memory) {
-        return ipfsHash;
-    }
-
-
-    /***
-     * @dev Old codes
-     */
-    function checkOwnerAddr(uint256 _tokenId) public returns (address) {
-        // This ownnerOf() function is inherited ERC721.sol
-        return ownerOf(_tokenId);
-    }
-
-
-    function mintNFT(address _to) public returns (bool) {
-        // This _mint() function is inherited ERC721.sol
-        tokenId++;
-        _mint(_to, tokenId);
-
-        return true;
-    }
-    
-
-    /**
-     * @dev Buy NFT and ownership-transfer at the same time. 
-     */
-    function buyNFT(uint256 _tokenId, address _buyer) public returns (bool) {
-        // Buy NFT
-        address _seller;       // Owener currently
-        _seller = ownerOf(_tokenId);  // Assign current owner (ownerOf function is inherited from ERC721.sol)
-
-        // Ownership-Transfer
-        transferFrom(_seller, _buyer, _tokenId);  // This transferFrom() function is inherited ERC721.sol
-    }
-    
-
-
-
-
-    function testFunc() public returns (bool) {
-        return true;
-    }
-
-
-    function foodExchange() public returns (bool) {
-        return true;    
-    }
-    
-    
+    }    
 
 }
