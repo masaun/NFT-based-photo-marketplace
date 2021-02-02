@@ -7,7 +7,7 @@ const Header = () => (
       <ul>
         <li><a href="/" className={styles.link}><span style={{ padding: "60px" }}></span></a></li>
 
-        <li><a href="/" className={styles.link}> Home</a></li>
+        <li><a href="/publish" className={styles.link}> Publish</a></li>
 
         {process.env.NODE_ENV !== 'photo_marketplace' && (
           <li><a href="/photo_marketplace" className={styles.link}> PhotoMarketPlace</a></li>

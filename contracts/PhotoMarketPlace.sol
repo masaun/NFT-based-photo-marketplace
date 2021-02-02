@@ -6,12 +6,11 @@ import "./modifiers/PhOwnable.sol";
 
 import './openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol';
 import './openzeppelin-solidity/contracts/ownership/Ownable.sol';
-import './openzeppelin-solidity/contracts/payment/PullPayment.sol';
 
 //import './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
 
-contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPayment {
+contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable {
 
     using SafeMath for uint256;
 
@@ -20,32 +19,30 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
      */ 
     uint256 tokenId;
     string ipfsHash;
-    string[] public colors;  // Manage all token by using array
+    //string[] public colors;  // Manage all token by using array
+    string[] public photoslist;  // Manage all token by using array
 
-    address DaiContractAddr; // Contract address of DAI at Ropsten
 
     /**
      * @dev Constructor
      */ 
-    mapping (string => bool) _colorExists;
+    mapping (string => bool) _photoExists;
     
     
-    constructor(address _DaiContractAddr) public ERC721Full("Photo", "PHT") {
-        DaiContractAddr = _DaiContractAddr;
-    }
+    constructor() public ERC721Full("Photo", "PHT") {}
 
 
     /** 
      * @dev mint function is that create a new token.
      */
-    function mint(string memory _color) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
+    function mint(string memory _ipfsHashOfPhoto) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
         // Check value is empty
-        require(!_colorExists[_color]);
+        require(!_photoExists[_ipfsHashOfPhoto]);
 
         // Require unique color
-        uint _id = colors.push(_color);
+        uint _id = photoslist.push(_ipfsHashOfPhoto);
         _mint(msg.sender, _id); 
-        _colorExists[_color] = true; // if it mint new token, it assign true
+        _photoExists[_ipfsHashOfPhoto] = true; // if it mint new token, it assign true
 
         // Color - track it
 
@@ -53,7 +50,7 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
         Photo memory photo = Photo({
             tokenId: _id,
             curretOwnerAddr: msg.sender,
-            ipfsHash: _color,
+            ipfsHash: _ipfsHashOfPhoto,
             reputation: 0
         });
         photos.push(photo);
@@ -97,83 +94,6 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
         curretReputationCount = photo.reputation;
 
         return curretReputationCount;
-    }
-    
-
-
-    /**
-     * @dev Post/Upload images to IPFS
-     */
-    function set(string memory x) public {
-        ipfsHash = x;
-    }
-
-    /**
-     * @dev Get uploaded images from IPFS
-     */
-    function get() public view returns (string memory) {
-        return ipfsHash;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /***
-     * @dev Old codes
-     */
-    function checkOwnerAddr(uint256 _tokenId) public returns (address) {
-        // This ownnerOf() function is inherited ERC721.sol
-        return ownerOf(_tokenId);
-    }
-
-
-    function mintNFT(address _to) public returns (bool) {
-        // This _mint() function is inherited ERC721.sol
-        tokenId++;
-        _mint(_to, tokenId);
-
-        return true;
-    }
-    
-
-    /**
-     * @dev Buy NFT and ownership-transfer at the same time. 
-     */
-    function buyNFT(uint256 _tokenId, address _buyer) public returns (bool) {
-        // Buy NFT
-        address _seller;       // Owener currently
-        _seller = ownerOf(_tokenId);  // Assign current owner (ownerOf function is inherited from ERC721.sol)
-
-        // Ownership-Transfer
-        transferFrom(_seller, _buyer, _tokenId);  // This transferFrom() function is inherited ERC721.sol
-    }
-    
-
-
-
-
-    function testFunc() public returns (bool) {
-        return true;
-    }
-
-
-    function foodExchange() public returns (bool) {
-        return true;    
-    }
-    
-    
+    }    
 
 }

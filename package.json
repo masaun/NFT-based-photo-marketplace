@@ -1,7 +1,7 @@
 {
-  "name": "zepkit",
+  "name": "NFT-based-photo-marketplace",
   "version": "1.0.0",
-  "description": "Truffle box containing React, ZeppelinOS & OpenZeppelin",
+  "description": "NFT-based-photo-marketplace",
   "main": "index.js",
   "scripts": {
     "test": "truffle test ./test/*",
@@ -10,7 +10,7 @@
     "console": "truffle console --network development",
     "push": "zos push --deploy-dependencies",
     "session": "zos session --network development --expires 7200",
-    "migrate": "truffle migrate --reset --network development",
+    "migrate:local": "truffle migrate --reset --network development",
     "migrate:ropsten": "truffle migrate --reset --network ropsten",
     "migrate:kovan": "truffle migrate --reset --network kovan",
     "migrate:rinkeby": "truffle migrate --reset --network rinkeby",

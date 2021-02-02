@@ -1,19 +1,14 @@
 import React, { Component } from "react";
-import getWeb3, { getGanacheWeb3, Web3 } from "./utils/getWeb3";
-import Header from "./components/Header/index.js";
-import Footer from "./components/Footer/index.js";
-import Publish from "./components/Publish/index.js";
-import PhotoMarketplace from "./components/PhotoMarketplace/index.js";
-import ipfs from './components/ipfs/ipfsApi.js'
+import getWeb3, { getGanacheWeb3, Web3 } from "../../utils/getWeb3";
+import ipfs from '../ipfs/ipfsApi.js'
 
 import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image } from 'rimble-ui';
-import { zeppelinSolidityHotLoaderOptions } from '../config/webpack';
+import { zeppelinSolidityHotLoaderOptions } from '../../../config/webpack';
 
-import styles from './App.module.scss';
-//import './App.css';
+import styles from '../../App.module.scss';
 
 
-class App extends Component {
+export default class Publish extends Component {
   constructor(props) {    
     super(props);
 
@@ -37,46 +32,9 @@ class App extends Component {
       photoDataAll: []
     };
 
-    this.getTestData = this.getTestData.bind(this);
-    this.addReputation = this.addReputation.bind(this);
-
     /////// Ipfs Upload
     this.captureFile = this.captureFile.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
-  }
-
-
-  ///////--------------------- Functions of reputation ---------------------------
-  addReputation = async () => {
-    const { accounts, photo_marketplace } = this.state;
-
-    let _from2 = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
-    let _to2 = accounts[0]
-    let _tokenId2 = 1
-    const response_1 = await photo_marketplace.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
-    console.log('=== response of reputation function ===', response_1);      // Debug
-
-    const response_2 = await photo_marketplace.methods.getReputationCount(_tokenId2).call()
-    console.log('=== response of getReputationCount function ===', response_2);      // Debug
-  }
-
-
-  ///////--------------------- Functions of testFunc ---------------------------  
-  getTestData = async () => {
-
-    const { accounts, photo_marketplace, web3 } = this.state;
-    console.log('=== accounts[0] ===', accounts[0]);      // Debug
-
-
-    let _from = accounts[0]
-    let _to = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
-    let _tokenId = 1
-    const response_buy = await photo_marketplace.methods.buy(_from, _to, _tokenId).send({ from: accounts[0] })
-    console.log('=== response of buy function ===', response_buy);      // Debug
-
-
-    const response_1 = await photo_marketplace.methods.testFunc().send({ from: accounts[0] })
-    console.log('=== response of testFunc function ===', response_1);      // Debug   
   }
 
 
@@ -111,21 +69,21 @@ class App extends Component {
       this.setState({ ipfsHash: result[0].hash })
       console.log('=== ipfsHash ===', this.state.ipfsHash)
 
-      const color = this.state.ipfsHash
+      const ipfsHashOfPhoto = this.state.ipfsHash
 
       // Append to array of NFT
-      this.state.photo_marketplace.methods.mint(color).send({ from: accounts[0] })
-      .once('receipt', (recipt) => {
+      this.state.photo_marketplace.methods.mint(ipfsHashOfPhoto).send({ from: accounts[0] })
+      .once('receipt', (receipt) => {
         this.setState({
-          photoslist: [...this.state.photoslist, color]
+          photoslist: [...this.state.photoslist, ipfsHashOfPhoto]
         })
 
-        console.log('=== recipt ===', recipt);
-        console.log('=== recipt.events.Transfer.returnValues.tokenId ===', recipt.events.Transfer.returnValues.tokenId);
-        console.log('=== recipt.events.Transfer.returnValues.to ===', recipt.events.Transfer.returnValues.to);
+        console.log('=== receipt ===', receipt);
+        console.log('=== receipt.events.Transfer.returnValues.tokenId ===', receipt.events.Transfer.returnValues.tokenId);
+        console.log('=== receipt.events.Transfer.returnValues.to ===', receipt.events.Transfer.returnValues.to);
 
-        let tokenId = recipt.events.Transfer.returnValues.tokenId
-        let ownerAddr = recipt.events.Transfer.returnValues.to
+        let tokenId = receipt.events.Transfer.returnValues.tokenId
+        let ownerAddr = receipt.events.Transfer.returnValues.to
         let reputationCount = 0
         this.setState({ photoData: [tokenId, ownerAddr, reputationCount] })
         this.setState({ photoDataAll: [...this.state.photoDataAll, this.state.photoData] })
@@ -160,7 +118,7 @@ class App extends Component {
  
     let PhotoMarketPlace = {};
     try {
-      PhotoMarketPlace = require("../../build/contracts/PhotoMarketPlace.json"); // Load ABI of contract of PhotoMarketPlace
+      PhotoMarketPlace = require("../../../../build/contracts/PhotoMarketPlace.json"); // Load ABI of contract of PhotoMarketPlace
     } catch (e) {
       console.log(e);
     }
@@ -255,56 +213,22 @@ class App extends Component {
     }
   }
 
-  renderLoader() {
+  render()  {
     return (
-      <div className={styles.loader}>
-        <Loader size="80px" color="red" />
-        <h3> Loading Web3, accounts, and contract...</h3>
-        <p> Unlock your metamask </p>
-      </div>
-    );
-  }
+      <div className={styles.left}>
+        <br />
+        <h4>Publish</h4>
+        <p>Please upload your photo from here!</p>
 
-  renderDeployCheck(instructionsKey) {
-    return (
-      <div className={styles.setup}>
-        <div className={styles.notice}>
-          Your <b> contracts are not deployed</b> in this network. Two potential reasons: <br />
-          <p>
-            Maybe you are in the wrong network? Point Metamask to localhost.<br />
-            You contract is not deployed. Follow the instructions below.
-          </p>
-        </div>
-      </div>
-    );
-  }
+        <Box bg="salmon" color="white" fontSize={4} p={3} width={[1, 1, 0.5]}>
+          <h2>Upload your photo to IPFS</h2>
 
-  renderPublish() {
-    return (
-      <div className={styles.wrapper}>
-        <Publish />
-      </div>
-    );
-  }
-
-  renderPhotoMarketPlace() {
-    return (
-      <div className={styles.wrapper}>
-        <PhotoMarketplace />
-      </div>    
-    );
-  }
-
-  render() {
-    return (
-      <div className={styles.App}>
-        <Header />
-          {this.state.route === 'publish' && this.renderPublish()}
-          {this.state.route === 'photo_marketplace' && this.renderPhotoMarketPlace()}
-        <Footer />
+          <form onSubmit={this.onSubmit}>
+            <input type='file' onChange={this.captureFile} />
+            <Button size={'small'}><input type='submit' /></Button>
+          </form>
+        </Box>
       </div>
     );
   }
 }
-
-export default App;
