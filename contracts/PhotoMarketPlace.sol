@@ -23,7 +23,6 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
     //string[] public colors;  // Manage all token by using array
     string[] public photoslist;  // Manage all token by using array
 
-    address DaiContractAddr; // Contract address of DAI at Ropsten
 
     /**
      * @dev Constructor
@@ -31,22 +30,20 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
     mapping (string => bool) _photoExists;
     
     
-    constructor(address _DaiContractAddr) public ERC721Full("Photo", "PHT") {
-        DaiContractAddr = _DaiContractAddr;
-    }
+    constructor() public ERC721Full("Photo", "PHT") {}
 
 
     /** 
      * @dev mint function is that create a new token.
      */
-    function mint(string memory _color) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
+    function mint(string memory _ipfsHashOfPhoto) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
         // Check value is empty
-        require(!_photoExlsts[_color]);
+        require(!_photoExlsts[_ipfsHashOfPhoto]);
 
         // Require unique color
-        uint _id = photoslist.push(_color);
+        uint _id = photoslist.push(_ipfsHashOfPhoto);
         _mint(msg.sender, _id); 
-        _photoExlsts[_color] = true; // if it mint new token, it assign true
+        _photoExlsts[_ipfsHashOfPhoto] = true; // if it mint new token, it assign true
 
         // Color - track it
 
@@ -54,7 +51,7 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
         Photo memory photo = Photo({
             tokenId: _id,
             curretOwnerAddr: msg.sender,
-            ipfsHash: _color,
+            ipfsHash: _ipfsHashOfPhoto,
             reputation: 0
         });
         photos.push(photo);
