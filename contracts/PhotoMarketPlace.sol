@@ -6,12 +6,11 @@ import "./modifiers/PhOwnable.sol";
 
 import './openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol';
 import './openzeppelin-solidity/contracts/ownership/Ownable.sol';
-import './openzeppelin-solidity/contracts/payment/PullPayment.sol';
 
 //import './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 
 
-contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPayment {
+contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable {
 
     using SafeMath for uint256;
 
@@ -38,12 +37,12 @@ contract PhotoMarketPlace is ERC721Full, Ownable, PhStorage, PhOwnable, PullPaym
      */
     function mint(string memory _ipfsHashOfPhoto) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
         // Check value is empty
-        require(!_photoExlsts[_ipfsHashOfPhoto]);
+        require(!_photoExists[_ipfsHashOfPhoto]);
 
         // Require unique color
         uint _id = photoslist.push(_ipfsHashOfPhoto);
         _mint(msg.sender, _id); 
-        _photoExlsts[_ipfsHashOfPhoto] = true; // if it mint new token, it assign true
+        _photoExists[_ipfsHashOfPhoto] = true; // if it mint new token, it assign true
 
         // Color - track it
 
