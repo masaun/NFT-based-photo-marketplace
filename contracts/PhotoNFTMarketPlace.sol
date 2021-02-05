@@ -4,21 +4,34 @@ pragma solidity ^0.5.16;
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { PhStorage } from "./storage/PhStorage.sol";
 import { PhOwnable } from "./modifiers/PhOwnable.sol";
+import { PhotoNFT } from "./PhotoNFT.sol";
 
 
 contract PhotoNFTMarketPlace is PhStorage, PhOwnable {
     using SafeMath for uint256;
     
-    constructor() public {}
+    address PHOTO_NFT_MARKETPLACE;
+
+    constructor() public {
+        address payable PHOTO_NFT_MARKETPLACE = address(uint160(address(this)));
+    }
 
 
     /** 
-     * @dev buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
+     * @notice - Buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
+     * @notice - Buy with ETH 
      */
-    function buy(address from, address to, uint256 tokenId) public returns (bool) {
-        //transferFrom(from, to, tokenId);
+    function buyPhotoNFT(PhotoNFT _photoNFT) public returns (bool) {
+        /// [Todo]: buy amount and owner (seller) address are assigned by using saved amount in the Photo struct
+        address seller;  /// Owner
+        uint buyAmount;
 
-        //fromAddrBalanceOf = DaiContractAddr.balanceOf(from);
+        /// msg.sender buy NFT with ETH
+        PHOTO_NFT_MARKETPLACE.call.value(buyAmount).gas(53000)("");
+
+        /// Transfer Ownership of the PhotoNFT
+        PhotoNFT photoNFT = _photoNFT;
+        photoNFT.mint(msg.sender);
 
         return true;
     }

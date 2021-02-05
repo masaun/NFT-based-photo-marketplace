@@ -39,20 +39,29 @@ contract PhotoNFT is ERC721Full, PhStorage, PhOwnable {
     /** 
      * @dev mint function is that create a new token.
      */
-    function mint(string memory _ipfsHashOfPhoto) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
+    function mint(address to) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
+
+        /// Mint a new PhotoNFT
+        uint newPhotoId = currentPhotoId.add(1);
+        currentPhotoId++;
+        _mint(msg.sender, newPhotoId); 
+
+        /// [Todo]: Move this into createNFT
+        string memory _ipfsHashOfPhoto;
+
         // Check value is empty
         require(!_photoExists[_ipfsHashOfPhoto]);
 
         // Require unique color
-        uint _id = photoslist.push(_ipfsHashOfPhoto);
-        _mint(msg.sender, _id); 
+        photoslist.push(_ipfsHashOfPhoto);
+
         _photoExists[_ipfsHashOfPhoto] = true; // if it mint new token, it assign true
 
         // Color - track it
 
         // Save NFT of photo
         Photo memory photo = Photo({
-            tokenId: _id,
+            tokenId: newPhotoId,
             curretOwnerAddr: msg.sender,
             ipfsHash: _ipfsHashOfPhoto,
             reputation: 0
