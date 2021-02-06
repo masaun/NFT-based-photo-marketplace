@@ -5,14 +5,18 @@ import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { PhStorage } from "./storage/PhStorage.sol";
 import { PhOwnable } from "./modifiers/PhOwnable.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
+import { PhotoNFTFactory } from "./PhotoNFTFactory.sol";
 
 
 contract PhotoNFTMarketPlace is PhStorage, PhOwnable {
     using SafeMath for uint256;
     
+    PhotoNFTFactory public photoNFTFactory;
+
     address PHOTO_NFT_MARKETPLACE;
 
-    constructor() public {
+    constructor(PhotoNFTFactory _photoNFTFactory) public {
+        photoNFTFactory = _photoNFTFactory;
         address payable PHOTO_NFT_MARKETPLACE = address(uint160(address(this)));
     }
 
@@ -22,7 +26,7 @@ contract PhotoNFTMarketPlace is PhStorage, PhOwnable {
      * @notice - Buy with ETH 
      */
     function buyPhotoNFT(PhotoNFT _photoNFT) public returns (bool) {
-        /// [Todo]: buy amount and owner (seller) address are assigned by using saved amount in the Photo struct
+        /// [Todo]: buy amount and owner (seller) address are assigned by using saved amount in the Photo struct 
         address seller;  /// Owner
         uint buyAmount;
 
