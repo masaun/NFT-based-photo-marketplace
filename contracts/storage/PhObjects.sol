@@ -1,20 +1,16 @@
 pragma solidity ^0.5.0;
 
+import { PhotoNFT } from "../PhotoNFT.sol";
+
 
 contract PhObjects {
 
-    struct Photo {
-        uint256 tokenId;
-        address curretOwnerAddr;
-        string ipfsHash;
+    struct Photo {  /// [Key]: index of array
+        PhotoNFT photoNFT;
+        address ownerAddress;
+        uint photoPrice;
+        string ipfsHashOfPhoto;
         uint256 reputation;
-    }
-
-
-    struct ExampleObject {
-        uint exampleId;
-        string exampleName;
-        address exampleAddr;
     }
 
 }

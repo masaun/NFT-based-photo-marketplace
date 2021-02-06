@@ -10,23 +10,9 @@ import { PhOwnable } from "./modifiers/PhOwnable.sol";
  * @notice - This is the NFT contract for a photo
  */
 contract PhotoNFT is ERC721Full, PhStorage, PhOwnable {
-
     using SafeMath for uint256;
 
-    /*+ 
-     * @dev Global variable
-     */ 
-    uint256 currentPhotoId = 1;
-    string ipfsHash;
-    //string[] public colors;  // Manage all token by using array
-    string[] public photoslist;  // Manage all token by using array
-
-
-    /**
-     * @dev Constructor
-     */ 
-    mapping (string => bool) _photoExists;
-    
+    uint256 currentPhotoId;
     
     constructor(
         string memory _nftName, 
@@ -37,38 +23,13 @@ contract PhotoNFT is ERC721Full, PhStorage, PhOwnable {
 
 
     /** 
-     * @dev mint function is that create a new token.
+     * @dev mint a photoNFT
      */
-    function mint(address to) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
-
+    function mint(address to) public returns (bool) {
         /// Mint a new PhotoNFT
         uint newPhotoId = getNextPhotoId();
         currentPhotoId++;
-        _mint(msg.sender, newPhotoId); 
-
-        /// [Todo]: Move this into createNFT
-        string memory _ipfsHashOfPhoto;
-
-        // Check value is empty
-        require(!_photoExists[_ipfsHashOfPhoto]);
-
-        // Require unique color
-        photoslist.push(_ipfsHashOfPhoto);
-
-        _photoExists[_ipfsHashOfPhoto] = true; // if it mint new token, it assign true
-
-        // Color - track it
-
-        // Save NFT of photo
-        Photo memory photo = Photo({
-            tokenId: newPhotoId,
-            curretOwnerAddr: msg.sender,
-            ipfsHash: _ipfsHashOfPhoto,
-            reputation: 0
-        });
-        photos.push(photo);
-
-        return (photo.tokenId, photo.curretOwnerAddr, photo.ipfsHash, photo.reputation);
+        _mint(msg.sender, newPhotoId);
     }
 
 
