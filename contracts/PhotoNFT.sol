@@ -42,7 +42,7 @@ contract PhotoNFT is ERC721Full, PhStorage, PhOwnable {
     function mint(address to) public returns (uint256 tokenId, address curretOwnerAddr, string memory ipfsHash, uint256 reputation) {
 
         /// Mint a new PhotoNFT
-        uint newPhotoId = currentPhotoId.add(1);
+        uint newPhotoId = getNextPhotoId();
         currentPhotoId++;
         _mint(msg.sender, newPhotoId); 
 
@@ -70,5 +70,14 @@ contract PhotoNFT is ERC721Full, PhStorage, PhOwnable {
 
         return (photo.tokenId, photo.curretOwnerAddr, photo.ipfsHash, photo.reputation);
     }
+
+
+    ///--------------------------------------
+    /// Private methods
+    ///--------------------------------------
+    function getNextPhotoId() private returns (uint nextPhotoId) {
+        return currentPhotoId.add(1);
+    }
+    
 
 }
