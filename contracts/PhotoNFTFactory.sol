@@ -1,4 +1,5 @@
 pragma solidity ^0.5.16;
+pragma experimental ABIEncoderV2;
 
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { PhStorage } from "./storage/PhStorage.sol";
@@ -12,13 +13,15 @@ import { PhotoNFT } from "./PhotoNFT.sol";
 contract PhotoNFTFactory is PhStorage, PhOwnable {
     using SafeMath for uint256;
     
-    address[] photoAddresses;
+    address[] public photoAddresses;
 
     constructor() public {}
 
     function createNewPhotoNFT(string memory nftName, string memory nftSymbol, uint photoPrice, string memory ipfsHashOfPhoto) public returns (bool) {
         PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol);
         photoAddresses.push(address(photoNFT));
+
+        photoNFT.savePhotoNFTData(msg.sender, photoPrice, ipfsHashOfPhoto);        
 
         /// Save metadata of a photoNFT
         saveMetadataOfPhotoNFT(photoNFT, photoPrice, ipfsHashOfPhoto);
@@ -39,5 +42,15 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
         });
         photos.push(photo);        
     }
+
+
+    ///-----------------
+    /// Getter methods
+    ///-----------------
+    function getPhoto(uint index) public view returns (Photo memory _photo) {
+        Photo memory photo = photos[index];
+        return photo;
+    }
+    
 
 }

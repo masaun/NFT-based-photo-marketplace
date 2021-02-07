@@ -20,13 +20,12 @@ contract PhotoNFTMarketPlace is PhStorage, PhOwnable {
         address payable PHOTO_NFT_MARKETPLACE = address(uint160(address(this)));
     }
 
-
     /** 
      * @notice - Buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
      * @notice - Buy with ETH 
      */
     function buyPhotoNFT(PhotoNFT _photoNFT) public returns (bool) {
-        /// [Todo]: buy amount and owner (seller) address are assigned by using saved amount in the Photo struct 
+        /// [Todo]: buy amount and owner (seller) address are assigned by using saved amount in the Photo struct
         address seller;  /// Owner
         uint buyAmount;
 
