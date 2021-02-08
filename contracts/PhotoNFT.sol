@@ -13,7 +13,7 @@ import { PhOwnable } from "./modifiers/PhOwnable.sol";
 contract PhotoNFT is ERC721Full, PhOwnable {
     using SafeMath for uint256;
 
-    uint256 currentPhotoId;
+    uint256 public currentPhotoId;
 
     struct PhotoData {  /// [Key]: photoNFT contract address
         address ownerAddress;

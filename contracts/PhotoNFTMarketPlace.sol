@@ -14,7 +14,7 @@ contract PhotoNFTMarketPlace {
     
     PhotoNFTFactory public photoNFTFactory;
 
-    address PHOTO_NFT_MARKETPLACE;
+    address public PHOTO_NFT_MARKETPLACE;
 
     constructor(PhotoNFTFactory _photoNFTFactory) public {
         photoNFTFactory = _photoNFTFactory;
