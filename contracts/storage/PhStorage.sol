@@ -10,7 +10,6 @@ import { PhEvents} from "./PhEvents.sol";
 contract PhStorage is PhObjects, PhEvents, Ownable {
 
     Photo[] public photos;
-    mapping (address => PhotoData) photoDatas;  /// [Key]: photoNFT contract address
 
 }
 

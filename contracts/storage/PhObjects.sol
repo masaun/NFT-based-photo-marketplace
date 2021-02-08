@@ -13,12 +13,4 @@ contract PhObjects {
         uint256 reputation;
     }
 
-    struct PhotoData {  /// [Key]: photoNFT contract address
-        address ownerAddress;
-        uint photoPrice;
-        string ipfsHashOfPhoto;
-        uint256 reputation;
-    }
-
-
 }

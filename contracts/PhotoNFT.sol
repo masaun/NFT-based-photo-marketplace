@@ -1,4 +1,5 @@
 pragma solidity ^0.5.16;
+pragma experimental ABIEncoderV2;
 
 import { ERC721Full } from "./openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
@@ -9,10 +10,18 @@ import { PhOwnable } from "./modifiers/PhOwnable.sol";
 /**
  * @notice - This is the NFT contract for a photo
  */
-contract PhotoNFT is ERC721Full, PhStorage, PhOwnable {
+contract PhotoNFT is ERC721Full, PhOwnable {
     using SafeMath for uint256;
 
     uint256 currentPhotoId;
+
+    struct PhotoData {  /// [Key]: photoNFT contract address
+        address ownerAddress;
+        uint photoPrice;
+        string ipfsHashOfPhoto;
+        uint256 reputation;
+    }
+    mapping (address => PhotoData) photoDatas;  /// [Key]: photoNFT contract address
     
     constructor(
         string memory _nftName, 
@@ -40,6 +49,15 @@ contract PhotoNFT is ERC721Full, PhStorage, PhOwnable {
         uint newPhotoId = getNextPhotoId();
         currentPhotoId++;
         _mint(msg.sender, newPhotoId);
+    }
+
+
+    ///--------------------------------------
+    /// Getter methods
+    ///--------------------------------------
+    function getPhotoData(address photoNFTContractAddress) public view returns (PhotoData memory _photoData) {
+        PhotoData memory photoData = photoDatas[photoNFTContractAddress];
+        return photoData;
     }
 
 
