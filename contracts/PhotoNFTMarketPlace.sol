@@ -25,15 +25,14 @@ contract PhotoNFTMarketPlace {
      * @notice - Buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
      * @notice - Buy with ETH 
      */
-    function buyPhotoNFT(address photoNFTContractAddress) public returns (bool) {
-        PhotoNFT photoNFT = PhotoNFT(photoNFTContractAddress);
+    function buyPhotoNFT(PhotoNFT _photoNFT) public returns (bool) {
+        PhotoNFT photoNFT = _photoNFT;
+        address PHOTO_NFT = address(_photoNFT);
 
-        /// [Todo]: buy amount and owner (seller) address are assigned by using saved amount in the Photo struct
-        //PhotoNFT.PhotoData memory photoData = photoNFT.getPhotoData(photoNFTContractAddress);
-        //PhotoNFT.PhotoData memory photoData = PhotoNFT.photoDatas[address(_photoNFT)];
-        address seller = photoNFT.getPhotoData(photoNFTContractAddress).ownerAddress;  /// Owner
-        uint buyAmount = photoNFT.getPhotoData(photoNFTContractAddress).photoPrice;
-
+        PhotoNFT.PhotoData memory photoData = photoNFT.getPhotoData(PHOTO_NFT);
+        address seller = photoData.ownerAddress;  /// Owner
+        uint buyAmount = photoData.photoPrice;
+ 
         /// msg.sender buy NFT with ETH
         PHOTO_NFT_MARKETPLACE.call.value(buyAmount).gas(53000)("");
 
