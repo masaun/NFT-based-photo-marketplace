@@ -48,7 +48,7 @@ contract PhotoNFT is ERC721Full, PhOwnable {
         /// Mint a new PhotoNFT
         uint newPhotoId = getNextPhotoId();
         currentPhotoId++;
-        _mint(msg.sender, newPhotoId);
+        _mint(to, newPhotoId);
     }
 
 
