@@ -24,7 +24,7 @@ export default class Publish extends Component {
           ipfsHash: '',
 
           /////// NFT
-          photo_marketplace: null, // Instance of contract
+          photoNFTFactory: null, // Instance of contract
           totalSupply: 0,
           photoslist: [],         // Array for NFT
 
@@ -54,7 +54,7 @@ export default class Publish extends Component {
     }
       
     onSubmit(event) {
-        const { accounts, photo_marketplace, web3 } = this.state;
+        const { accounts, photoNFTFactory, web3 } = this.state;
 
         event.preventDefault()
 
@@ -72,7 +72,7 @@ export default class Publish extends Component {
           const ipfsHashOfPhoto = this.state.ipfsHash
 
           // Append to array of NFT
-          this.state.photo_marketplace.methods.mint(ipfsHashOfPhoto).send({ from: accounts[0] })
+          this.state.photoNFTFactory.methods.mint(ipfsHashOfPhoto).send({ from: accounts[0] })
           .once('receipt', (receipt) => {
             this.setState({
               photoslist: [...this.state.photoslist, ipfsHashOfPhoto]
@@ -94,9 +94,24 @@ export default class Publish extends Component {
         })
     }  
 
+    getAllPhotos = async () => {
+        //---------------- NFT（Always load listed NFT data）------------------
+        const { photoNFTFactory } = this.state;
 
+        const totalSupply = await photoNFTFactory.methods.totalSupply().call()
+        this.setState({ totalSupply: totalSupply })
 
+        // Load photoslist
+        for (var i=1; i<=totalSupply; i++) {
+          const color = await photoNFTFactory.methods.photoslist(i - 1).call()
+          this.setState({
+            photoslist: [...this.state.photoslist, color]
+          })
+        }
+        console.log('======== photoslist ========', this.state.photoslist)
 
+        return 
+    }
 
      
     //////////////////////////////////// 
@@ -163,7 +178,7 @@ export default class Publish extends Component {
                 // Set web3, accounts, and contract to the state, and then proceed with an
                 // example of interacting with the contract's methods.
                 this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled,
-                    isMetaMask, photo_marketplace: instancePhotoNFTFactory}, () => {
+                    isMetaMask, photoNFTFactory: instancePhotoNFTFactory}, () => {
                       this.refreshValues(instancePhotoNFTFactory);
                       setInterval(() => {
                         this.refreshValues(instancePhotoNFTFactory);
@@ -176,19 +191,7 @@ export default class Publish extends Component {
 
 
             //---------------- NFT（Always load listed NFT data）------------------
-            const { photo_marketplace } = this.state;
 
-            const totalSupply = await photo_marketplace.methods.totalSupply().call()
-            this.setState({ totalSupply: totalSupply })
-
-            // Load photoslist
-            for (var i=1; i<=totalSupply; i++) {
-              const color = await photo_marketplace.methods.photoslist(i - 1).call()
-              this.setState({
-                photoslist: [...this.state.photoslist, color]
-              })
-            }
-            console.log('======== photoslist ========', this.state.photoslist)
 
           }
         } catch (error) {
