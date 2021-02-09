@@ -202,7 +202,7 @@ export default class Publish extends Component {
 
               <form onSubmit={this.onSubmit}>
                 <input type='file' onChange={this.captureFile} />
-                <Button size={'small'}><input type='submit' /></Button>
+                <Button size={'small'} type='submit'>Upload my photo</Button>
               </form>
             </Box>
           </div>
