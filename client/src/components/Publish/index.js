@@ -73,19 +73,9 @@ export default class Publish extends Component {
           const ipfsHashOfPhoto = this.state.ipfsHash
           photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
           .once('receipt', (receipt) => {
-            // this.setState({
-            //   photoslist: [...this.state.photoslist, ipfsHashOfPhoto]
-            // })
-
             console.log('=== receipt ===', receipt);
             // console.log('=== receipt.events.Transfer.returnValues.tokenId ===', receipt.events.Transfer.returnValues.tokenId);
             // console.log('=== receipt.events.Transfer.returnValues.to ===', receipt.events.Transfer.returnValues.to);
-
-            // let tokenId = receipt.events.Transfer.returnValues.tokenId
-            // let ownerAddr = receipt.events.Transfer.returnValues.to
-            // let reputationCount = 0
-            // this.setState({ photoData: [tokenId, ownerAddr, reputationCount] })
-            // this.setState({ photoDataAll: [...this.state.photoDataAll, this.state.photoData] })
           })
         })
     }  
