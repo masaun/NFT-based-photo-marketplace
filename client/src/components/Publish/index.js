@@ -94,25 +94,6 @@ export default class Publish extends Component {
         })
     }  
 
-    getAllPhotos = async () => {
-        //---------------- NFT（Always load listed NFT data）------------------
-        const { photoNFTFactory } = this.state;
-
-        const totalSupply = await photoNFTFactory.methods.totalSupply().call()
-        this.setState({ totalSupply: totalSupply })
-
-        // Load photoslist
-        for (var i=1; i<=totalSupply; i++) {
-          const color = await photoNFTFactory.methods.photoslist(i - 1).call()
-          this.setState({
-            photoslist: [...this.state.photoslist, color]
-          })
-        }
-        console.log('======== photoslist ========', this.state.photoslist)
-
-        return 
-    }
-
      
     //////////////////////////////////// 
     /// Ganache
