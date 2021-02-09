@@ -111,14 +111,11 @@ export default class Publish extends Component {
   }
 
   componentDidMount = async () => {
-    console.log('=== photoData（＠componentDidMount）===', this.state.photoData)      
-    console.log('=== photoDataAll（＠componentDidMount）===', this.state.photoDataAll)
-
     const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
  
-    let PhotoMarketPlace = {};
+    let PhotoNFTFactory = {};
     try {
-      PhotoMarketPlace = require("../../../../build/contracts/PhotoMarketPlace.json"); // Load ABI of contract of PhotoMarketPlace
+      PhotoNFTFactory = require("../../../../build/contracts/PhotoNFTFactory.json"); // Load ABI of contract of PhotoNFTFactory
     } catch (e) {
       console.log(e);
     }
@@ -145,30 +142,30 @@ export default class Publish extends Component {
         let balance = accounts.length > 0 ? await web3.eth.getBalance(accounts[0]): web3.utils.toWei('0');
         balance = web3.utils.fromWei(balance, 'ether');
 
-        let instancePhotoMarketPlace = null;
+        let instancePhotoNFTFactory = null;
         let deployedNetwork = null;
 
         // Create instance of contracts
-        if (PhotoMarketPlace.networks) {
-          deployedNetwork = PhotoMarketPlace.networks[networkId.toString()];
+        if (PhotoNFTFactory.networks) {
+          deployedNetwork = PhotoNFTFactory.networks[networkId.toString()];
           if (deployedNetwork) {
-            instancePhotoMarketPlace = new web3.eth.Contract(
-              PhotoMarketPlace.abi,
+            instancePhotoNFTFactory = new web3.eth.Contract(
+              PhotoNFTFactory.abi,
               deployedNetwork && deployedNetwork.address,
             );
-            console.log('=== instancePhotoMarketPlace ===', instancePhotoMarketPlace);
+            console.log('=== instancePhotoNFTFactory ===', instancePhotoNFTFactory);
           }
         }
 
-        if (instancePhotoMarketPlace) {
-          // Set web3, accounts, and contract to the state, and then proceed with an
-          // example of interacting with the contract's methods.
-          this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled,
-            isMetaMask, photo_marketplace: instancePhotoMarketPlace }, () => {
-              this.refreshValues(instancePhotoMarketPlace);
-              setInterval(() => {
-                this.refreshValues(instancePhotoMarketPlace);
-              }, 5000);
+        if (instancePhotoNFTFactory) {
+            // Set web3, accounts, and contract to the state, and then proceed with an
+            // example of interacting with the contract's methods.
+            this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled,
+                isMetaMask, photo_marketplace: instancePhotoNFTFactory}, () => {
+                  this.refreshValues(instancePhotoNFTFactory);
+                  setInterval(() => {
+                    this.refreshValues(instancePhotoNFTFactory);
+                }, 5000);
             });
         }
         else {
@@ -207,9 +204,9 @@ export default class Publish extends Component {
     }
   }
 
-  refreshValues = (instancePhotoMarketPlace) => {
-    if (instancePhotoMarketPlace) {
-      console.log('refreshValues of instancePhotoMarketPlace');
+  refreshValues = (instancePhotoNFTFactory) => {
+    if (instancePhotoNFTFactory) {
+      console.log('refreshValues of instancePhotoNFTFactory');
     }
   }
 
