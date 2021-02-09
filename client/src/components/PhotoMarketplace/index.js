@@ -19,8 +19,8 @@ export default class PhotoMarketplace extends Component {
           route: window.location.pathname.replace("/", ""),
 
           /////// NFT
-          allPhotos: null,
-
+          allPhotos: [],
+          
           photoslist: [],         // Array for NFT
 
           photoData: [],
@@ -161,7 +161,8 @@ export default class PhotoMarketplace extends Component {
             }
 
             ///@dev - NFT（Always load listed NFT data
-            await this.getAllPhotos();
+            const allPhotos = await this.getAllPhotos();
+            this.setState({ allPhotos: allPhotos })
           }
         } catch (error) {
           // Catch any errors for any of the above operations.
