@@ -18,20 +18,15 @@ export default class PhotoMarketplace extends Component {
           accounts: null,
           route: window.location.pathname.replace("/", ""),
 
-          /////// Ipfs Upload
-          buffer: null,
-          ipfsHash: '',
-
           /////// NFT
-          photo_marketplace: null, // Instance of contract
-          totalSupply: 0,
+          allPhotos: null,
+
           photoslist: [],         // Array for NFT
 
           photoData: [],
           photoDataAll: []
         };
 
-        this.getTestData = this.getTestData.bind(this);
         this.addReputation = this.addReputation.bind(this);
     }
 
@@ -57,12 +52,13 @@ export default class PhotoMarketplace extends Component {
     /// NFT（Always load listed NFT data）
     ///-------------------------------------
     getAllPhotos = async () => {
-        const { photoNFTFactory } = this.state;
+        const { photoNFTFactory } = this.state
 
-        const allPhotos = await photoNFTFactory.methods.getAllPhotos().call();
-        console.log('=== allPhotos ===', allPhotos);
+        const allPhotos = await photoNFTFactory.methods.getAllPhotos().call()
+        console.log('=== allPhotos ===', allPhotos)
 
-        this.setState({ allPhotos: allPhotos });
+        this.setState({ allPhotos: allPhotos })
+        return allPhotos
     }
 
 
@@ -196,7 +192,7 @@ export default class PhotoMarketplace extends Component {
 
               <h2>NFT based Photo MarketPlace</h2>
 
-              { this.state.allPhotos.map((photo, key) => {
+              { allPhotos.map((photo, key) => {
                 return (
                   <div key={key} className="">
                     <div className={styles.widgets}>
