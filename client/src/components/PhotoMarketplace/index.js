@@ -59,19 +59,10 @@ export default class PhotoMarketplace extends Component {
     getAllPhotos = async () => {
         const { photoNFTFactory } = this.state;
 
-        const totalSupply = await photoNFTFactory.methods.getAllPhotos().call()
-        this.setState({ totalSupply: totalSupply })
+        const allPhotos = await photoNFTFactory.methods.getAllPhotos().call();
+        console.log('=== allPhotos ===', allPhotos);
 
-        // Load photoslist
-        for (var i=1; i<=totalSupply; i++) {
-          const color = await photoNFTFactory.methods.photoslist(i - 1).call()
-          this.setState({
-            photoslist: [...this.state.photoslist, color]
-          })
-        }
-        console.log('======== photoslist ========', this.state.photoslist)
-
-        return 
+        this.setState({ allPhotos: allPhotos });
     }
 
 
@@ -92,8 +83,10 @@ export default class PhotoMarketplace extends Component {
         const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
      
         let PhotoNFTFactory = {};
+        let PhotoNFTMarketPlace = {};
         try {
-          PhotoNFTFactory = require("../../../../build/contracts/PhotoNFTFactory.json"); // Load ABI of contract of PhotoNFTFactory
+          PhotoNFTFactory = require("../../../../build/contracts/PhotoNFTFactory.json");
+          PhotoNFTMarketPlace = require("../../../../build/contracts/PhotoNFTMarketPlace.json");
         } catch (e) {
           console.log(e);
         }
@@ -121,6 +114,7 @@ export default class PhotoMarketplace extends Component {
             balance = web3.utils.fromWei(balance, 'ether');
 
             let instancePhotoNFTFactory = null;
+            let instancePhotoNFTMarketPlace = null;
             let deployedNetwork = null;
 
             // Create instance of contracts
@@ -135,11 +129,31 @@ export default class PhotoMarketplace extends Component {
               }
             }
 
-            if (instancePhotoNFTFactory) {
+            if (PhotoNFTMarketPlace.networks) {
+              deployedNetwork = PhotoNFTMarketPlace.networks[networkId.toString()];
+              if (deployedNetwork) {
+                instancePhotoNFTMarketPlace = new web3.eth.Contract(
+                  PhotoNFTMarketPlace.abi,
+                  deployedNetwork && deployedNetwork.address,
+                );
+                console.log('=== instancePhotoNFTMarketPlace ===', instancePhotoNFTMarketPlace);
+              }
+            }
+
+            if (instancePhotoNFTFactory || instancePhotoNFTMarketPlace) {
                 // Set web3, accounts, and contract to the state, and then proceed with an
                 // example of interacting with the contract's methods.
-                this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled,
-                    isMetaMask, photoNFTFactory: instancePhotoNFTFactory}, () => {
+                this.setState({ 
+                    web3, 
+                    ganacheAccounts, 
+                    accounts, 
+                    balance, 
+                    networkId, 
+                    networkType, 
+                    hotLoaderDisabled,
+                    isMetaMask, 
+                    photoNFTFactory: instancePhotoNFTFactory, 
+                    photoNFTMarketPlace: instancePhotoNFTMarketPlace }, () => {
                       this.refreshValues(instancePhotoNFTFactory);
                       setInterval(() => {
                         this.refreshValues(instancePhotoNFTFactory);
@@ -150,10 +164,8 @@ export default class PhotoMarketplace extends Component {
               this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled, isMetaMask });
             }
 
-
-            //---------------- NFT（Always load listed NFT data）------------------
-
-
+            ///@dev - NFT（Always load listed NFT data
+            await this.getAllPhotos();
           }
         } catch (error) {
           // Catch any errors for any of the above operations.
@@ -177,14 +189,14 @@ export default class PhotoMarketplace extends Component {
     }
 
     render() {
-        const {} = this.state;
+        const { allPhotos } = this.state;
 
         return (
             <div className={styles.contracts}>
 
               <h2>NFT based Photo MarketPlace</h2>
 
-              { this.state.photoslist.map((photo, key) => {
+              { this.state.allPhotos.map((photo, key) => {
                 return (
                   <div key={key} className="">
                     <div className={styles.widgets}>

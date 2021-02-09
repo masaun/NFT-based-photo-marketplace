@@ -24,8 +24,6 @@ export default class Publish extends Component {
           ipfsHash: '',
 
           /////// NFT
-          photoNFTFactory: null, // Instance of contract
-          totalSupply: 0,
           photoslist: [],         // Array for NFT
 
           photoData: [],
@@ -158,8 +156,16 @@ export default class Publish extends Component {
             if (instancePhotoNFTFactory) {
                 // Set web3, accounts, and contract to the state, and then proceed with an
                 // example of interacting with the contract's methods.
-                this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled,
-                    isMetaMask, photoNFTFactory: instancePhotoNFTFactory}, () => {
+                this.setState({ 
+                    web3, 
+                    ganacheAccounts, 
+                    accounts, 
+                    balance, 
+                    networkId, 
+                    networkType, 
+                    hotLoaderDisabled,
+                    isMetaMask, 
+                    photoNFTFactory: instancePhotoNFTFactory}, () => {
                       this.refreshValues(instancePhotoNFTFactory);
                       setInterval(() => {
                         this.refreshValues(instancePhotoNFTFactory);
