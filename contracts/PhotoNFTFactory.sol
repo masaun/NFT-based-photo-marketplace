@@ -24,14 +24,14 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
         photoNFT.savePhotoNFTData(msg.sender, photoPrice, ipfsHashOfPhoto);        
 
         /// Save metadata of a photoNFT
-        saveMetadataOfPhotoNFT(photoNFT, photoPrice, ipfsHashOfPhoto);
+        _saveMetadataOfPhotoNFT(photoNFT, photoPrice, ipfsHashOfPhoto);
     }
 
 
     /**
      * @notice - Save metadata of a photoNFT
      */
-    function saveMetadataOfPhotoNFT(PhotoNFT _photoNFT, uint _photoPrice, string memory _ipfsHashOfPhoto) public returns (bool) {
+    function _saveMetadataOfPhotoNFT(PhotoNFT _photoNFT, uint _photoPrice, string memory _ipfsHashOfPhoto) internal returns (bool) {
         // Save metadata of a photoNFT of photo
         Photo memory photo = Photo({
             photoNFT: _photoNFT,
@@ -51,7 +51,7 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
         Photo memory photo = photos[index];
         return photo;
     }
-    
+
     function getAllPhotos() public view returns (Photo[] memory photos) {
         return photos;
     }

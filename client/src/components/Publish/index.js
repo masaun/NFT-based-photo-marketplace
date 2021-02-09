@@ -67,28 +67,26 @@ export default class Publish extends Component {
           this.setState({ ipfsHash: result[0].hash })
           console.log('=== ipfsHash ===', this.state.ipfsHash)
 
+          const nftName = "Art Test Token";
+          const nftSymbol = "ATT";
+          const photoPrice = web3.utils.toWei('100', 'ether');
           const ipfsHashOfPhoto = this.state.ipfsHash
-
-          // Append to array of NFT
-          this.state.photoNFTFactory.methods.mint(ipfsHashOfPhoto).send({ from: accounts[0] })
+          photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
           .once('receipt', (receipt) => {
-            this.setState({
-              photoslist: [...this.state.photoslist, ipfsHashOfPhoto]
-            })
+            // this.setState({
+            //   photoslist: [...this.state.photoslist, ipfsHashOfPhoto]
+            // })
 
             console.log('=== receipt ===', receipt);
-            console.log('=== receipt.events.Transfer.returnValues.tokenId ===', receipt.events.Transfer.returnValues.tokenId);
-            console.log('=== receipt.events.Transfer.returnValues.to ===', receipt.events.Transfer.returnValues.to);
+            // console.log('=== receipt.events.Transfer.returnValues.tokenId ===', receipt.events.Transfer.returnValues.tokenId);
+            // console.log('=== receipt.events.Transfer.returnValues.to ===', receipt.events.Transfer.returnValues.to);
 
-            let tokenId = receipt.events.Transfer.returnValues.tokenId
-            let ownerAddr = receipt.events.Transfer.returnValues.to
-            let reputationCount = 0
-            this.setState({ photoData: [tokenId, ownerAddr, reputationCount] })
-            this.setState({ photoDataAll: [...this.state.photoDataAll, this.state.photoData] })
+            // let tokenId = receipt.events.Transfer.returnValues.tokenId
+            // let ownerAddr = receipt.events.Transfer.returnValues.to
+            // let reputationCount = 0
+            // this.setState({ photoData: [tokenId, ownerAddr, reputationCount] })
+            // this.setState({ photoDataAll: [...this.state.photoDataAll, this.state.photoData] })
           })
-          console.log('=== photoslist ===', this.state.photoslist)
-          console.log('=== photoData ===', this.state.photoData)      
-          console.log('=== photoDataAll ===', this.state.photoDataAll)
         })
     }  
 
