@@ -210,6 +210,14 @@ export default class PhotoMarketplace extends Component {
 
                         <span style={{ padding: "20px" }}></span>
 
+                        <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
+
+                        <p>NFT Address: { photo.photoNFT }</p>
+
+                        <p>Owner: { photo.ownerAddress }</p>
+
+                        <p>Reputation Count: { photo.reputation }</p>
+                        
                         <br />
 
                         <Button size={'small'} onClick={this.getTestData}> Buy </Button>
@@ -219,14 +227,6 @@ export default class PhotoMarketplace extends Component {
                         <Button size={'small'} onClick={this.addReputation}> Rep </Button> 
 
                         <span style={{ padding: "5px" }}></span>
-
-                        <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
-
-                        <p>NFT Address: { photo.photoNFT }</p>
-
-                        <p>Owner: { photo.ownerAddress }</p>
-
-                        <p>Reputation Count: { photo.reputation }</p>
                       </Card>
                     </div>
                   </div>
