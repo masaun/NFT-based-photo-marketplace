@@ -49,5 +49,16 @@ module.exports = {
       gas: 3000000,
       gasPrice: 10000000000
     }
+  },
+  compilers: {
+    solc: {
+      //version: "0.5.16",  /// Final version of solidity-v0.5.x
+      settings: {
+        optimizer: {
+          enabled: true,
+          runs: 200
+        }
+      }
+    }
   }
 };
