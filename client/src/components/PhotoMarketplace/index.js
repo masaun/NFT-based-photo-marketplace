@@ -190,7 +190,6 @@ export default class PhotoMarketplace extends Component {
 
         return (
             <div className={styles.contracts}>
-
               <h2>NFT based Photo MarketPlace</h2>
 
               { allPhotos.map((photo, key) => {
