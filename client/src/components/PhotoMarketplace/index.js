@@ -186,7 +186,7 @@ export default class PhotoMarketplace extends Component {
     }
 
     render() {
-        const { allPhotos } = this.state;
+        const { web3, allPhotos } = this.state;
 
         return (
             <div className={styles.contracts}>
@@ -205,7 +205,7 @@ export default class PhotoMarketplace extends Component {
                           borderRadius={8}
                           height="100%"
                           maxWidth='100%'
-                          src={ `https://ipfs.io/ipfs/${photo}` }
+                          src={ `https://ipfs.io/ipfs/${photo.ipfsHashOfPhoto}` }
                         />
 
                         <span style={{ padding: "20px" }}></span>
@@ -220,13 +220,13 @@ export default class PhotoMarketplace extends Component {
 
                         <span style={{ padding: "5px" }}></span>
 
-                        <p>Price: 1.5 ETH (e.g.)</p>
+                        <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
 
-                        <p>NFT Address: 0x5bc111G543B66E331fFaC7FFB0463d91fd9FE8G7 (e.g.)</p>
+                        <p>NFT Address: { photo.photoNFT }</p>
 
-                        <p>Owner: 0x1cb241G111B66E331fFaC7FFB0463d91fd8FE8F5 (e.g.)</p>
+                        <p>Owner: { photo.ownerAddress }</p>
 
-                        <p>Reputation Count: 1</p>
+                        <p>Reputation Count: { photo.reputation }</p>
                       </Card>
                     </div>
                   </div>
