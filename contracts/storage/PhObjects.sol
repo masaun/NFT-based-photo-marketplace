@@ -7,6 +7,8 @@ contract PhObjects {
 
     struct Photo {  /// [Key]: index of array
         PhotoNFT photoNFT;
+        string photoNFTName;
+        string photoNFTSymbol;
         address ownerAddress;
         uint photoPrice;
         string ipfsHashOfPhoto;
