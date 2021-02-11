@@ -34,10 +34,12 @@ export default class PhotoMarketplace extends Component {
     ///---------------------------------
     /// Functions of buying a photo NFT 
     ///---------------------------------
-    buyPhotoNFT = async () => {
+    buyPhotoNFT = async (e) => {
         const { accounts, photoNFTMarketPlace } = this.state;
 
-        let _photoNFT = ""
+        console.log('=== value of buyPhotoNFT ===', e.target.value);
+
+        const _photoNFT = e.target.value
         const txReceipt1 = await photoNFTMarketPlace.methods.buyPhotoNFT(_photoNFT).send({ from: accounts[0] })
         console.log('=== response of buyPhotoNFT ===', txReceipt1);
     }
@@ -232,7 +234,7 @@ export default class PhotoMarketplace extends Component {
                         
                         <br />
 
-                        <Button size={'small'} onClick={this.buyPhotoNFT}> Buy </Button>
+                        <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
 
                         <span style={{ padding: "5px" }}></span>
 
