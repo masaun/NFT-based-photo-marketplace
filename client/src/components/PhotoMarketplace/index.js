@@ -27,7 +27,21 @@ export default class PhotoMarketplace extends Component {
           photoDataAll: []
         };
 
+        this.buyPhotoNFT = this.buyPhotoNFT.bind(this);
         this.addReputation = this.addReputation.bind(this);
+    }
+
+    ///---------------------------------
+    /// Functions of buying a photo NFT 
+    ///---------------------------------
+    buyPhotoNFT = async (e) => {
+        const { accounts, photoNFTMarketPlace } = this.state;
+
+        console.log('=== value of buyPhotoNFT ===', e.target.value);
+
+        const _photoNFT = e.target.value
+        const txReceipt1 = await photoNFTMarketPlace.methods.buyPhotoNFT(_photoNFT).send({ from: accounts[0] })
+        console.log('=== response of buyPhotoNFT ===', txReceipt1);
     }
 
 
@@ -35,15 +49,15 @@ export default class PhotoMarketplace extends Component {
     /// Functions of reputation 
     ///---------------------------
     addReputation = async () => {
-        const { accounts, photo_marketplace } = this.state;
+        const { accounts, photoNFTMarketPlace } = this.state;
 
         let _from2 = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
         let _to2 = accounts[0]
         let _tokenId2 = 1
-        const response_1 = await photo_marketplace.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
+        const response_1 = await photoNFTMarketPlace.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
         console.log('=== response of reputation function ===', response_1);      // Debug
 
-        const response_2 = await photo_marketplace.methods.getReputationCount(_tokenId2).call()
+        const response_2 = await photoNFTMarketPlace.methods.getReputationCount(_tokenId2).call()
         console.log('=== response of getReputationCount function ===', response_2);      // Debug
     }
 
@@ -220,7 +234,7 @@ export default class PhotoMarketplace extends Component {
                         
                         <br />
 
-                        <Button size={'small'} onClick={this.getTestData}> Buy </Button>
+                        <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
 
                         <span style={{ padding: "5px" }}></span>
 
