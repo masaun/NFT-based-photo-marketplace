@@ -34,13 +34,23 @@ contract PhotoNFTMarketPlace {
         uint buyAmount = photoData.photoPrice;
  
         /// msg.sender buy NFT with ETH
-        PHOTO_NFT_MARKETPLACE.call.value(buyAmount).gas(53000)("");
+        bool result = _buyPhotoNFTWithETH(PHOTO_NFT_MARKETPLACE, buyAmount);
+        //PHOTO_NFT_MARKETPLACE.call.value(buyAmount).gas(53000)("");
 
         /// Transfer Ownership of the PhotoNFT
-        photoNFT.mint(msg.sender);
+        if (result == true) {
+            photoNFT.mint(msg.sender);
+        }
 
         return true;
     }
+
+    function _buyPhotoNFTWithETH(address receiver, uint buyAmount) internal returns (bool) {
+        /// msg.sender buy NFT with ETH
+        receiver.call.value(buyAmount).gas(53000)("");
+        return true;        
+    }
+    
 
 
     /** 
