@@ -25,7 +25,7 @@ contract PhotoNFTMarketPlace {
      * @notice - Buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
      * @notice - Buy with ETH 
      */
-    function buyPhotoNFT(PhotoNFT _photoNFT) public returns (bool) {
+    function buyPhotoNFT(PhotoNFT _photoNFT) public payable returns (bool) {
         PhotoNFT photoNFT = _photoNFT;
         address PHOTO_NFT = address(_photoNFT);
 
@@ -45,7 +45,7 @@ contract PhotoNFTMarketPlace {
         return true;
     }
 
-    function _buyPhotoNFTWithETH(address receiver, uint buyAmount) internal returns (bool) {
+    function _buyPhotoNFTWithETH(address receiver, uint buyAmount) internal payable returns (bool) {
         /// msg.sender buy NFT with ETH
         receiver.call.value(buyAmount).gas(53000)("");
         return true;        
