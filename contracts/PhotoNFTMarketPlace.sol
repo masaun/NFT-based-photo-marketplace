@@ -45,7 +45,7 @@ contract PhotoNFTMarketPlace {
         return true;
     }
 
-    function _buyPhotoNFTWithETH(address receiver, uint buyAmount) internal payable returns (bool) {
+    function _buyPhotoNFTWithETH(address receiver, uint buyAmount) public payable returns (bool) {
         /// msg.sender buy NFT with ETH
         receiver.call.value(buyAmount).gas(53000)("");
         return true;        
