@@ -69,7 +69,7 @@ export default class Publish extends Component {
 
           const nftName = "Art Test Token";
           const nftSymbol = "ATT";
-          const photoPrice = web3.utils.toWei('100', 'ether');
+          const photoPrice = web3.utils.toWei('10', 'ether');
           const ipfsHashOfPhoto = this.state.ipfsHash
           photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
           .once('receipt', (receipt) => {

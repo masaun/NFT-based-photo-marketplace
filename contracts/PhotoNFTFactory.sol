@@ -54,7 +54,23 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
         return photo;
     }
 
+    function getPhotoByNFTAddress(address photoAddress) public view returns (Photo memory _photo) {
+        /// Identify member's index
+        uint photoIndex;
+        for (uint i=0; i < photoAddresses.length; i++) {
+            if (photoAddresses[i] == photoAddress) {
+                photoIndex = i;
+            }
+        }
+
+        Photo memory photo = photos[photoIndex];
+        return photo;
+    }
+
     function getAllPhotos() public view returns (Photo[] memory _photos) {
         return photos;
     }
+
+
+
 }
