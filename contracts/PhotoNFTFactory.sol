@@ -21,23 +21,23 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
         PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol);
         photoAddresses.push(address(photoNFT));
 
-        photoNFT.savePhotoNFTData(msg.sender, photoPrice, ipfsHashOfPhoto);        
+        photoNFT.savePhotoNFTData(nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);        
 
         /// Save metadata of a photoNFT
-        _saveMetadataOfPhotoNFT(photoNFT, nftName, nftSymbol, photoPrice, ipfsHashOfPhoto);
+        _saveMetadataOfPhotoNFT(photoNFT, nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);
     }
 
 
     /**
      * @notice - Save metadata of a photoNFT
      */
-    function _saveMetadataOfPhotoNFT(PhotoNFT _photoNFT, string memory _photoNFTName, string memory _photoNFTSymbol, uint _photoPrice, string memory _ipfsHashOfPhoto) internal returns (bool) {
+    function _saveMetadataOfPhotoNFT(PhotoNFT _photoNFT, string memory _photoNFTName, string memory _photoNFTSymbol, address _ownerAddress, uint _photoPrice, string memory _ipfsHashOfPhoto) internal returns (bool) {
         // Save metadata of a photoNFT of photo
         Photo memory photo = Photo({
             photoNFT: _photoNFT,
             photoNFTName: _photoNFTName,
             photoNFTSymbol: _photoNFTSymbol,
-            ownerAddress: msg.sender,
+            ownerAddress: _ownerAddress,
             photoPrice: _photoPrice,
             ipfsHashOfPhoto: _ipfsHashOfPhoto,
             reputation: 0
