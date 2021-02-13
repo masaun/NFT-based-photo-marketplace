@@ -16,6 +16,8 @@ contract PhotoNFT is ERC721Full, PhOwnable {
     uint256 public currentPhotoId;
 
     struct PhotoData {  /// [Key]: photoNFT contract address
+        string photoNFTName;
+        string photoNFTSymbol;
         address ownerAddress;
         uint photoPrice;
         string ipfsHashOfPhoto;
@@ -33,8 +35,10 @@ contract PhotoNFT is ERC721Full, PhOwnable {
     /** 
      * @notice - Save a photoNFT data
      */
-    function savePhotoNFTData(address _ownerAddress, uint _photoPrice, string memory _ipfsHashOfPhoto) public returns (bool) {
+    function savePhotoNFTData(string memory _photoNFTName, string memory _photoNFTSymbol, address _ownerAddress, uint _photoPrice, string memory _ipfsHashOfPhoto) public returns (bool) {
         PhotoData storage photoData = photoDatas[address(this)];
+        photoData.photoNFTName = _photoNFTName;
+        photoData.photoNFTSymbol = _photoNFTSymbol;
         photoData.ownerAddress = _ownerAddress;
         photoData.photoPrice = _photoPrice;
         photoData.ipfsHashOfPhoto = _ipfsHashOfPhoto;
