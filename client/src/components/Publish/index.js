@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import getWeb3, { getGanacheWeb3, Web3 } from "../../utils/getWeb3";
 import ipfs from '../ipfs/ipfsApi.js'
 
-import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image } from 'rimble-ui';
+import { Grid } from '@material-ui/core';
+import { Loader, Button, Card, Input, Heading, Table, Form, Field } from 'rimble-ui';
 import { zeppelinSolidityHotLoaderOptions } from '../../../config/webpack';
 
 import styles from '../../App.module.scss';
@@ -192,20 +193,84 @@ export default class Publish extends Component {
 
     render()  {
         return (
-          <div className={styles.left}>
-            <br />
-            <h4>Publish</h4>
-            <p>Please upload your photo from here!</p>
+            <div className={styles.left}>
+                <Grid container style={{ marginTop: 20 }}>
+                    <Grid item xs={10}>
+                        <Card width={"auto"} 
+                              maxWidth={"420px"} 
+                              mx={"auto"} 
+                              my={5} 
+                              p={20} 
+                              borderColor={"#E8E8E8"}
+                        >
+                            <h2>Publish</h2>
+                            <p>Please upload your photo from here!</p>
 
-            <Box bg="salmon" color="white" fontSize={4} p={3} width={[1, 1, 0.5]}>
-              <h2>Upload your photo to IPFS</h2>
+                            <form onSubmit={this.onSubmit}>
+                                <Field label="NFT Name">
+                                    <Input
+                                        type="text"
+                                        width={1}
+                                        placeholder="e.g) Art NFT Token"
+                                        required={true}
+                                    />
+                                </Field> 
 
-              <form onSubmit={this.onSubmit}>
-                <input type='file' onChange={this.captureFile} />
-                <Button size={'small'} type='submit'>Upload my photo</Button>
-              </form>
-            </Box>
-          </div>
+                                <Field label="NFT Symbol">
+                                    <Input
+                                        type="text"
+                                        width={1}
+                                        placeholder="e.g) ARNT"
+                                        required={true}
+                                    />
+                                </Field>
+
+                                <Field label="Photo for uploading to IPFS">
+                                    <input 
+                                        type='file' 
+                                        onChange={this.captureFile} 
+                                        required={true}
+                                    />
+                                </Field>
+
+                                <Button size={'medium'} type='submit'>Upload my photo</Button>
+                            </form>
+
+
+                            {/*
+                            <Field label="Asset ID">
+                                <Input
+                                    type="text"
+                                    width={1}
+                                    placeholder="e.g) 1"
+                                    required={true}
+                                    value={this.state.valueEipbAssetId} 
+                                    onChange={this.handleEipbAssetId}
+                                />
+                            </Field> 
+
+                            <Field label="Needed quantity (volume in 1,000 m3)">
+                                <Input
+                                    type="text"
+                                    width={1}
+                                    placeholder="e.g) 50"
+                                    required={true}
+                                    value={this.state.valueEipbAskingValue} 
+                                    onChange={this.handleEipbAskingValue}
+                                />
+                            </Field>
+                            */}
+
+                        </Card>
+                    </Grid>
+
+                    <Grid item xs={1}>
+                    </Grid>
+
+                    <Grid item xs={1}>
+                    </Grid>
+                </Grid>
+            </div>
         );
     }
 }
