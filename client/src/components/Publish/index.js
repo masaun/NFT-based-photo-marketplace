@@ -31,13 +31,30 @@ export default class Publish extends Component {
           photoDataAll: []
         };
 
+        /////// Handle
+        this.handleNFTName = this.handleNFTName.bind(this);
+        this.handleNFTSymbol = this.handleNFTSymbol.bind(this);
+
         /////// Ipfs Upload
         this.captureFile = this.captureFile.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
     }
 
 
-    ///////--------------------- Functions of ipfsUpload ---------------------------  
+    ///--------------------------
+    /// Handler
+    ///-------------------------- 
+    handleNFTName(event) {
+        this.setState({ valueNFTName: event.target.value });
+    }
+
+    handleNFTSymbol(event) {
+        this.setState({ valueNFTSymbol: event.target.value });
+    }
+
+    ///--------------------------
+    /// Functions of ipfsUpload 
+    ///-------------------------- 
     captureFile(event) {
         event.preventDefault()
         const file = event.target.files[0]
@@ -213,6 +230,8 @@ export default class Publish extends Component {
                                         width={1}
                                         placeholder="e.g) Art NFT Token"
                                         required={true}
+                                        value={this.state.valueNFTName} 
+                                        onChange={this.handleNFTName} 
                                     />
                                 </Field> 
 
@@ -222,6 +241,8 @@ export default class Publish extends Component {
                                         width={1}
                                         placeholder="e.g) ARNT"
                                         required={true}
+                                        value={this.state.valueNFTSymbol} 
+                                        onChange={this.handleNFTSymbol}                                        
                                     />
                                 </Field>
 
@@ -230,37 +251,13 @@ export default class Publish extends Component {
                                         type='file' 
                                         onChange={this.captureFile} 
                                         required={true}
+                                        value={this.state.valueEipbAssetId} 
+                                        onChange={this.handleEipbAssetId}
                                     />
                                 </Field>
 
                                 <Button size={'medium'} type='submit'>Upload my photo</Button>
                             </form>
-
-
-                            {/*
-                            <Field label="Asset ID">
-                                <Input
-                                    type="text"
-                                    width={1}
-                                    placeholder="e.g) 1"
-                                    required={true}
-                                    value={this.state.valueEipbAssetId} 
-                                    onChange={this.handleEipbAssetId}
-                                />
-                            </Field> 
-
-                            <Field label="Needed quantity (volume in 1,000 m3)">
-                                <Input
-                                    type="text"
-                                    width={1}
-                                    placeholder="e.g) 50"
-                                    required={true}
-                                    value={this.state.valueEipbAskingValue} 
-                                    onChange={this.handleEipbAskingValue}
-                                />
-                            </Field>
-                            */}
-
                         </Card>
                     </Grid>
 
