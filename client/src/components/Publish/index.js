@@ -70,7 +70,7 @@ export default class Publish extends Component {
     }
       
     onSubmit(event) {
-        const { accounts, photoNFTFactory, web3 } = this.state;
+        const { web3, accounts, photoNFTFactory, valueNFTName, valueNFTSymbol } = this.state;
 
         event.preventDefault()
 
@@ -85,8 +85,11 @@ export default class Publish extends Component {
           this.setState({ ipfsHash: result[0].hash })
           console.log('=== ipfsHash ===', this.state.ipfsHash)
 
-          const nftName = "Art Test Token";
-          const nftSymbol = "ATT";
+          const nftName = valueNFTName;
+          const nftSymbol = valueNFTSymbol;
+          console.log('=== nftName ===', nftName);
+          console.log('=== nftSymbol ===', nftSymbol);
+
           const photoPrice = web3.utils.toWei('10', 'ether');
           const ipfsHashOfPhoto = this.state.ipfsHash
           photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
@@ -224,7 +227,7 @@ export default class Publish extends Component {
                             <p>Please upload your photo from here!</p>
 
                             <form onSubmit={this.onSubmit}>
-                                <Field label="NFT Name">
+                                <Field label="Photo NFT Name">
                                     <Input
                                         type="text"
                                         width={1}
@@ -235,11 +238,22 @@ export default class Publish extends Component {
                                     />
                                 </Field> 
 
-                                <Field label="NFT Symbol">
+                                <Field label="Photo NFT Symbol">
                                     <Input
                                         type="text"
                                         width={1}
                                         placeholder="e.g) ARNT"
+                                        required={true}
+                                        value={this.state.valueNFTSymbol} 
+                                        onChange={this.handleNFTSymbol}                                        
+                                    />
+                                </Field>
+
+                                <Field label="Photo Price (unit: ETH)">
+                                    <Input
+                                        type="text"
+                                        width={1}
+                                        placeholder="e.g) 100"
                                         required={true}
                                         value={this.state.valueNFTSymbol} 
                                         onChange={this.handleNFTSymbol}                                        
