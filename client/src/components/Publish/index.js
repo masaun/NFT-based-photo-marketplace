@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import getWeb3, { getGanacheWeb3, Web3 } from "../../utils/getWeb3";
 import ipfs from '../ipfs/ipfsApi.js'
 
-import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image } from 'rimble-ui';
+import { Grid } from '@material-ui/core';
+import { Loader, Button, Card, Input, Heading, Table, Form, Field } from 'rimble-ui';
 import { zeppelinSolidityHotLoaderOptions } from '../../../config/webpack';
 
 import styles from '../../App.module.scss';
@@ -19,16 +20,20 @@ export default class Publish extends Component {
           accounts: null,
           route: window.location.pathname.replace("/", ""),
 
+          /////// NFT concern
+          valueNFTName: '',
+          valueNFTSymbol: '',
+          valuePhotoPrice: '',
+
           /////// Ipfs Upload
           buffer: null,
-          ipfsHash: '',
-
-          /////// NFT
-          photoslist: [],         // Array for NFT
-
-          photoData: [],
-          photoDataAll: []
+          ipfsHash: ''
         };
+
+        /////// Handle
+        this.handleNFTName = this.handleNFTName.bind(this);
+        this.handleNFTSymbol = this.handleNFTSymbol.bind(this);
+        this.handlePhotoPrice = this.handlePhotoPrice.bind(this);
 
         /////// Ipfs Upload
         this.captureFile = this.captureFile.bind(this);
@@ -36,7 +41,24 @@ export default class Publish extends Component {
     }
 
 
-    ///////--------------------- Functions of ipfsUpload ---------------------------  
+    ///--------------------------
+    /// Handler
+    ///-------------------------- 
+    handleNFTName(event) {
+        this.setState({ valueNFTName: event.target.value });
+    }
+
+    handleNFTSymbol(event) {
+        this.setState({ valueNFTSymbol: event.target.value });
+    }
+
+    handlePhotoPrice(event) {
+        this.setState({ valuePhotoPrice: event.target.value });
+    }
+
+    ///--------------------------
+    /// Functions of ipfsUpload 
+    ///-------------------------- 
     captureFile(event) {
         event.preventDefault()
         const file = event.target.files[0]
@@ -52,7 +74,7 @@ export default class Publish extends Component {
     }
       
     onSubmit(event) {
-        const { accounts, photoNFTFactory, web3 } = this.state;
+        const { web3, accounts, photoNFTFactory, valueNFTName, valueNFTSymbol, valuePhotoPrice } = this.state;
 
         event.preventDefault()
 
@@ -67,9 +89,14 @@ export default class Publish extends Component {
           this.setState({ ipfsHash: result[0].hash })
           console.log('=== ipfsHash ===', this.state.ipfsHash)
 
-          const nftName = "Art Test Token";
-          const nftSymbol = "ATT";
-          const photoPrice = web3.utils.toWei('10', 'ether');
+          const nftName = valueNFTName;
+          const nftSymbol = valueNFTSymbol;
+          const _photoPrice = valuePhotoPrice;
+          console.log('=== nftName ===', nftName);
+          console.log('=== nftSymbol ===', nftSymbol);
+          console.log('=== _photoPrice ===', _photoPrice);
+
+          const photoPrice = web3.utils.toWei(_photoPrice, 'ether');
           const ipfsHashOfPhoto = this.state.ipfsHash
           photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
           .once('receipt', (receipt) => {
@@ -163,11 +190,6 @@ export default class Publish extends Component {
             else {
               this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled, isMetaMask });
             }
-
-
-            //---------------- NFT（Always load listed NFT data）------------------
-
-
           }
         } catch (error) {
           // Catch any errors for any of the above operations.
@@ -192,20 +214,73 @@ export default class Publish extends Component {
 
     render()  {
         return (
-          <div className={styles.left}>
-            <br />
-            <h4>Publish</h4>
-            <p>Please upload your photo from here!</p>
+            <div className={styles.left}>
+                <Grid container style={{ marginTop: 20 }}>
+                    <Grid item xs={10}>
+                        <Card width={"420px"} 
+                              maxWidth={"420px"} 
+                              mx={"auto"} 
+                              my={5} 
+                              p={20} 
+                              borderColor={"#E8E8E8"}
+                        >
+                            <h2>Publish</h2>
+                            <p>Please upload your photo from here!</p>
 
-            <Box bg="salmon" color="white" fontSize={4} p={3} width={[1, 1, 0.5]}>
-              <h2>Upload your photo to IPFS</h2>
+                            <Form onSubmit={this.onSubmit}>
+                                <Field label="Photo NFT Name">
+                                    <Input
+                                        type="text"
+                                        width={1}
+                                        placeholder="e.g) Art NFT Token"
+                                        required={true}
+                                        value={this.state.valueNFTName} 
+                                        onChange={this.handleNFTName} 
+                                    />
+                                </Field> 
 
-              <form onSubmit={this.onSubmit}>
-                <input type='file' onChange={this.captureFile} />
-                <Button size={'small'} type='submit'>Upload my photo</Button>
-              </form>
-            </Box>
-          </div>
+                                <Field label="Photo NFT Symbol">
+                                    <Input
+                                        type="text"
+                                        width={1}
+                                        placeholder="e.g) ARNT"
+                                        required={true}
+                                        value={this.state.valueNFTSymbol} 
+                                        onChange={this.handleNFTSymbol}                                        
+                                    />
+                                </Field>
+
+                                <Field label="Photo Price (unit: ETH)">
+                                    <Input
+                                        type="text"
+                                        width={1}
+                                        placeholder="e.g) 10"
+                                        required={true}
+                                        value={this.state.valuePhotoPrice} 
+                                        onChange={this.handlePhotoPrice}                                        
+                                    />
+                                </Field>
+
+                                <Field label="Photo for uploading to IPFS">
+                                    <input 
+                                        type='file' 
+                                        onChange={this.captureFile} 
+                                        required={true}
+                                    />
+                                </Field>
+
+                                <Button size={'medium'} type='submit'>Upload my photo</Button>
+                            </Form>
+                        </Card>
+                    </Grid>
+
+                    <Grid item xs={1}>
+                    </Grid>
+
+                    <Grid item xs={1}>
+                    </Grid>
+                </Grid>
+            </div>
         );
     }
 }
