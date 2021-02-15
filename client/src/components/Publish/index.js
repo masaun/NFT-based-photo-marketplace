@@ -217,7 +217,7 @@ export default class Publish extends Component {
             <div className={styles.left}>
                 <Grid container style={{ marginTop: 20 }}>
                     <Grid item xs={10}>
-                        <Card width={"auto"} 
+                        <Card width={"420px"} 
                               maxWidth={"420px"} 
                               mx={"auto"} 
                               my={5} 
