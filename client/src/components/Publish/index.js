@@ -53,7 +53,7 @@ export default class Publish extends Component {
     }
 
     handlePhotoPrice(event) {
-        this.setState({ valuePhotoPrice: Number(event.target.value) });
+        this.setState({ valuePhotoPrice: event.target.value });
     }
 
     ///--------------------------
@@ -91,10 +91,12 @@ export default class Publish extends Component {
 
           const nftName = valueNFTName;
           const nftSymbol = valueNFTSymbol;
+          const _photoPrice = valuePhotoPrice;
           console.log('=== nftName ===', nftName);
           console.log('=== nftSymbol ===', nftSymbol);
+          console.log('=== _photoPrice ===', _photoPrice);
 
-          const photoPrice = web3.utils.toWei('10', 'ether');
+          const photoPrice = web3.utils.toWei(_photoPrice, 'ether');
           const ipfsHashOfPhoto = this.state.ipfsHash
           photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
           .once('receipt', (receipt) => {
