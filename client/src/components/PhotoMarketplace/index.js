@@ -212,8 +212,14 @@ export default class PhotoMarketplace extends Component {
                 return (
                   <div key={key} className="">
                     <div className={styles.widgets}>
-                      <Card width={'30%'} bg="primary">
-
+                      {/* <Card width={'360px'} bg="primary"> */}
+                      <Card width={"360px"} 
+                              maxWidth={"360px"} 
+                              mx={"auto"} 
+                              my={5} 
+                              p={20} 
+                              borderColor={"#E8E8E8"}
+                      >
                         <h4>Photo name: { photo.photoNFTName } ({ photo.photoNFTSymbol })</h4>
 
                         <Image
