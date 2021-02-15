@@ -23,6 +23,7 @@ export default class Publish extends Component {
           /////// NFT concern
           valueNFTName: '',
           valueNFTSymbol: '',
+          valuePhotoPrice: '',
 
           /////// Ipfs Upload
           buffer: null,
@@ -32,6 +33,7 @@ export default class Publish extends Component {
         /////// Handle
         this.handleNFTName = this.handleNFTName.bind(this);
         this.handleNFTSymbol = this.handleNFTSymbol.bind(this);
+        this.handlePhotoPrice = this.handlePhotoPrice.bind(this);
 
         /////// Ipfs Upload
         this.captureFile = this.captureFile.bind(this);
@@ -48,6 +50,10 @@ export default class Publish extends Component {
 
     handleNFTSymbol(event) {
         this.setState({ valueNFTSymbol: event.target.value });
+    }
+
+    handlePhotoPrice(event) {
+        this.setState({ valuePhotoPrice: Number(event.target.value) });
     }
 
     ///--------------------------
@@ -68,7 +74,7 @@ export default class Publish extends Component {
     }
       
     onSubmit(event) {
-        const { web3, accounts, photoNFTFactory, valueNFTName, valueNFTSymbol } = this.state;
+        const { web3, accounts, photoNFTFactory, valueNFTName, valueNFTSymbol, valuePhotoPrice } = this.state;
 
         event.preventDefault()
 
@@ -246,10 +252,10 @@ export default class Publish extends Component {
                                     <Input
                                         type="text"
                                         width={1}
-                                        placeholder="e.g) 100"
+                                        placeholder="e.g) 10"
                                         required={true}
-                                        value={this.state.valueNFTSymbol} 
-                                        onChange={this.handleNFTSymbol}                                        
+                                        value={this.state.valuePhotoPrice} 
+                                        onChange={this.handlePhotoPrice}                                        
                                     />
                                 </Field>
 
