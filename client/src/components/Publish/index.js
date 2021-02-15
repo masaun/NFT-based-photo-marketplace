@@ -86,8 +86,8 @@ export default class Publish extends Component {
           }
 
           // In case of successful to upload to IPFS
-          this.setState({ ipfsHash: result[0].hash })
-          console.log('=== ipfsHash ===', this.state.ipfsHash)
+          this.setState({ ipfsHash: result[0].hash });
+          console.log('=== ipfsHash ===', this.state.ipfsHash);
 
           const nftName = valueNFTName;
           const nftSymbol = valueNFTSymbol;
@@ -95,6 +95,11 @@ export default class Publish extends Component {
           console.log('=== nftName ===', nftName);
           console.log('=== nftSymbol ===', nftSymbol);
           console.log('=== _photoPrice ===', _photoPrice);
+          this.setState({ 
+            valueNFTName: '',
+            valueNFTSymbol: '',
+            valuePhotoPrice: ''
+          });
 
           const photoPrice = web3.utils.toWei(_photoPrice, 'ether');
           const ipfsHashOfPhoto = this.state.ipfsHash

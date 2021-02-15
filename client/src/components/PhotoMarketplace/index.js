@@ -19,12 +19,7 @@ export default class PhotoMarketplace extends Component {
           route: window.location.pathname.replace("/", ""),
 
           /////// NFT
-          allPhotos: [],
-          
-          photoslist: [],         // Array for NFT
-
-          photoData: [],
-          photoDataAll: []
+          allPhotos: []
         };
 
         this.buyPhotoNFT = this.buyPhotoNFT.bind(this);
