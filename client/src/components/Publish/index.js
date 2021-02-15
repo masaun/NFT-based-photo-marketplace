@@ -20,15 +20,13 @@ export default class Publish extends Component {
           accounts: null,
           route: window.location.pathname.replace("/", ""),
 
+          /////// NFT concern
+          valueNFTName: '',
+          valueNFTSymbol: '',
+
           /////// Ipfs Upload
           buffer: null,
-          ipfsHash: '',
-
-          /////// NFT
-          photoslist: [],         // Array for NFT
-
-          photoData: [],
-          photoDataAll: []
+          ipfsHash: ''
         };
 
         /////// Handle
@@ -184,11 +182,6 @@ export default class Publish extends Component {
             else {
               this.setState({ web3, ganacheAccounts, accounts, balance, networkId, networkType, hotLoaderDisabled, isMetaMask });
             }
-
-
-            //---------------- NFT（Always load listed NFT data）------------------
-
-
           }
         } catch (error) {
           // Catch any errors for any of the above operations.
@@ -226,7 +219,7 @@ export default class Publish extends Component {
                             <h2>Publish</h2>
                             <p>Please upload your photo from here!</p>
 
-                            <form onSubmit={this.onSubmit}>
+                            <Form onSubmit={this.onSubmit}>
                                 <Field label="Photo NFT Name">
                                     <Input
                                         type="text"
@@ -271,7 +264,7 @@ export default class Publish extends Component {
                                 </Field>
 
                                 <Button size={'medium'} type='submit'>Upload my photo</Button>
-                            </form>
+                            </Form>
                         </Card>
                     </Grid>
 
