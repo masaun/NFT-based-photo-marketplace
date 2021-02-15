@@ -266,8 +266,6 @@ export default class Publish extends Component {
                                         type='file' 
                                         onChange={this.captureFile} 
                                         required={true}
-                                        value={this.state.valueEipbAssetId} 
-                                        onChange={this.handleEipbAssetId}
                                     />
                                 </Field>
 
