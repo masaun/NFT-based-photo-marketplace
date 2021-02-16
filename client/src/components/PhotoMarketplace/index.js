@@ -35,6 +35,9 @@ export default class PhotoMarketplace extends Component {
         console.log('=== value of buyPhotoNFT ===', e.target.value);
 
         const _photoNFT = e.target.value;
+
+        //const _photoNFT = "0x6d7d6fED69E7769C294DE41a28aF9E118567Bc81"
+
         const photo = await photoNFTFactory.methods.getPhotoByNFTAddress(_photoNFT).call();
         const buyAmount = await photo.photoPrice;
         const txReceipt1 = await photoNFTMarketPlace.methods.buyPhotoNFT(_photoNFT).send({ from: accounts[0], value: buyAmount });

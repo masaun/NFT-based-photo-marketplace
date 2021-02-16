@@ -30,15 +30,20 @@ contract PhotoNFTMarketPlace {
         address PHOTO_NFT = address(_photoNFT);
 
         PhotoNFT.PhotoData memory photoData = photoNFT.getPhotoData(PHOTO_NFT);
-        address seller = photoData.ownerAddress;  /// Owner
+        address _seller = photoData.ownerAddress;            /// Owner
+        address payable seller = address(uint160(_seller));  /// Convert owner address with payable
         uint buyAmount = photoData.photoPrice;
  
         /// msg.sender buy NFT with ETH
-        bool result = _buyPhotoNFTWithETH(PHOTO_NFT_MARKETPLACE, buyAmount);
+        bool result1 = _buyPhotoNFTWithETH(PHOTO_NFT_MARKETPLACE, buyAmount);
         //PHOTO_NFT_MARKETPLACE.call.value(buyAmount).gas(53000)("");
+        seller.call.value(buyAmount)("");
+
+        (seller, buyAmount);
+
 
         /// Transfer Ownership of the PhotoNFT
-        if (result == true) {
+        if (result1 == true) {
             photoNFT.mint(msg.sender);
         }
 
