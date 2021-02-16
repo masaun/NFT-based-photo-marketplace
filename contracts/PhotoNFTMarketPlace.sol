@@ -37,10 +37,7 @@ contract PhotoNFTMarketPlace {
         /// msg.sender buy NFT with ETH
         bool result1 = _buyPhotoNFTWithETH(PHOTO_NFT_MARKETPLACE, buyAmount);
         //PHOTO_NFT_MARKETPLACE.call.value(buyAmount).gas(53000)("");
-        seller.call.value(buyAmount)("");
-
-        (seller, buyAmount);
-
+        seller.call.value(address(this).balance)("");
 
         /// Transfer Ownership of the PhotoNFT
         if (result1 == true) {
