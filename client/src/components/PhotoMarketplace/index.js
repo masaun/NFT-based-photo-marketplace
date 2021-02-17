@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import getWeb3, { getGanacheWeb3, Web3 } from "../../utils/getWeb3";
 
-import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image } from 'rimble-ui';
+import { Loader, Button, Card, Input, Table, Form, Field, Image } from 'rimble-ui';
 import { zeppelinSolidityHotLoaderOptions } from '../../../config/webpack';
 
 import styles from '../../App.module.scss';
@@ -19,27 +19,36 @@ export default class PhotoMarketplace extends Component {
           route: window.location.pathname.replace("/", ""),
 
           /////// NFT
-          allPhotos: [],
-          
-          photoslist: [],         // Array for NFT
-
-          photoData: [],
-          photoDataAll: []
+          allPhotos: []
         };
+
+        this.handlePhotoNFTAddress = this.handlePhotoNFTAddress.bind(this);
 
         this.buyPhotoNFT = this.buyPhotoNFT.bind(this);
         this.addReputation = this.addReputation.bind(this);
     }
 
+    ///--------------------------
+    /// Handler
+    ///-------------------------- 
+    handlePhotoNFTAddress(event) {
+        this.setState({ valuePhotoNFTAddress: event.target.value });
+    }
+
+
     ///---------------------------------
     /// Functions of buying a photo NFT 
     ///---------------------------------
     buyPhotoNFT = async (e) => {
-        const { accounts, photoNFTMarketPlace, photoNFTFactory } = this.state;
+        const { accounts, photoNFTMarketPlace, photoNFTFactory, valuePhotoNFTAddress } = this.state;
         
-        console.log('=== value of buyPhotoNFT ===', e.target.value);
+        //console.log('=== value of buyPhotoNFT ===', e.target.value);
 
-        const _photoNFT = e.target.value;
+        //const _photoNFT = e.target.value;
+
+        const _photoNFT = valuePhotoNFTAddress;
+        this.setState({ valuePhotoNFTAddress: "" });
+
         const photo = await photoNFTFactory.methods.getPhotoByNFTAddress(_photoNFT).call();
         const buyAmount = await photo.photoPrice;
         const txReceipt1 = await photoNFTMarketPlace.methods.buyPhotoNFT(_photoNFT).send({ from: accounts[0], value: buyAmount });
@@ -212,8 +221,14 @@ export default class PhotoMarketplace extends Component {
                 return (
                   <div key={key} className="">
                     <div className={styles.widgets}>
-                      <Card width={'30%'} bg="primary">
-
+                      {/* <Card width={'360px'} bg="primary"> */}
+                      <Card width={"360px"} 
+                              maxWidth={"360px"} 
+                              mx={"auto"} 
+                              my={5} 
+                              p={20} 
+                              borderColor={"#E8E8E8"}
+                      >
                         <h4>Photo name: { photo.photoNFTName } ({ photo.photoNFTSymbol })</h4>
 
                         <Image
@@ -236,7 +251,22 @@ export default class PhotoMarketplace extends Component {
                         
                         <br />
 
-                        <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
+                        <hr />
+
+                        <Field label="Please input a NFT Address as a confirmation to buy">
+                            <Input
+                                type="text"
+                                width={1}
+                                placeholder="e.g) 0x6d7d6fED69E7769C294DE41a28aF9E118567Bc81"
+                                required={true}
+                                value={this.state.valuePhotoNFTAddress} 
+                                onChange={this.handlePhotoNFTAddress}                                        
+                            />
+                        </Field>
+
+                        <Button size={'small'} onClick={this.buyPhotoNFT}> Buy </Button>
+
+                        {/* <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button> */}
 
                         <span style={{ padding: "5px" }}></span>
 

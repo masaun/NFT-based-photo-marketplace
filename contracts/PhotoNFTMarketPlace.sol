@@ -23,34 +23,24 @@ contract PhotoNFTMarketPlace {
 
     /** 
      * @notice - Buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
-     * @notice - Buy with ETH 
+     * @notice - msg.sender buy NFT with ETH (msg.value)
      */
     function buyPhotoNFT(PhotoNFT _photoNFT) public payable returns (bool) {
         PhotoNFT photoNFT = _photoNFT;
         address PHOTO_NFT = address(_photoNFT);
 
         PhotoNFT.PhotoData memory photoData = photoNFT.getPhotoData(PHOTO_NFT);
-        address seller = photoData.ownerAddress;  /// Owner
+        address _seller = photoData.ownerAddress;                     /// Owner
+        address payable seller = address(uint160(_seller));  /// Convert owner address with payable
         uint buyAmount = photoData.photoPrice;
+        require (msg.value == buyAmount, "msg.value should be equal to the buyAmount");
  
-        /// msg.sender buy NFT with ETH
-        bool result = _buyPhotoNFTWithETH(PHOTO_NFT_MARKETPLACE, buyAmount);
-        //PHOTO_NFT_MARKETPLACE.call.value(buyAmount).gas(53000)("");
+        /// Bought-amount is transferred into a seller wallet
+        seller.transfer(buyAmount);
 
         /// Transfer Ownership of the PhotoNFT
-        if (result == true) {
-            photoNFT.mint(msg.sender);
-        }
-
-        return true;
-    }
-
-    function _buyPhotoNFTWithETH(address receiver, uint buyAmount) public payable returns (bool) {
-        /// msg.sender buy NFT with ETH
-        receiver.call.value(buyAmount).gas(53000)("");
-        return true;        
-    }
-    
+        photoNFT.mint(msg.sender);
+    }    
 
 
     /** 
