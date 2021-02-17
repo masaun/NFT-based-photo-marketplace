@@ -30,8 +30,7 @@ contract PhotoNFTMarketPlace {
         address PHOTO_NFT = address(_photoNFT);
 
         PhotoNFT.PhotoData memory photoData = photoNFT.getPhotoData(PHOTO_NFT);
-        //address _seller = photoData.ownerAddress;                     /// Owner
-        address _seller = 0x8Fc9d07b1B9542A71C4ba1702Cd230E160af6EB3;   /// Owner        
+        address _seller = photoData.ownerAddress;                     /// Owner
         address payable seller = address(uint160(_seller));  /// Convert owner address with payable
         uint buyAmount = photoData.photoPrice;
         require (msg.value == buyAmount, "msg.value should be equal to the buyAmount");
