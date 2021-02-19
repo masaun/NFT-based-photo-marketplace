@@ -38,9 +38,14 @@ contract PhotoNFTMarketPlace {
         /// Bought-amount is transferred into a seller wallet
         seller.transfer(buyAmount);
 
-        /// Transfer Ownership of the PhotoNFT
-        string memory tokenURI = photoNFTFactory.getTokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
-        photoNFT.mint(msg.sender, tokenURI);
+        /// Transfer Ownership of the PhotoNFT from a seller to a buyer
+        uint tokenId = 0;  /// [Note]: This time each asset is unique (only 1). Therefore, tokenId is always "0"
+        photoNFT.approve(msg.sender, tokenId);
+        photoNFT.safeTransferFrom(seller, msg.sender, tokenId);
+
+        /// Mint a photo with a new photoId
+        //string memory tokenURI = photoNFTFactory.getTokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
+        //photoNFT.mint(msg.sender, tokenURI);
     }    
 
 
