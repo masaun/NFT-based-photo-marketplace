@@ -20,8 +20,8 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
     constructor() public {}
 
     function createNewPhotoNFT(string memory nftName, string memory nftSymbol, uint photoPrice, string memory ipfsHashOfPhoto) public returns (bool) {
-        string memory _tokenURI = tokenURI(ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
-        PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol, _tokenURI);
+        string memory tokenURI = getTokenURI(ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
+        PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol, tokenURI);
         photoAddresses.push(address(photoNFT));
 
         photoNFT.savePhotoNFTData(nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);        
@@ -78,7 +78,7 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
         return "https://ipfs.io/ipfs/";
     }
 
-    function tokenURI(string memory _ipfsHashOfPhoto) public view returns (string memory) {
+    function getTokenURI(string memory _ipfsHashOfPhoto) public view returns (string memory) {
         return Strings.strConcat(baseTokenURI(), _ipfsHashOfPhoto);
     }
 

@@ -39,8 +39,8 @@ contract PhotoNFTMarketPlace {
         seller.transfer(buyAmount);
 
         /// Transfer Ownership of the PhotoNFT
-        string memory _tokenURI = photoNFTFactory.tokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
-        photoNFT.mint(msg.sender, _tokenURI);
+        string memory tokenURI = photoNFTFactory.getTokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
+        photoNFT.mint(msg.sender, tokenURI);
     }    
 
 
