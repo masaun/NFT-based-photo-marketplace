@@ -27,9 +27,11 @@ contract PhotoNFT is ERC721Full, PhOwnable {
     
     constructor(
         string memory _nftName, 
-        string memory _nftSymbol
+        string memory _nftSymbol,
+        string memory _tokenURI    /// [Note]: TokenURI is URL include ipfs hash
     ) public ERC721Full(_nftName, _nftSymbol) {
         _mint(msg.sender, currentPhotoId);
+        _setTokenURI(currentPhotoId, _tokenURI);
     }
 
     /** 
@@ -47,12 +49,14 @@ contract PhotoNFT is ERC721Full, PhOwnable {
 
     /** 
      * @dev mint a photoNFT
+     * @dev tokenURI - URL include ipfs hash
      */
-    function mint(address to) public returns (bool) {
+    function mint(address to, string memory tokenURI) public returns (bool) {
         /// Mint a new PhotoNFT
         uint newPhotoId = getNextPhotoId();
         currentPhotoId++;
         _mint(to, newPhotoId);
+        _setTokenURI(newPhotoId, tokenURI);
     }
 
 

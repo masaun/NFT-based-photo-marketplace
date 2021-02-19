@@ -7,14 +7,9 @@
     "test": "truffle test ./test/*",
     "start-blank": "rm -rf client/src && cp -rf barebones/src client/",
     "client": "cd client && npm run start",
-    "console": "truffle console --network development",
-    "push": "zos push --deploy-dependencies",
-    "session": "zos session --network development --expires 7200",
-    "migrate:local": "truffle migrate --reset --network development",
-    "migrate:ropsten": "truffle migrate --reset --network ropsten",
-    "migrate:kovan": "truffle migrate --reset --network kovan",
-    "migrate:rinkeby": "truffle migrate --reset --network rinkeby",
-    "bridge": "./node_modules/.bin/ethereum-bridge -a 9 -H 127.0.0.1 -p 9545 --dev"
+    "console": "truffle console --network local",
+    "migrate:local": "truffle migrate --reset --network local",
+    "migrate:ropsten": "truffle migrate --reset --network ropsten"
   },
   "repository": {
     "type": "git",
@@ -34,12 +29,7 @@
   "homepage": "https://github.com/rrecuero/zepkit#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "openzeppelin-eth": "^2.1.3",
-    "@truffle/hdwallet-provider": "^1.2.0",
-    "zos-lib": "2.2.0"
+    "@truffle/hdwallet-provider": "^1.2.0"
   },
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "openzeppelin-test-helpers": "^0.3.0"
-  }
+  "devDependencies": {}
 }
