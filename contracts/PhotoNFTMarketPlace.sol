@@ -36,8 +36,10 @@ contract PhotoNFTMarketPlace {
 
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
         uint tokenId = 0;  /// [Note]: This time each asset is unique (only 1). Therefore, tokenId is always "0"
+        photoNFT.safeTransferFrom(seller, address(this), tokenId);      /// [Note]: Transfer from a seller to this contract (Approval of tokenId is already done when a photoNFT is created)
+
         photoNFT.approve(msg.sender, tokenId);
-        photoNFT.safeTransferFrom(seller, msg.sender, tokenId);
+        photoNFT.safeTransferFrom(address(this), msg.sender, tokenId);  /// [Note]: Transfer from this contract to a buyer
 
         /// Mint a photo with a new photoId
         //string memory tokenURI = photoNFTFactory.getTokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
