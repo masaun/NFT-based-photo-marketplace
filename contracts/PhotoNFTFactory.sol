@@ -6,6 +6,7 @@ import { Strings } from "./libraries/Strings.sol";
 import { PhStorage } from "./storage/PhStorage.sol";
 import { PhOwnable } from "./modifiers/PhOwnable.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
+import { PhotoNFTMarketPlace } from "./PhotoNFTMarketPlace.sol";
 
 
 /**
@@ -16,8 +17,14 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
     using Strings for string;    
 
     address[] public photoAddresses;
+    address PHOTO_NFT_MARKETPLACE;
 
-    constructor() public {}
+    PhotoNFTMarketPlace public photoNFTMarketPlace;
+
+    constructor(PhotoNFTMarketPlace _photoNFTMarketPlace) public {
+        photoNFTMarketPlace = _photoNFTMarketPlace;
+        PHOTO_NFT_MARKETPLACE = address(photoNFTMarketPlace);
+    }
 
     /**
      * @notice - Create a new photoNFT when a seller (owner) upload a photo onto IPFS
@@ -26,6 +33,10 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
         string memory tokenURI = getTokenURI(ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
         PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol, tokenURI);
         photoAddresses.push(address(photoNFT));
+
+        /// Approve photoId of seller for the PhotoNFTMarketPlace contract
+        uint photoId = 0; /// Always 0 (Because all photo are just published at a time)
+        photoNFT.approve(PHOTO_NFT_MARKETPLACE, tokenId);
 
         /// Save metadata of a photoNFT created into the PhotoData struct
         photoNFT.savePhotoNFTData(nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);        
