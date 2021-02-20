@@ -6,18 +6,14 @@ import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { PhStorage } from "./storage/PhStorage.sol";
 import { PhOwnable } from "./modifiers/PhOwnable.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
-import { PhotoNFTFactory } from "./PhotoNFTFactory.sol";
 
 
 contract PhotoNFTMarketPlace {
     using SafeMath for uint256;
-    
-    PhotoNFTFactory public photoNFTFactory;
 
     address public PHOTO_NFT_MARKETPLACE;
 
-    constructor(PhotoNFTFactory _photoNFTFactory) public {
-        photoNFTFactory = _photoNFTFactory;
+    constructor() public {
         address payable PHOTO_NFT_MARKETPLACE = address(uint160(address(this)));
     }
 
