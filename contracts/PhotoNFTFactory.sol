@@ -19,17 +19,20 @@ contract PhotoNFTFactory is PhStorage, PhOwnable {
 
     constructor() public {}
 
+    /**
+     * @notice - Create a new photoNFT when a seller (owner) upload a photo onto IPFS
+     */
     function createNewPhotoNFT(string memory nftName, string memory nftSymbol, uint photoPrice, string memory ipfsHashOfPhoto) public returns (bool) {
         string memory tokenURI = getTokenURI(ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
         PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol, tokenURI);
         photoAddresses.push(address(photoNFT));
 
+        /// Save metadata of a photoNFT created into the PhotoData struct
         photoNFT.savePhotoNFTData(nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);        
 
-        /// Save metadata of a photoNFT
+        /// Save metadata of a photoNFT created
         _saveMetadataOfPhotoNFT(photoNFT, nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);
     }
-
 
     /**
      * @notice - Save metadata of a photoNFT
