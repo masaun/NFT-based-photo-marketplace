@@ -26,7 +26,7 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
      * @notice - Buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
      * @notice - msg.sender buy NFT with ETH (msg.value)
      */
-    function buyPhotoNFT(PhotoNFT _photoNFT, bytes memory data) public payable returns (bool) {
+    function buyPhotoNFT(PhotoNFT _photoNFT) public payable returns (bool) {
         PhotoNFT photoNFT = _photoNFT;
         address PHOTO_NFT = address(_photoNFT);
 
