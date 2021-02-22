@@ -42,7 +42,7 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
         /// Approve this contract address as a receiver before NFT's safeTransferFrom is executed
         uint tokenId = 0;        /// [Note]: This time each asset is unique (only 1). Therefore, tokenId is always "0"
         bytes memory data = "";  /// [Todo]: data - Additional data with no specified format
-        bytes4 result = IERC721Receiver(msg.sender).onERC721Received(address(this), seller, tokenId, data);
+        bytes4 result = IERC721Receiver(address(this)).onERC721Received(msg.sender, seller, tokenId, data);
 
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
         photoNFT.safeTransferFrom(seller, address(this), tokenId, data);      /// [Note]: Transfer from a seller to this contract (Approval of tokenId is already done when a photoNFT is created)
