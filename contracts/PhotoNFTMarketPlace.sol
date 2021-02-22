@@ -7,8 +7,10 @@ import { PhStorage } from "./storage/PhStorage.sol";
 import { PhOwnable } from "./modifiers/PhOwnable.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
 
+import { ERC721Holder } from "./openzeppelin-solidity/contracts/token/ERC721/ERC721Holder.sol";
 
-contract PhotoNFTMarketPlace {
+
+contract PhotoNFTMarketPlace is ERC721Holder {
     using SafeMath for uint256;
 
     address public PHOTO_NFT_MARKETPLACE;
