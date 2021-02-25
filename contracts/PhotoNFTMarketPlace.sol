@@ -65,8 +65,9 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
         PhotoNFT.Trade memory trade = photoNFT.getPhotoTrade(_trade);
         require(trade.status == "Open", "Trade is not Open.");
 
+        address buyer = msg.sender;
         //currencyToken.transferFrom(msg.sender, trade.seller, trade.photoPrice);
-        photoNFT.transferFrom(address(this), msg.sender, trade.photoId);
+        photoNFT.transferFrom(address(this), buyer, trade.photoId);
         photoNFT.getPhotoTrade(_trade).status = "Executed";
         emit TradeStatusChange(_trade, "Executed");
     }
