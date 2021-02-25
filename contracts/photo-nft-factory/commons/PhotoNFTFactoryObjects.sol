@@ -1,9 +1,9 @@
 pragma solidity ^0.5.0;
 
-import { PhotoNFT } from "../PhotoNFT.sol";
+import { PhotoNFT } from "../../PhotoNFT.sol";
 
 
-contract PhObjects {
+contract PhotoNFTFactoryObjects {
 
     struct Photo {  /// [Key]: index of array
         PhotoNFT photoNFT;
