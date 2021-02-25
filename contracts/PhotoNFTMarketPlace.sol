@@ -3,14 +3,15 @@ pragma experimental ABIEncoderV2;
 
 //import { ERC20 } from './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
-import { PhStorage } from "./storage/PhStorage.sol";
-import { PhOwnable } from "./modifiers/PhOwnable.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
 
+import { IERC721 } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
 import { ERC721Holder } from "./openzeppelin-solidity/contracts/token/ERC721/ERC721Holder.sol";
+import { IERC721Receiver } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
+import { ERC165 } from "./openzeppelin-solidity/contracts/introspection/ERC165.sol";
 
 
-contract PhotoNFTMarketPlace is ERC721Holder {
+contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
     using SafeMath for uint256;
 
     address public PHOTO_NFT_MARKETPLACE;
@@ -36,9 +37,12 @@ contract PhotoNFTMarketPlace is ERC721Holder {
         /// Bought-amount is transferred into a seller wallet
         seller.transfer(buyAmount);
 
+        /// Approve this contract address as a receiver before NFT's safeTransferFrom is executed
+        uint tokenId = 0;        /// [Note]: This time each asset is unique (only 1). Therefore, tokenId is always "0"
+        photoNFT.approve(address(this), tokenId);
+
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
-        uint tokenId = 0;  /// [Note]: This time each asset is unique (only 1). Therefore, tokenId is always "0"
-        photoNFT.safeTransferFrom(seller, address(this), tokenId);      /// [Note]: Transfer from a seller to this contract (Approval of tokenId is already done when a photoNFT is created)
+        photoNFT.transferFrom(seller, address(this), tokenId);      /// [Note]: Transfer from a seller to this contract (Approval of tokenId is already done when a photoNFT is created)
 
         photoNFT.approve(msg.sender, tokenId);
         photoNFT.safeTransferFrom(address(this), msg.sender, tokenId);  /// [Note]: Transfer from this contract to a buyer

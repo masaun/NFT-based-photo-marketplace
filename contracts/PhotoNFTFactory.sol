@@ -3,8 +3,7 @@ pragma experimental ABIEncoderV2;
 
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { Strings } from "./libraries/Strings.sol";
-import { PhStorage } from "./storage/PhStorage.sol";
-import { PhOwnable } from "./modifiers/PhOwnable.sol";
+import { PhotoNFTFactoryStorage } from "./photo-nft-factory/commons/PhotoNFTFactoryStorage.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
 import { PhotoNFTMarketPlace } from "./PhotoNFTMarketPlace.sol";
 
@@ -12,7 +11,7 @@ import { PhotoNFTMarketPlace } from "./PhotoNFTMarketPlace.sol";
 /**
  * @notice - This is the factory contract for a NFT of photo
  */
-contract PhotoNFTFactory is PhStorage, PhOwnable {
+contract PhotoNFTFactory is PhotoNFTFactoryStorage {
     using SafeMath for uint256;
     using Strings for string;    
 

@@ -3,14 +3,12 @@ pragma experimental ABIEncoderV2;
 
 import { ERC721Full } from "./openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
-import { PhStorage } from "./storage/PhStorage.sol";
-import { PhOwnable } from "./modifiers/PhOwnable.sol";
 
 
 /**
  * @notice - This is the NFT contract for a photo
  */
-contract PhotoNFT is ERC721Full, PhOwnable {
+contract PhotoNFT is ERC721Full {
     using SafeMath for uint256;
 
     uint256 public currentPhotoId;
