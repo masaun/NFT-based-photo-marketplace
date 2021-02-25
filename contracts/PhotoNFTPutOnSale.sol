@@ -1,7 +1,7 @@
 pragma solidity ^0.5.16;
 pragma experimental ABIEncoderV2;
 
-import { IERC721 } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
+import { PhotoNFT } from "./PhotoNFT.sol";
 
 
 /**
@@ -10,21 +10,21 @@ import { IERC721 } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721.
 contract PhotoNFTPutOnSale {
     event TradeStatusChange(uint256 ad, bytes32 status);
 
-    IERC721 public itemToken;
+    PhotoNFT public photoNFT;
 
     struct Trade {
-        address poster;
-        uint256 item;
-        uint256 price;
-        bytes32 status; // Open, Executed, Cancelled
+        address seller;
+        uint256 photoId;  /// PhotoNFT's token ID
+        uint256 photoPrice;
+        bytes32 status;   /// Open, Executed, Cancelled
     }
 
-    mapping(uint256 => Trade) public trades;
+    mapping(uint256 => Trade) public trades;  /// [Key]: Index of array
 
     uint256 tradeCounter;
 
-    constructor (IERC721 _itemToken) public {
-        itemToken = _itemToken;
+    constructor (PhotoNFT _photoNFT) public {
+        photoNFT = _photoNFT;
         tradeCounter = 0;
     }
 
@@ -34,20 +34,20 @@ contract PhotoNFTPutOnSale {
     function getTrade(uint256 _trade) public view returns (Trade memory trade_) {
         Trade memory trade = trades[_trade];
         return trade;
-        //return (trade.poster, trade.item, trade.price, trade.status);
+        //return (trade.seller, trade.photoId, trade.photoPrice, trade.status);
     }
 
     /**
-     * @dev Opens a new trade. Puts _item in escrow.
-     * @param _item The id for the item to trade.
-     * @param _price The amount of currency for which to trade the item.
+     * @dev Opens a new trade. Puts _photoId in escrow.
+     * @param _photoId The id for the photoId to trade.
+     * @param _photoPrice The amount of currency for which to trade the photoId.
      */
-    function openTrade(uint256 _item, uint256 _price) public {
-        itemToken.transferFrom(msg.sender, address(this), _item);
+    function openTrade(uint256 _photoId, uint256 _photoPrice) public {
+        photoNFT.transferFrom(msg.sender, address(this), _photoId);
         trades[tradeCounter] = Trade({
-            poster: msg.sender,
-            item: _item,
-            price: _price,
+            seller: msg.sender,
+            photoId: _photoId,
+            photoPrice: _photoPrice,
             status: "Open"
         });
         tradeCounter += 1;
@@ -55,16 +55,16 @@ contract PhotoNFTPutOnSale {
     }
 
     /**
-     * @dev Cancels a trade by the poster.
+     * @dev Cancels a trade by the seller.
      */
     function cancelTrade(uint256 _trade) public {
         Trade memory trade = trades[_trade];
         require(
-            msg.sender == trade.poster,
-            "Trade can be cancelled only by poster."
+            msg.sender == trade.seller,
+            "Trade can be cancelled only by seller."
         );
         require(trade.status == "Open", "Trade is not Open.");
-        itemToken.transferFrom(address(this), trade.poster, trade.item);
+        photoNFT.transferFrom(address(this), trade.seller, trade.photoId);
         trades[_trade].status = "Cancelled";
         emit TradeStatusChange(_trade, "Cancelled");
     }
