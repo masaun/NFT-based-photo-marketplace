@@ -53,6 +53,29 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
     }    
 
 
+    /**
+     * @dev Executes a trade. Must have approved this contract to transfer the amount of currency specified to the poster. Transfers ownership of the item to the filler.
+     * @param _trade The id of an existing trade
+     */
+    event TradeStatusChange(uint256 ad, bytes32 status);
+    
+    function executePhotoNFTTrade(uint256 _trade) public {
+        Trade memory trade = trades[_trade];
+        require(trade.status == "Open", "Trade is not Open.");
+        //currencyToken.transferFrom(msg.sender, trade.poster, trade.price);
+        itemToken.transferFrom(address(this), msg.sender, trade.item);
+        trades[_trade].status = "Executed";
+        emit TradeStatusChange(_trade, "Executed");
+    }
+
+
+
+
+
+    ///-----------------------------------------------------
+    /// Methods below are pending methods
+    ///-----------------------------------------------------
+
     /** 
      * @dev reputation function is that gives reputation to a user who has ownership of being posted photo.
      * @dev Each user has reputation data in struct
