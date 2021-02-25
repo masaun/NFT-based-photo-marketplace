@@ -3,8 +3,6 @@ pragma experimental ABIEncoderV2;
 
 //import { ERC20 } from './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
-import { PhStorage } from "./storage/PhStorage.sol";
-import { PhOwnable } from "./modifiers/PhOwnable.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
 
 import { IERC721 } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
