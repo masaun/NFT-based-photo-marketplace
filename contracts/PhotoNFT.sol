@@ -76,6 +76,11 @@ contract PhotoNFT is ERC721Full, PhotoNFTPutOnSale {
         return photoData;
     }
 
+    function getPhotoTrade(uint256 _trade) public view returns (Trade memory trade_) {
+        return getTrade(_trade);
+    }
+    
+
 
     ///--------------------------------------
     /// Private methods

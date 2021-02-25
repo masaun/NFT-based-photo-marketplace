@@ -1,4 +1,5 @@
 pragma solidity ^0.5.16;
+pragma experimental ABIEncoderV2;
 
 import { IERC721 } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
 
@@ -29,11 +30,11 @@ contract PhotoNFTPutOnSale {
 
     /**
      * @dev Returns the details for a trade.
-     * @param _trade The id for the trade.
      */
-    function getTrade(uint256 _trade) public view returns(address, uint256, uint256, bytes32) {
+    function getTrade(uint256 _trade) public view returns (Trade memory trade_) {
         Trade memory trade = trades[_trade];
-        return (trade.poster, trade.item, trade.price, trade.status);
+        return trade;
+        //return (trade.poster, trade.item, trade.price, trade.status);
     }
 
     /**
@@ -55,7 +56,6 @@ contract PhotoNFTPutOnSale {
 
     /**
      * @dev Cancels a trade by the poster.
-     * @param _trade The trade to be cancelled.
      */
     function cancelTrade(uint256 _trade) public {
         Trade memory trade = trades[_trade];
