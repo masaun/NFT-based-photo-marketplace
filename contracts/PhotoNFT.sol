@@ -27,10 +27,19 @@ contract PhotoNFT is ERC721Full, PhotoNFTPutOnSale {
     constructor(
         string memory _nftName, 
         string memory _nftSymbol,
-        string memory _tokenURI    /// [Note]: TokenURI is URL include ipfs hash
-    ) public ERC721Full(_nftName, _nftSymbol) {
+        string memory _tokenURI,    /// [Note]: TokenURI is URL include ipfs hash
+        uint photoPrice
+    ) 
+        public 
+        ERC721Full(_nftName, _nftSymbol) 
+        PhotoNFTPutOnSale(this) 
+    {
         _mint(msg.sender, currentPhotoId);
         _setTokenURI(currentPhotoId, _tokenURI);
+
+        /// Put on sale (by a seller == owner)
+        uint photoId = 0;
+        openTrade(photoId, photoPrice);
     }
 
     /** 

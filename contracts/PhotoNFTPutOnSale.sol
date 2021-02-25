@@ -7,6 +7,8 @@ import { IERC721 } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721.
  * @title PhotoNFTPutOnSale
  */
 contract PhotoNFTPutOnSale {
+    event TradeStatusChange(uint256 ad, bytes32 status);
+
     IERC721 public itemToken;
 
     struct Trade {
@@ -20,8 +22,8 @@ contract PhotoNFTPutOnSale {
 
     uint256 tradeCounter;
 
-    constructor (address _itemTokenAddress) public {
-        itemToken = IERC721(_itemTokenAddress);
+    constructor (IERC721 _itemToken) public {
+        itemToken = _itemToken;
         tradeCounter = 0;
     }
 

@@ -30,7 +30,7 @@ contract PhotoNFTFactory is PhotoNFTFactoryStorage {
      */
     function createNewPhotoNFT(string memory nftName, string memory nftSymbol, uint photoPrice, string memory ipfsHashOfPhoto) public returns (bool) {
         string memory tokenURI = getTokenURI(ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
-        PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol, tokenURI);
+        PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol, tokenURI, photoPrice);
         photoAddresses.push(address(photoNFT));
 
         /// Approve photoId of seller for the PhotoNFTMarketPlace contract
