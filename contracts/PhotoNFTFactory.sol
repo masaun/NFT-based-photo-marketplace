@@ -35,7 +35,7 @@ contract PhotoNFTFactory is PhotoNFTFactoryStorage {
 
         /// Approve photoId of seller for the PhotoNFTMarketPlace contract
         uint photoId = 0; /// Always 0 (Because all photo are just published at a time)
-        photoNFT.approve(PHOTO_NFT_MARKETPLACE, photoId);
+        photoNFT.approve(PHOTO_NFT_MARKETPLACE, photoId);   /// [Todo]: Change place approve() method into FE
 
         /// Save metadata of a photoNFT created into the PhotoData struct
         photoNFT.savePhotoNFTData(nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);        

@@ -102,7 +102,7 @@ export default class Publish extends Component {
           });
 
           const photoPrice = web3.utils.toWei(_photoPrice, 'ether');
-          const ipfsHashOfPhoto = this.state.ipfsHash
+          const ipfsHashOfPhoto = this.state.ipfsHash;
           photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
           .once('receipt', (receipt) => {
             console.log('=== receipt ===', receipt);
