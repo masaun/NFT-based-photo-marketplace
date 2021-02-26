@@ -54,22 +54,22 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
 
 
     /**
-     * @dev Executes a trade. Must have approved this contract to transfer the amount of currency specified to the poster. Transfers ownership of the item to the filler.
+     * @dev Executes a trade. Must have approved this contract to transfer the amount of currency specified to the seller. Transfers ownership of the photoId to the filler.
      */
     event TradeStatusChange(uint256 ad, bytes32 status);
 
-    function executePhotoNFTTrade(PhotoNFT _photoNFT, uint256 _trade) public {
+    function executePhotoNFTTrade(PhotoNFT _photoNFT, uint256 _photoId) public {
         PhotoNFT photoNFT = _photoNFT;
         address PHOTO_NFT = address(_photoNFT);
 
-        PhotoNFT.Trade memory trade = photoNFT.getPhotoTrade(_trade);
+        PhotoNFT.Trade memory trade = photoNFT.getPhotoTrade(_photoId);
         require(trade.status == "Open", "Trade is not Open.");
 
         address buyer = msg.sender;
         //currencyToken.transferFrom(msg.sender, trade.seller, trade.photoPrice);
         photoNFT.transferFrom(address(this), buyer, trade.photoId);
-        photoNFT.getPhotoTrade(_trade).status = "Executed";
-        emit TradeStatusChange(_trade, "Executed");
+        photoNFT.getPhotoTrade(_photoId).status = "Executed";
+        emit TradeStatusChange(_photoId, "Executed");
     }
 
 

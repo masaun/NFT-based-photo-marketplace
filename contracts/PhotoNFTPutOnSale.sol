@@ -18,8 +18,7 @@ contract PhotoNFTPutOnSale {
         uint256 photoPrice;
         bytes32 status;   /// Open, Executed, Cancelled
     }
-
-    mapping(uint256 => Trade) public trades;  /// [Key]: Index of array
+    mapping(uint256 => Trade) public trades;  /// [Key]: PhotoNFT's token ID
 
     uint256 tradeCounter;
 
@@ -29,10 +28,10 @@ contract PhotoNFTPutOnSale {
     }
 
     /**
-     * @dev Returns the details for a trade.
+     * @dev - Returns the details for a trade.
      */
-    function getTrade(uint256 _trade) public view returns (Trade memory trade_) {
-        Trade memory trade = trades[_trade];
+    function getTrade(uint256 _photoId) public view returns (Trade memory trade_) {
+        Trade memory trade = trades[_photoId];
         return trade;
         //return (trade.seller, trade.photoId, trade.photoPrice, trade.status);
     }
@@ -57,15 +56,15 @@ contract PhotoNFTPutOnSale {
     /**
      * @dev Cancels a trade by the seller.
      */
-    function cancelTrade(uint256 _trade) public {
-        Trade memory trade = trades[_trade];
+    function cancelTrade(uint256 _photoId) public {
+        Trade memory trade = trades[_photoId];
         require(
             msg.sender == trade.seller,
             "Trade can be cancelled only by seller."
         );
         require(trade.status == "Open", "Trade is not Open.");
         photoNFT.transferFrom(address(this), trade.seller, trade.photoId);
-        trades[_trade].status = "Cancelled";
-        emit TradeStatusChange(_trade, "Cancelled");
+        trades[_photoId].status = "Cancelled";
+        emit TradeStatusChange(_photoId, "Cancelled");
     }
 }
