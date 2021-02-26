@@ -37,15 +37,13 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
         /// Bought-amount is transferred into a seller wallet
         seller.transfer(buyAmount);
 
-        /// Approve this contract address as a receiver before NFT's safeTransferFrom is executed
-        uint tokenId = 0;        /// [Note]: This time each asset is unique (only 1). Therefore, tokenId is always "0"
-        photoNFT.approve(address(this), tokenId);
+        /// Approve a buyer address as a receiver before NFT's transferFrom method is executed
+        uint photoId = 0;        /// [Note]: This time each asset is unique (only 1). Therefore, photoId is always "0"
+        address buyer = msg.sender;
+        photoNFT.approve(buyer, photoId);
 
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
-        photoNFT.transferFrom(seller, address(this), tokenId);      /// [Note]: Transfer from a seller to this contract (Approval of tokenId is already done when a photoNFT is created)
-
-        photoNFT.approve(msg.sender, tokenId);
-        photoNFT.safeTransferFrom(address(this), msg.sender, tokenId);  /// [Note]: Transfer from this contract to a buyer
+        _transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);
 
         /// Mint a photo with a new photoId
         //string memory tokenURI = photoNFTFactory.getTokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
@@ -58,16 +56,14 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
      */
     event TradeStatusChange(uint256 ad, bytes32 status);
 
-    function executePhotoNFTTrade(PhotoNFT _photoNFT, uint256 _photoId) public {
+    function _transferOwnershipOfPhotoNFT(PhotoNFT _photoNFT, uint256 _photoId, address _buyer) internal {
         PhotoNFT photoNFT = _photoNFT;
         address PHOTO_NFT = address(_photoNFT);
 
         PhotoNFT.Trade memory trade = photoNFT.getPhotoTrade(_photoId);
         require(trade.status == "Open", "Trade is not Open.");
 
-        address buyer = msg.sender;
-        //currencyToken.transferFrom(msg.sender, trade.seller, trade.photoPrice);
-        photoNFT.transferFrom(address(this), buyer, trade.photoId);
+        photoNFT.transferFrom(address(this), _buyer, trade.photoId);
         photoNFT.getPhotoTrade(_photoId).status = "Executed";
         emit TradeStatusChange(_photoId, "Executed");
     }
@@ -84,22 +80,22 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
      * @dev reputation function is that gives reputation to a user who has ownership of being posted photo.
      * @dev Each user has reputation data in struct
      */
-    function reputation(address from, address to, uint256 tokenId) public returns (uint256, uint256) {
+    function reputation(address from, address to, uint256 photoId) public returns (uint256, uint256) {
 
-        // Photo storage photo = photos[tokenId];
+        // Photo storage photo = photos[photoId];
         // photo.reputation = photo.reputation.add(1);
 
-        // emit AddReputation(tokenId, photo.reputation);
+        // emit AddReputation(photoId, photo.reputation);
 
-        // return (tokenId, photo.reputation);
+        // return (photoId, photo.reputation);
         return (0, 0);
     }
     
 
-    function getReputationCount(uint256 tokenId) public view returns (uint256) {
+    function getReputationCount(uint256 photoId) public view returns (uint256) {
         uint256 curretReputationCount;
 
-        // Photo memory photo = photos[tokenId];
+        // Photo memory photo = photos[photoId];
         // curretReputationCount = photo.reputation;
 
         return curretReputationCount;
