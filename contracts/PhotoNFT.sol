@@ -1,7 +1,6 @@
 pragma solidity ^0.5.16;
 pragma experimental ABIEncoderV2;
 
-import { PhotoNFTPutOnSale } from "./PhotoNFTPutOnSale.sol";
 import { ERC721Full } from "./openzeppelin-solidity/contracts/token/ERC721/ERC721Full.sol";
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 
@@ -9,7 +8,7 @@ import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 /**
  * @notice - This is the NFT contract for a photo
  */
-contract PhotoNFT is ERC721Full, PhotoNFTPutOnSale {
+contract PhotoNFT is ERC721Full {
     using SafeMath for uint256;
 
     uint256 public currentPhotoId;
@@ -32,7 +31,6 @@ contract PhotoNFT is ERC721Full, PhotoNFTPutOnSale {
     ) 
         public 
         ERC721Full(_nftName, _nftSymbol) 
-        PhotoNFTPutOnSale(this) 
     {
         _mint(msg.sender, currentPhotoId);
         _setTokenURI(currentPhotoId, _tokenURI);
@@ -72,10 +70,6 @@ contract PhotoNFT is ERC721Full, PhotoNFTPutOnSale {
         return photoData;
     }
 
-    function getPhotoTrade(uint256 _trade) public view returns (Trade memory trade_) {
-        return getTrade(_trade);
-    }
-    
 
 
     ///--------------------------------------

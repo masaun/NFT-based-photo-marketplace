@@ -114,8 +114,22 @@ export default class Publish extends Component {
             /// Get instance by using created photoNFT address
             let PhotoNFT = {};
             PhotoNFT = require("../../../../build/contracts/PhotoNFT.json"); 
+            const networkId = await web3.eth.net.getId();
+            const deployedNetwork = PhotoNFTFactory.networks[networkId.toString()];
             let photoNFT = new web3.eth.Contract(PhotoNFT.abi, PHOTO_NFT);
      
+                let deployedNetwork = null;
+
+            // Create instance of contracts
+            if (PhotoNFTFactory.networks) {
+              deployedNetwork = PhotoNFTFactory.networks[networkId.toString()];
+              if (deployedNetwork) {
+                instancePhotoNFTFactory = new web3.eth.Contract(
+                  PhotoNFTFactory.abi,
+                  deployedNetwork && deployedNetwork.address,
+                );
+
+
             /// Put on sale (by a seller who is also called as owner)
             const photoId = 0;
             photoNFT.methods.approve(PHOTO_NFT, photoId).send({ from: accounts[0] });

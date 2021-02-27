@@ -5,9 +5,10 @@ import { PhotoNFT } from "./PhotoNFT.sol";
 
 
 /**
- * @title PhotoNFTPutOnSale
+ * @title - PhotoNFTTradable contract
+ * @notice - This contract has role that put on sale of photoNFTs
  */
-contract PhotoNFTPutOnSale {
+contract PhotoNFTTradable {
     event TradeStatusChange(uint256 ad, bytes32 status);
 
     PhotoNFT public photoNFT;
@@ -25,15 +26,6 @@ contract PhotoNFTPutOnSale {
     constructor (PhotoNFT _photoNFT) public {
         photoNFT = _photoNFT;
         tradeCounter = 0;
-    }
-
-    /**
-     * @dev - Returns the details for a trade.
-     */
-    function getTrade(uint256 _photoId) public view returns (Trade memory trade_) {
-        Trade memory trade = trades[_photoId];
-        return trade;
-        //return (trade.seller, trade.photoId, trade.photoPrice, trade.status);
     }
 
     /**
@@ -66,5 +58,15 @@ contract PhotoNFTPutOnSale {
         photoNFT.transferFrom(address(this), trade.seller, trade.photoId);
         trades[_photoId].status = "Cancelled";
         emit TradeStatusChange(_photoId, "Cancelled");
+    }
+
+
+    /**
+     * @dev - Returns the details for a trade.
+     */
+    function getTrade(uint256 _photoId) public view returns (Trade memory trade_) {
+        Trade memory trade = trades[_photoId];
+        return trade;
+        //return (trade.seller, trade.photoId, trade.photoPrice, trade.status);
     }
 }

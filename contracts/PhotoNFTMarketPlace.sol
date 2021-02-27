@@ -4,19 +4,18 @@ pragma experimental ABIEncoderV2;
 //import { ERC20 } from './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
-
-import { IERC721 } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
-import { ERC721Holder } from "./openzeppelin-solidity/contracts/token/ERC721/ERC721Holder.sol";
-import { IERC721Receiver } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
-import { ERC165 } from "./openzeppelin-solidity/contracts/introspection/ERC165.sol";
+import { PhotoNFTTradable } from "./PhotoNFTTradable.sol";
 
 
-contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
+contract PhotoNFTMarketPlace {
     using SafeMath for uint256;
+
+    PhotoNFTTradable public photoNFTTradable;
 
     address public PHOTO_NFT_MARKETPLACE;
 
-    constructor() public {
+    constructor(PhotoNFTTradable _photoNFTTradable) public {
+        photoNFTTradable = _photoNFTTradable;
         address payable PHOTO_NFT_MARKETPLACE = address(uint160(address(this)));
     }
 
@@ -48,28 +47,24 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
         /// Mint a photo with a new photoId
         //string memory tokenURI = photoNFTFactory.getTokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
         //photoNFT.mint(msg.sender, tokenURI);
-    }    
-
+    }
 
     /**
      * @dev Executes a trade. Must have approved this contract to transfer the amount of currency specified to the seller. Transfers ownership of the photoId to the filler.
      */
     event TradeStatusChange(uint256 ad, bytes32 status);
 
-    function _transferOwnershipOfPhotoNFT(PhotoNFT _photoNFT, uint256 _photoId, address _buyer) internal {
+    function _transferOwnershipOfPhotoNFT(PhotoNFT _photoNFT, uint256 _photoId, address _buyer) public {
         PhotoNFT photoNFT = _photoNFT;
         address PHOTO_NFT = address(_photoNFT);
 
-        PhotoNFT.Trade memory trade = photoNFT.getPhotoTrade(_photoId);
+        PhotoNFTTradable.Trade memory trade = photoNFTTradable.getTrade(_photoId);
         require(trade.status == "Open", "Trade is not Open.");
 
         photoNFT.transferFrom(address(this), _buyer, trade.photoId);
-        photoNFT.getPhotoTrade(_photoId).status = "Executed";
+        photoNFTTradable.getTrade(_photoId).status = "Executed";
         emit TradeStatusChange(_photoId, "Executed");
     }
-
-
-
 
 
     ///-----------------------------------------------------
