@@ -74,7 +74,7 @@ export default class Publish extends Component {
     }
       
     onSubmit(event) {
-        const { web3, accounts, photoNFTFactory, valueNFTName, valueNFTSymbol, valuePhotoPrice } = this.state;
+        const { web3, accounts, photoNFTFactory, photoNFTTradable, PHOTO_NFT_TRADABLE, valueNFTName, valueNFTSymbol, valuePhotoPrice } = this.state;
 
         event.preventDefault()
 
@@ -114,26 +114,12 @@ export default class Publish extends Component {
             /// Get instance by using created photoNFT address
             let PhotoNFT = {};
             PhotoNFT = require("../../../../build/contracts/PhotoNFT.json"); 
-            const networkId = await web3.eth.net.getId();
-            const deployedNetwork = PhotoNFTFactory.networks[networkId.toString()];
             let photoNFT = new web3.eth.Contract(PhotoNFT.abi, PHOTO_NFT);
      
-                let deployedNetwork = null;
-
-            // Create instance of contracts
-            if (PhotoNFTFactory.networks) {
-              deployedNetwork = PhotoNFTFactory.networks[networkId.toString()];
-              if (deployedNetwork) {
-                instancePhotoNFTFactory = new web3.eth.Contract(
-                  PhotoNFTFactory.abi,
-                  deployedNetwork && deployedNetwork.address,
-                );
-
-
             /// Put on sale (by a seller who is also called as owner)
             const photoId = 0;
-            photoNFT.methods.approve(PHOTO_NFT, photoId).send({ from: accounts[0] });
-            photoNFT.methods.openTrade(photoId, photoPrice).send({ from: accounts[0] });
+            photoNFT.methods.approve(PHOTO_NFT_TRADABLE, photoId).send({ from: accounts[0] });
+            photoNFTTradable.methods.openTrade(photoId, photoPrice).send({ from: accounts[0] });
           })
         })
     }  
@@ -156,8 +142,10 @@ export default class Publish extends Component {
         const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
      
         let PhotoNFTFactory = {};
+        let PhotoNFTTradable = {};
         try {
           PhotoNFTFactory = require("../../../../build/contracts/PhotoNFTFactory.json"); // Load ABI of contract of PhotoNFTFactory
+          PhotoNFTTradable = require("../../../../build/contracts/PhotoNFTTradable.json");
         } catch (e) {
           console.log(e);
         }
@@ -185,6 +173,8 @@ export default class Publish extends Component {
             balance = web3.utils.fromWei(balance, 'ether');
 
             let instancePhotoNFTFactory = null;
+            let instancePhotoNFTTradable = null;
+            let PHOTO_NFT_TRADABLE = null;
             let deployedNetwork = null;
 
             // Create instance of contracts
@@ -196,6 +186,18 @@ export default class Publish extends Component {
                   deployedNetwork && deployedNetwork.address,
                 );
                 console.log('=== instancePhotoNFTFactory ===', instancePhotoNFTFactory);
+              }
+            }
+
+            if (PhotoNFTTradable.networks) {
+              deployedNetwork = PhotoNFTTradable.networks[networkId.toString()];
+              if (deployedNetwork) {
+                instancePhotoNFTTradable = new web3.eth.Contract(
+                  PhotoNFTTradable.abi,
+                  deployedNetwork && deployedNetwork.address,
+                );
+                PHOTO_NFT_TRADABLE = deployedNetwork.address;
+                console.log('=== instancePhotoNFTTradable ===', instancePhotoNFTTradable);
               }
             }
 
@@ -211,7 +213,9 @@ export default class Publish extends Component {
                     networkType, 
                     hotLoaderDisabled,
                     isMetaMask, 
-                    photoNFTFactory: instancePhotoNFTFactory}, () => {
+                    photoNFTFactory: instancePhotoNFTFactory,
+                    photoNFTTradable: instancePhotoNFTTradable, 
+                    PHOTO_NFT_TRADABLE: PHOTO_NFT_TRADABLE }, () => {
                       this.refreshValues(instancePhotoNFTFactory);
                       setInterval(() => {
                         this.refreshValues(instancePhotoNFTFactory);
