@@ -22,8 +22,7 @@ contract PhotoNFTPutOnSale {
 
     uint256 tradeCounter;
 
-    constructor (PhotoNFT _photoNFT) public {
-        photoNFT = _photoNFT;
+    constructor() public {
         tradeCounter = 0;
     }
 
@@ -41,7 +40,7 @@ contract PhotoNFTPutOnSale {
      * @param _photoId The id for the photoId to trade.
      * @param _photoPrice The amount of currency for which to trade the photoId.
      */
-    function openTrade(uint256 _photoId, uint256 _photoPrice) public {
+    function openTrade(PhotoNFT photoNFT, uint256 _photoId, uint256 _photoPrice) public {
         photoNFT.transferFrom(msg.sender, address(this), _photoId);
         trades[tradeCounter] = Trade({
             seller: msg.sender,
@@ -56,7 +55,7 @@ contract PhotoNFTPutOnSale {
     /**
      * @dev Cancels a trade by the seller.
      */
-    function cancelTrade(uint256 _photoId) public {
+    function cancelTrade(PhotoNFT photoNFT, uint256 _photoId) public {
         Trade memory trade = trades[_photoId];
         require(
             msg.sender == trade.seller,

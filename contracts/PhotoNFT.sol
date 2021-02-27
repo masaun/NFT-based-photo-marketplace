@@ -36,10 +36,6 @@ contract PhotoNFT is ERC721Full, PhotoNFTPutOnSale {
     {
         _mint(msg.sender, currentPhotoId);
         _setTokenURI(currentPhotoId, _tokenURI);
-
-        /// Put on sale (by a seller who is also called as owner)
-        uint photoId = 0;
-        openTrade(photoId, photoPrice);
     }
 
     /** 
