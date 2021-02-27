@@ -24,6 +24,7 @@ contract PhotoNFT is ERC721Full {
     mapping (address => PhotoData) photoDatas;  /// [Key]: photoNFT contract address
     
     constructor(
+        address owner,  /// Initial owner (Seller)
         string memory _nftName, 
         string memory _nftSymbol,
         string memory _tokenURI,    /// [Note]: TokenURI is URL include ipfs hash
@@ -32,8 +33,7 @@ contract PhotoNFT is ERC721Full {
         public 
         ERC721Full(_nftName, _nftSymbol) 
     {
-        _mint(msg.sender, currentPhotoId);
-        _setTokenURI(currentPhotoId, _tokenURI);
+        mint(owner, _tokenURI);
     }
 
     /** 

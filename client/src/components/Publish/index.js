@@ -101,7 +101,7 @@ export default class Publish extends Component {
             valuePhotoPrice: ''
           });
 
-          let PHOTO_NFT;  /// [Note]: This is a photoNFT address created
+          //let PHOTO_NFT;  /// [Note]: This is a photoNFT address created
           const photoPrice = web3.utils.toWei(_photoPrice, 'ether');
           const ipfsHashOfPhoto = this.state.ipfsHash;
           photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
@@ -115,11 +115,12 @@ export default class Publish extends Component {
             let PhotoNFT = {};
             PhotoNFT = require("../../../../build/contracts/PhotoNFT.json"); 
             let photoNFT = new web3.eth.Contract(PhotoNFT.abi, PHOTO_NFT);
+            console.log('=== photoNFT ===', photoNFT);
      
             /// Put on sale (by a seller who is also called as owner)
-            const photoId = 0;
+            const photoId = 1;
             photoNFT.methods.approve(PHOTO_NFT_TRADABLE, photoId).send({ from: accounts[0] });
-            photoNFTTradable.methods.openTrade(photoId, photoPrice).send({ from: accounts[0] });
+            photoNFTTradable.methods.openTrade(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] });
           })
         })
     }  
@@ -174,7 +175,7 @@ export default class Publish extends Component {
 
             let instancePhotoNFTFactory = null;
             let instancePhotoNFTTradable = null;
-            let PHOTO_NFT_TRADABLE = null;
+            let PHOTO_NFT_TRADABLE;
             let deployedNetwork = null;
 
             // Create instance of contracts
@@ -198,6 +199,7 @@ export default class Publish extends Component {
                 );
                 PHOTO_NFT_TRADABLE = deployedNetwork.address;
                 console.log('=== instancePhotoNFTTradable ===', instancePhotoNFTTradable);
+                console.log('=== PHOTO_NFT_TRADABLE ===', PHOTO_NFT_TRADABLE);
               }
             }
 

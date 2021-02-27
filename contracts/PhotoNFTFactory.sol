@@ -29,8 +29,9 @@ contract PhotoNFTFactory is PhotoNFTFactoryStorage {
      * @notice - Create a new photoNFT when a seller (owner) upload a photo onto IPFS
      */
     function createNewPhotoNFT(string memory nftName, string memory nftSymbol, uint photoPrice, string memory ipfsHashOfPhoto) public returns (bool) {
+        address owner = msg.sender;  /// [Note]: Initial owner of photoNFT is msg.sender
         string memory tokenURI = getTokenURI(ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
-        PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol, tokenURI, photoPrice);
+        PhotoNFT photoNFT = new PhotoNFT(owner, nftName, nftSymbol, tokenURI, photoPrice);
         photoAddresses.push(address(photoNFT));
 
         /// Save metadata of a photoNFT created into the PhotoData struct
