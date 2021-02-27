@@ -38,6 +38,8 @@ contract PhotoNFTFactory is PhotoNFTFactoryStorage {
 
         /// Save metadata of a photoNFT created
         _saveMetadataOfPhotoNFT(photoNFT, nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);
+
+        emit PhotoNFTCreated(msg.sender, photoNFT, nftName, nftSymbol, photoPrice, ipfsHashOfPhoto);
     }
 
     /**

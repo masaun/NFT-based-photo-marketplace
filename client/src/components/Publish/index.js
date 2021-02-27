@@ -101,13 +101,25 @@ export default class Publish extends Component {
             valuePhotoPrice: ''
           });
 
+          let PHOTO_NFT;  /// [Note]: This is a photoNFT address created
           const photoPrice = web3.utils.toWei(_photoPrice, 'ether');
           const ipfsHashOfPhoto = this.state.ipfsHash;
           photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
           .once('receipt', (receipt) => {
             console.log('=== receipt ===', receipt);
-            // console.log('=== receipt.events.Transfer.returnValues.tokenId ===', receipt.events.Transfer.returnValues.tokenId);
-            // console.log('=== receipt.events.Transfer.returnValues.to ===', receipt.events.Transfer.returnValues.to);
+
+            const PHOTO_NFT = receipt.events.PhotoNFTCreated.returnValues.photoNFT;
+            console.log('=== PHOTO_NFT ===', PHOTO_NFT);
+
+            /// Get instance by using created photoNFT address
+            let PhotoNFT = {};
+            PhotoNFT = require("../../../../build/contracts/PhotoNFT.json"); 
+            let photoNFT = new web3.eth.Contract(PhotoNFT.abi, PHOTO_NFT);
+     
+            /// Put on sale (by a seller who is also called as owner)
+            const photoId = 0;
+            photoNFT.methods.approve(PHOTO_NFT, photoId).send({ from: accounts[0] });
+            photoNFT.methods.openTrade(photoId, photoPrice).send({ from: accounts[0] });
           })
         })
     }  
