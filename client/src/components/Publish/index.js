@@ -119,8 +119,12 @@ export default class Publish extends Component {
      
             /// Put on sale (by a seller who is also called as owner)
             const photoId = 1;
-            photoNFT.methods.approve(PHOTO_NFT_TRADABLE, photoId).send({ from: accounts[0] });
-            photoNFTTradable.methods.openTrade(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] });
+            photoNFT.methods.ownerOf(photoId).call().then(owner => console.log('=== owner of photoId 1 ===', owner));
+            
+            /// [Note]: Promise is needed for executing those methods below (Or, rewrite by async/await)
+            photoNFT.methods.approve(PHOTO_NFT_TRADABLE, photoId).send({ from: accounts[0] }).once('receipt', (receipt) => {
+                photoNFTTradable.methods.openTrade(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] }).once('receipt', (receipt) => {})
+            })
           })
         })
     }  
