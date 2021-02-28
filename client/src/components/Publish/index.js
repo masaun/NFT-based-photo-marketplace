@@ -311,7 +311,7 @@ export default class Publish extends Component {
                                     />
                                 </Field>
 
-                                <Button size={'medium'} type='submit'>Upload my photo</Button>
+                                <Button size={'medium'} type='submit'>Upload my photo and put on sale</Button>
                             </Form>
                         </Card>
                     </Grid>
