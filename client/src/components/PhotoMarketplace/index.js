@@ -40,7 +40,7 @@ export default class PhotoMarketplace extends Component {
     /// Functions of buying a photo NFT 
     ///---------------------------------
     buyPhotoNFT = async (e) => {
-        const { web3, accounts, photoNFTMarketplace, photoNFTFactory, valuePhotoNFTAddress } = this.state;
+        const { web3, accounts, photoNFTMarketplace, photoNFTData, valuePhotoNFTAddress } = this.state;
 
         //console.log('=== value of buyPhotoNFT ===', e.target.value);
 
@@ -59,7 +59,7 @@ export default class PhotoMarketplace extends Component {
         const owner = await photoNFT.methods.ownerOf(photoId).call();
         console.log('=== owner of photoId ===', owner);  /// [Expect]: Owner should be the PhotoNFTMarketplace.sol (This also called as a proxy/escrow contract)
 
-        const photo = await photoNFTFactory.methods.getPhotoByNFTAddress(PHOTO_NFT).call();
+        const photo = await photoNFTData.methods.getPhotoByNFTAddress(PHOTO_NFT).call();
         const buyAmount = await photo.photoPrice;
         const txReceipt1 = await photoNFTMarketplace.methods.buyPhotoNFT(PHOTO_NFT).send({ from: accounts[0], value: buyAmount });
         console.log('=== response of buyPhotoNFT ===', txReceipt1);
@@ -87,9 +87,9 @@ export default class PhotoMarketplace extends Component {
     /// NFT（Always load listed NFT data）
     ///-------------------------------------
     getAllPhotos = async () => {
-        const { photoNFTFactory } = this.state
+        const { photoNFTData } = this.state
 
-        const allPhotos = await photoNFTFactory.methods.getAllPhotos().call()
+        const allPhotos = await photoNFTData.methods.getAllPhotos().call()
         console.log('=== allPhotos ===', allPhotos)
 
         this.setState({ allPhotos: allPhotos })
@@ -113,11 +113,11 @@ export default class PhotoMarketplace extends Component {
     componentDidMount = async () => {
         const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
      
-        let PhotoNFTFactory = {};
         let PhotoNFTMarketplace = {};
+        let PhotoNFTData = {};
         try {
-          PhotoNFTFactory = require("../../../../build/contracts/PhotoNFTFactory.json");
           PhotoNFTMarketplace = require("../../../../build/contracts/PhotoNFTMarketplace.json");
+          PhotoNFTData = require("../../../../build/contracts/PhotoNFTData.json");
         } catch (e) {
           console.log(e);
         }
@@ -144,22 +144,11 @@ export default class PhotoMarketplace extends Component {
             let balance = accounts.length > 0 ? await web3.eth.getBalance(accounts[0]): web3.utils.toWei('0');
             balance = web3.utils.fromWei(balance, 'ether');
 
-            let instancePhotoNFTFactory = null;
             let instancePhotoNFTMarketplace = null;
+            let instancePhotoNFTData = null;
             let deployedNetwork = null;
 
             // Create instance of contracts
-            if (PhotoNFTFactory.networks) {
-              deployedNetwork = PhotoNFTFactory.networks[networkId.toString()];
-              if (deployedNetwork) {
-                instancePhotoNFTFactory = new web3.eth.Contract(
-                  PhotoNFTFactory.abi,
-                  deployedNetwork && deployedNetwork.address,
-                );
-                console.log('=== instancePhotoNFTFactory ===', instancePhotoNFTFactory);
-              }
-            }
-
             if (PhotoNFTMarketplace.networks) {
               deployedNetwork = PhotoNFTMarketplace.networks[networkId.toString()];
               if (deployedNetwork) {
@@ -171,7 +160,18 @@ export default class PhotoMarketplace extends Component {
               }
             }
 
-            if (instancePhotoNFTFactory || instancePhotoNFTMarketplace) {
+            if (PhotoNFTData.networks) {
+              deployedNetwork = PhotoNFTData.networks[networkId.toString()];
+              if (deployedNetwork) {
+                instancePhotoNFTData = new web3.eth.Contract(
+                  PhotoNFTData.abi,
+                  deployedNetwork && deployedNetwork.address,
+                );
+                console.log('=== instancePhotoNFTData ===', instancePhotoNFTData);
+              }
+            }
+
+            if (instancePhotoNFTMarketplace) {
                 // Set web3, accounts, and contract to the state, and then proceed with an
                 // example of interacting with the contract's methods.
                 this.setState({ 
@@ -183,11 +183,11 @@ export default class PhotoMarketplace extends Component {
                     networkType, 
                     hotLoaderDisabled,
                     isMetaMask, 
-                    photoNFTFactory: instancePhotoNFTFactory, 
-                    photoNFTMarketplace: instancePhotoNFTMarketplace }, () => {
-                      this.refreshValues(instancePhotoNFTFactory);
+                    photoNFTMarketplace: instancePhotoNFTMarketplace,
+                    photoNFTData: instancePhotoNFTData }, () => {
+                      this.refreshValues(instancePhotoNFTMarketplace);
                       setInterval(() => {
-                        this.refreshValues(instancePhotoNFTFactory);
+                        this.refreshValues(instancePhotoNFTMarketplace);
                     }, 5000);
                 });
             }
@@ -214,9 +214,9 @@ export default class PhotoMarketplace extends Component {
         }
     }
 
-    refreshValues = (instancePhotoNFTFactory) => {
-        if (instancePhotoNFTFactory) {
-          console.log('refreshValues of instancePhotoNFTFactory');
+    refreshValues = (instancePhotoNFTMarketplace) => {
+        if (instancePhotoNFTMarketplace) {
+          console.log('refreshValues of instancePhotoNFTMarketplace');
         }
     }
 
