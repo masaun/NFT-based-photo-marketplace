@@ -7,15 +7,12 @@ import { PhotoNFT } from "./PhotoNFT.sol";
 import { PhotoNFTTradable } from "./PhotoNFTTradable.sol";
 
 
-contract PhotoNFTMarketPlace {
+contract PhotoNFTMarketPlace is PhotoNFTTradable {
     using SafeMath for uint256;
-
-    PhotoNFTTradable public photoNFTTradable;
 
     address public PHOTO_NFT_MARKETPLACE;
 
-    constructor(PhotoNFTTradable _photoNFTTradable) public {
-        photoNFTTradable = _photoNFTTradable;
+    constructor() public {
         address payable PHOTO_NFT_MARKETPLACE = address(uint160(address(this)));
     }
 
@@ -42,28 +39,11 @@ contract PhotoNFTMarketPlace {
         photoNFT.approve(buyer, photoId);
 
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
-        _transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);
+        transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);
 
         /// Mint a photo with a new photoId
         //string memory tokenURI = photoNFTFactory.getTokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
         //photoNFT.mint(msg.sender, tokenURI);
-    }
-
-    /**
-     * @dev Executes a trade. Must have approved this contract to transfer the amount of currency specified to the seller. Transfers ownership of the photoId to the filler.
-     */
-    event TradeStatusChange(uint256 ad, bytes32 status);
-
-    function _transferOwnershipOfPhotoNFT(PhotoNFT _photoNFT, uint256 _photoId, address _buyer) public {
-        PhotoNFT photoNFT = _photoNFT;
-        address PHOTO_NFT = address(_photoNFT);
-
-        PhotoNFTTradable.Trade memory trade = photoNFTTradable.getTrade(_photoId);
-        require(trade.status == "Open", "Trade is not Open.");
-
-        photoNFT.transferFrom(address(this), _buyer, trade.photoId);
-        photoNFTTradable.getTrade(_photoId).status = "Executed";
-        emit TradeStatusChange(_photoId, "Executed");
     }
 
 

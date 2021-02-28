@@ -23,7 +23,7 @@ contract PhotoNFTTradable {
 
     uint256 tradeCounter;
 
-    constructor () public {
+    constructor() public {
         tradeCounter = 0;
     }
 
@@ -57,6 +57,20 @@ contract PhotoNFTTradable {
         photoNFT.transferFrom(address(this), trade.seller, trade.photoId);
         trades[_photoId].status = "Cancelled";
         emit TradeStatusChange(_photoId, "Cancelled");
+    }
+
+    /**
+     * @dev Executes a trade. Must have approved this contract to transfer the amount of currency specified to the seller. Transfers ownership of the photoId to the filler.
+     */
+    function transferOwnershipOfPhotoNFT(PhotoNFT _photoNFT, uint256 _photoId, address _buyer) public {
+        PhotoNFT photoNFT = _photoNFT;
+
+        Trade memory trade = getTrade(_photoId);
+        require(trade.status == "Open", "Trade is not Open.");
+
+        photoNFT.transferFrom(address(this), _buyer, trade.photoId);
+        getTrade(_photoId).status = "Executed";
+        emit TradeStatusChange(_photoId, "Executed");
     }
 
 
