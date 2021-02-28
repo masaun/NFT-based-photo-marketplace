@@ -5,9 +5,10 @@ pragma experimental ABIEncoderV2;
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
 import { PhotoNFTTradable } from "./PhotoNFTTradable.sol";
+import { PhotoNFTMarketplaceEvents } from "./photo-nft-marketplace/commons/PhotoNFTMarketplaceEvents.sol";
 
 
-contract PhotoNFTMarketplace is PhotoNFTTradable {
+contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
     using SafeMath for uint256;
 
     address public PHOTO_NFT_MARKETPLACE;
@@ -39,8 +40,14 @@ contract PhotoNFTMarketplace is PhotoNFTTradable {
         uint photoId = 1;  /// [Note]: PhotoID is always 1. Because each photoNFT is unique.
         photoNFT.approve(buyer, photoId);
 
+        address ownerBeforeOwnershipTransferred = photoNFT.ownerOf(photoId);
+
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
         transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);
+
+        /// Event for checking result of transferring ownership of a photoNFT
+        address ownerAfterOwnershipTransferred = photoNFT.ownerOf(photoId);
+        emit PhotoNFTOwnershipChanged(photoNFT, photoId, ownerBeforeOwnershipTransferred, ownerAfterOwnershipTransferred);
 
         /// Mint a photo with a new photoId
         //string memory tokenURI = photoNFTFactory.getTokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
