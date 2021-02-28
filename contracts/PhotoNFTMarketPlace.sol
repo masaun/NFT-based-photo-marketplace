@@ -6,6 +6,7 @@ import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
 import { PhotoNFTTradable } from "./PhotoNFTTradable.sol";
 import { PhotoNFTMarketplaceEvents } from "./photo-nft-marketplace/commons/PhotoNFTMarketplaceEvents.sol";
+import { PhotoNFTData } from "./PhotoNFTData.sol";
 
 
 contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
@@ -13,7 +14,10 @@ contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
 
     address public PHOTO_NFT_MARKETPLACE;
 
-    constructor() public {
+    PhotoNFTData public photoNFTData;
+
+    constructor(PhotoNFTData _photoNFTData) public {
+        photoNFTData = _photoNFTData;
         address payable PHOTO_NFT_MARKETPLACE = address(uint160(address(this)));
     }
 
@@ -26,10 +30,10 @@ contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
         PhotoNFT photoNFT = _photoNFT;
         address PHOTO_NFT = address(_photoNFT);
 
-        PhotoNFT.PhotoData memory photoData = photoNFT.getPhotoData(PHOTO_NFT);
-        address _seller = photoData.ownerAddress;                     /// Owner
+        PhotoNFTData.Photo memory photo = photoNFTData.getPhotoByNFTAddress(PHOTO_NFT);
+        address _seller = photo.ownerAddress;                     /// Owner
         address payable seller = address(uint160(_seller));  /// Convert owner address with payable
-        uint buyAmount = photoData.photoPrice;
+        uint buyAmount = photo.photoPrice;
         require (msg.value == buyAmount, "msg.value should be equal to the buyAmount");
  
         /// Bought-amount is transferred into a seller wallet
@@ -44,6 +48,7 @@ contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
 
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
         transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);
+        
 
         /// Event for checking result of transferring ownership of a photoNFT
         address ownerAfterOwnershipTransferred = photoNFT.ownerOf(photoId);
