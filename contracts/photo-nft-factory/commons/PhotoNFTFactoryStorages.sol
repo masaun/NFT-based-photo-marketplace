@@ -6,9 +6,9 @@ import { PhotoNFTFactoryEvents } from "./PhotoNFTFactoryEvents.sol";
 
 
 // shared storage
-contract PhotoNFTFactoryStorage is PhotoNFTFactoryObjects, PhotoNFTFactoryEvents {
+contract PhotoNFTFactoryStorages is PhotoNFTFactoryObjects, PhotoNFTFactoryEvents {
 
-    Photo[] public photos;
+    //Photo[] public photos;
 
 }
 
