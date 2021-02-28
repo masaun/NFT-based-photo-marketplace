@@ -1,5 +1,5 @@
-const PhotoNFTMarketPlace = artifacts.require("./PhotoNFTMarketPlace.sol");
+const PhotoNFTMarketplace = artifacts.require("./PhotoNFTMarketplace.sol");
 
 module.exports = async function(deployer, network, accounts) {
-    await deployer.deploy(PhotoNFTMarketPlace);
+    await deployer.deploy(PhotoNFTMarketplace);
 };

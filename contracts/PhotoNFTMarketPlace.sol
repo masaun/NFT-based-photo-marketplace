@@ -7,7 +7,7 @@ import { PhotoNFT } from "./PhotoNFT.sol";
 import { PhotoNFTTradable } from "./PhotoNFTTradable.sol";
 
 
-contract PhotoNFTMarketPlace is PhotoNFTTradable {
+contract PhotoNFTMarketplace is PhotoNFTTradable {
     using SafeMath for uint256;
 
     address public PHOTO_NFT_MARKETPLACE;

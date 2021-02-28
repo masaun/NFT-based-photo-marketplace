@@ -74,7 +74,7 @@ export default class Publish extends Component {
     }
       
     onSubmit(event) {
-        const { web3, accounts, photoNFTFactory, photoNFTTradable, PHOTO_NFT_TRADABLE, valueNFTName, valueNFTSymbol, valuePhotoPrice } = this.state;
+        const { web3, accounts, photoNFTFactory, photoNFTMarketplace, PHOTO_NFT_MARKETPLACE, valueNFTName, valueNFTSymbol, valuePhotoPrice } = this.state;
 
         event.preventDefault()
 
@@ -122,9 +122,9 @@ export default class Publish extends Component {
             photoNFT.methods.ownerOf(photoId).call().then(owner => console.log('=== owner of photoId 1 ===', owner));
             
             /// [Note]: Promise (nested-structure) is needed for executing those methods below (Or, rewrite by async/await)
-            photoNFT.methods.approve(PHOTO_NFT_TRADABLE, photoId).send({ from: accounts[0] }).once('receipt', (receipt) => {
+            photoNFT.methods.approve(PHOTO_NFT_MARKETPLACE, photoId).send({ from: accounts[0] }).once('receipt', (receipt) => {
                 /// Put on sale (by a seller who is also called as owner)
-                photoNFTTradable.methods.openTrade(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] }).once('receipt', (receipt) => {})
+                photoNFTMarketplace.methods.openTrade(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] }).once('receipt', (receipt) => {})
             })
           })
         })
@@ -148,10 +148,10 @@ export default class Publish extends Component {
         const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
      
         let PhotoNFTFactory = {};
-        let PhotoNFTTradable = {};
+        let PhotoNFTMarketplace = {};
         try {
           PhotoNFTFactory = require("../../../../build/contracts/PhotoNFTFactory.json"); // Load ABI of contract of PhotoNFTFactory
-          PhotoNFTTradable = require("../../../../build/contracts/PhotoNFTTradable.json");
+          PhotoNFTMarketplace = require("../../../../build/contracts/PhotoNFTMarketplace.json");
         } catch (e) {
           console.log(e);
         }
@@ -179,8 +179,8 @@ export default class Publish extends Component {
             balance = web3.utils.fromWei(balance, 'ether');
 
             let instancePhotoNFTFactory = null;
-            let instancePhotoNFTTradable = null;
-            let PHOTO_NFT_TRADABLE;
+            let instancePhotoNFTMarketplace = null;
+            let PHOTO_NFT_MARKETPLACE;
             let deployedNetwork = null;
 
             // Create instance of contracts
@@ -195,16 +195,16 @@ export default class Publish extends Component {
               }
             }
 
-            if (PhotoNFTTradable.networks) {
-              deployedNetwork = PhotoNFTTradable.networks[networkId.toString()];
+            if (PhotoNFTMarketplace.networks) {
+              deployedNetwork = PhotoNFTMarketplace.networks[networkId.toString()];
               if (deployedNetwork) {
-                instancePhotoNFTTradable = new web3.eth.Contract(
-                  PhotoNFTTradable.abi,
+                instancePhotoNFTMarketplace = new web3.eth.Contract(
+                  PhotoNFTMarketplace.abi,
                   deployedNetwork && deployedNetwork.address,
                 );
-                PHOTO_NFT_TRADABLE = deployedNetwork.address;
-                console.log('=== instancePhotoNFTTradable ===', instancePhotoNFTTradable);
-                console.log('=== PHOTO_NFT_TRADABLE ===', PHOTO_NFT_TRADABLE);
+                PHOTO_NFT_MARKETPLACE = deployedNetwork.address;
+                console.log('=== instancePhotoNFTMarketplace ===', instancePhotoNFTMarketplace);
+                console.log('=== PHOTO_NFT_MARKETPLACE ===', PHOTO_NFT_MARKETPLACE);
               }
             }
 
@@ -221,8 +221,8 @@ export default class Publish extends Component {
                     hotLoaderDisabled,
                     isMetaMask, 
                     photoNFTFactory: instancePhotoNFTFactory,
-                    photoNFTTradable: instancePhotoNFTTradable, 
-                    PHOTO_NFT_TRADABLE: PHOTO_NFT_TRADABLE }, () => {
+                    photoNFTMarketplace: instancePhotoNFTMarketplace, 
+                    PHOTO_NFT_MARKETPLACE: PHOTO_NFT_MARKETPLACE }, () => {
                       this.refreshValues(instancePhotoNFTFactory);
                       setInterval(() => {
                         this.refreshValues(instancePhotoNFTFactory);
