@@ -118,7 +118,7 @@ export default class Publish extends Component {
             console.log('=== photoNFT ===', photoNFT);
      
             /// Check owner of photoId==1
-            const photoId = 1;
+            const photoId = 1;  /// [Note]: PhotoID is always 1. Because each photoNFT is unique.
             photoNFT.methods.ownerOf(photoId).call().then(owner => console.log('=== owner of photoId 1 ===', owner));
             
             /// [Note]: Promise (nested-structure) is needed for executing those methods below (Or, rewrite by async/await)
