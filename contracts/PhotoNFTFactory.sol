@@ -5,7 +5,7 @@ import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { Strings } from "./libraries/Strings.sol";
 import { PhotoNFTFactoryStorage } from "./photo-nft-factory/commons/PhotoNFTFactoryStorage.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
-import { PhotoNFTMarketPlace } from "./PhotoNFTMarketPlace.sol";
+import { PhotoNFTMarketplace } from "./PhotoNFTMarketplace.sol";
 
 
 /**
@@ -18,30 +18,29 @@ contract PhotoNFTFactory is PhotoNFTFactoryStorage {
     address[] public photoAddresses;
     address PHOTO_NFT_MARKETPLACE;
 
-    PhotoNFTMarketPlace public photoNFTMarketPlace;
+    PhotoNFTMarketplace public photoNFTMarketplace;
 
-    constructor(PhotoNFTMarketPlace _photoNFTMarketPlace) public {
-        photoNFTMarketPlace = _photoNFTMarketPlace;
-        PHOTO_NFT_MARKETPLACE = address(photoNFTMarketPlace);
+    constructor(PhotoNFTMarketplace _photoNFTMarketplace) public {
+        photoNFTMarketplace = _photoNFTMarketplace;
+        PHOTO_NFT_MARKETPLACE = address(photoNFTMarketplace);
     }
 
     /**
      * @notice - Create a new photoNFT when a seller (owner) upload a photo onto IPFS
      */
     function createNewPhotoNFT(string memory nftName, string memory nftSymbol, uint photoPrice, string memory ipfsHashOfPhoto) public returns (bool) {
+        address owner = msg.sender;  /// [Note]: Initial owner of photoNFT is msg.sender
         string memory tokenURI = getTokenURI(ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
-        PhotoNFT photoNFT = new PhotoNFT(nftName, nftSymbol, tokenURI);
+        PhotoNFT photoNFT = new PhotoNFT(owner, nftName, nftSymbol, tokenURI, photoPrice);
         photoAddresses.push(address(photoNFT));
-
-        /// Approve photoId of seller for the PhotoNFTMarketPlace contract
-        uint photoId = 0; /// Always 0 (Because all photo are just published at a time)
-        photoNFT.approve(PHOTO_NFT_MARKETPLACE, photoId);
 
         /// Save metadata of a photoNFT created into the PhotoData struct
         photoNFT.savePhotoNFTData(nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);        
 
         /// Save metadata of a photoNFT created
         _saveMetadataOfPhotoNFT(photoNFT, nftName, nftSymbol, msg.sender, photoPrice, ipfsHashOfPhoto);
+
+        emit PhotoNFTCreated(msg.sender, photoNFT, nftName, nftSymbol, photoPrice, ipfsHashOfPhoto);
     }
 
     /**

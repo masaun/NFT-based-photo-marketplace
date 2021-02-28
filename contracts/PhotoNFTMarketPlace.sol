@@ -4,14 +4,11 @@ pragma experimental ABIEncoderV2;
 //import { ERC20 } from './openzeppelin-solidity/contracts/token/ERC20/ERC20.sol';
 import { SafeMath } from "./openzeppelin-solidity/contracts/math/SafeMath.sol";
 import { PhotoNFT } from "./PhotoNFT.sol";
-
-import { IERC721 } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721.sol";
-import { ERC721Holder } from "./openzeppelin-solidity/contracts/token/ERC721/ERC721Holder.sol";
-import { IERC721Receiver } from "./openzeppelin-solidity/contracts/token/ERC721/IERC721Receiver.sol";
-import { ERC165 } from "./openzeppelin-solidity/contracts/introspection/ERC165.sol";
+import { PhotoNFTTradable } from "./PhotoNFTTradable.sol";
+import { PhotoNFTMarketplaceEvents } from "./photo-nft-marketplace/commons/PhotoNFTMarketplaceEvents.sol";
 
 
-contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
+contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
     using SafeMath for uint256;
 
     address public PHOTO_NFT_MARKETPLACE;
@@ -23,6 +20,7 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
     /** 
      * @notice - Buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
      * @notice - msg.sender buy NFT with ETH (msg.value)
+     * @notice - PhotoID is always 1. Because each photoNFT is unique.
      */
     function buyPhotoNFT(PhotoNFT _photoNFT) public payable returns (bool) {
         PhotoNFT photoNFT = _photoNFT;
@@ -37,42 +35,50 @@ contract PhotoNFTMarketPlace is IERC721Receiver, ERC165, ERC721Holder {
         /// Bought-amount is transferred into a seller wallet
         seller.transfer(buyAmount);
 
-        /// Approve this contract address as a receiver before NFT's safeTransferFrom is executed
-        uint tokenId = 0;        /// [Note]: This time each asset is unique (only 1). Therefore, tokenId is always "0"
-        photoNFT.approve(address(this), tokenId);
+        /// Approve a buyer address as a receiver before NFT's transferFrom method is executed
+        address buyer = msg.sender;
+        uint photoId = 1;  /// [Note]: PhotoID is always 1. Because each photoNFT is unique.
+        photoNFT.approve(buyer, photoId);
+
+        address ownerBeforeOwnershipTransferred = photoNFT.ownerOf(photoId);
 
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
-        photoNFT.transferFrom(seller, address(this), tokenId);      /// [Note]: Transfer from a seller to this contract (Approval of tokenId is already done when a photoNFT is created)
+        transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);
 
-        photoNFT.approve(msg.sender, tokenId);
-        photoNFT.safeTransferFrom(address(this), msg.sender, tokenId);  /// [Note]: Transfer from this contract to a buyer
+        /// Event for checking result of transferring ownership of a photoNFT
+        address ownerAfterOwnershipTransferred = photoNFT.ownerOf(photoId);
+        emit PhotoNFTOwnershipChanged(photoNFT, photoId, ownerBeforeOwnershipTransferred, ownerAfterOwnershipTransferred);
 
         /// Mint a photo with a new photoId
         //string memory tokenURI = photoNFTFactory.getTokenURI(photoData.ipfsHashOfPhoto);  /// [Note]: IPFS hash + URL
         //photoNFT.mint(msg.sender, tokenURI);
-    }    
+    }
 
+
+    ///-----------------------------------------------------
+    /// Methods below are pending methods
+    ///-----------------------------------------------------
 
     /** 
      * @dev reputation function is that gives reputation to a user who has ownership of being posted photo.
      * @dev Each user has reputation data in struct
      */
-    function reputation(address from, address to, uint256 tokenId) public returns (uint256, uint256) {
+    function reputation(address from, address to, uint256 photoId) public returns (uint256, uint256) {
 
-        // Photo storage photo = photos[tokenId];
+        // Photo storage photo = photos[photoId];
         // photo.reputation = photo.reputation.add(1);
 
-        // emit AddReputation(tokenId, photo.reputation);
+        // emit AddReputation(photoId, photo.reputation);
 
-        // return (tokenId, photo.reputation);
+        // return (photoId, photo.reputation);
         return (0, 0);
     }
     
 
-    function getReputationCount(uint256 tokenId) public view returns (uint256) {
+    function getReputationCount(uint256 photoId) public view returns (uint256) {
         uint256 curretReputationCount;
 
-        // Photo memory photo = photos[tokenId];
+        // Photo memory photo = photos[photoId];
         // curretReputationCount = photo.reputation;
 
         return curretReputationCount;

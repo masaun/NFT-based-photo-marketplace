@@ -74,7 +74,7 @@ export default class Publish extends Component {
     }
       
     onSubmit(event) {
-        const { web3, accounts, photoNFTFactory, valueNFTName, valueNFTSymbol, valuePhotoPrice } = this.state;
+        const { web3, accounts, photoNFTFactory, photoNFTMarketplace, PHOTO_NFT_MARKETPLACE, valueNFTName, valueNFTSymbol, valuePhotoPrice } = this.state;
 
         event.preventDefault()
 
@@ -101,13 +101,31 @@ export default class Publish extends Component {
             valuePhotoPrice: ''
           });
 
+          //let PHOTO_NFT;  /// [Note]: This is a photoNFT address created
           const photoPrice = web3.utils.toWei(_photoPrice, 'ether');
-          const ipfsHashOfPhoto = this.state.ipfsHash
+          const ipfsHashOfPhoto = this.state.ipfsHash;
           photoNFTFactory.methods.createNewPhotoNFT(nftName, nftSymbol, photoPrice, ipfsHashOfPhoto).send({ from: accounts[0] })
           .once('receipt', (receipt) => {
             console.log('=== receipt ===', receipt);
-            // console.log('=== receipt.events.Transfer.returnValues.tokenId ===', receipt.events.Transfer.returnValues.tokenId);
-            // console.log('=== receipt.events.Transfer.returnValues.to ===', receipt.events.Transfer.returnValues.to);
+
+            const PHOTO_NFT = receipt.events.PhotoNFTCreated.returnValues.photoNFT;
+            console.log('=== PHOTO_NFT ===', PHOTO_NFT);
+
+            /// Get instance by using created photoNFT address
+            let PhotoNFT = {};
+            PhotoNFT = require("../../../../build/contracts/PhotoNFT.json"); 
+            let photoNFT = new web3.eth.Contract(PhotoNFT.abi, PHOTO_NFT);
+            console.log('=== photoNFT ===', photoNFT);
+     
+            /// Check owner of photoId==1
+            const photoId = 1;  /// [Note]: PhotoID is always 1. Because each photoNFT is unique.
+            photoNFT.methods.ownerOf(photoId).call().then(owner => console.log('=== owner of photoId 1 ===', owner));
+            
+            /// [Note]: Promise (nested-structure) is needed for executing those methods below (Or, rewrite by async/await)
+            photoNFT.methods.approve(PHOTO_NFT_MARKETPLACE, photoId).send({ from: accounts[0] }).once('receipt', (receipt) => {
+                /// Put on sale (by a seller who is also called as owner)
+                photoNFTMarketplace.methods.openTrade(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] }).once('receipt', (receipt) => {})
+            })
           })
         })
     }  
@@ -130,8 +148,10 @@ export default class Publish extends Component {
         const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
      
         let PhotoNFTFactory = {};
+        let PhotoNFTMarketplace = {};
         try {
           PhotoNFTFactory = require("../../../../build/contracts/PhotoNFTFactory.json"); // Load ABI of contract of PhotoNFTFactory
+          PhotoNFTMarketplace = require("../../../../build/contracts/PhotoNFTMarketplace.json");
         } catch (e) {
           console.log(e);
         }
@@ -159,6 +179,8 @@ export default class Publish extends Component {
             balance = web3.utils.fromWei(balance, 'ether');
 
             let instancePhotoNFTFactory = null;
+            let instancePhotoNFTMarketplace = null;
+            let PHOTO_NFT_MARKETPLACE;
             let deployedNetwork = null;
 
             // Create instance of contracts
@@ -170,6 +192,19 @@ export default class Publish extends Component {
                   deployedNetwork && deployedNetwork.address,
                 );
                 console.log('=== instancePhotoNFTFactory ===', instancePhotoNFTFactory);
+              }
+            }
+
+            if (PhotoNFTMarketplace.networks) {
+              deployedNetwork = PhotoNFTMarketplace.networks[networkId.toString()];
+              if (deployedNetwork) {
+                instancePhotoNFTMarketplace = new web3.eth.Contract(
+                  PhotoNFTMarketplace.abi,
+                  deployedNetwork && deployedNetwork.address,
+                );
+                PHOTO_NFT_MARKETPLACE = deployedNetwork.address;
+                console.log('=== instancePhotoNFTMarketplace ===', instancePhotoNFTMarketplace);
+                console.log('=== PHOTO_NFT_MARKETPLACE ===', PHOTO_NFT_MARKETPLACE);
               }
             }
 
@@ -185,7 +220,9 @@ export default class Publish extends Component {
                     networkType, 
                     hotLoaderDisabled,
                     isMetaMask, 
-                    photoNFTFactory: instancePhotoNFTFactory}, () => {
+                    photoNFTFactory: instancePhotoNFTFactory,
+                    photoNFTMarketplace: instancePhotoNFTMarketplace, 
+                    PHOTO_NFT_MARKETPLACE: PHOTO_NFT_MARKETPLACE }, () => {
                       this.refreshValues(instancePhotoNFTFactory);
                       setInterval(() => {
                         this.refreshValues(instancePhotoNFTFactory);
@@ -274,7 +311,7 @@ export default class Publish extends Component {
                                     />
                                 </Field>
 
-                                <Button size={'medium'} type='submit'>Upload my photo</Button>
+                                <Button size={'medium'} type='submit'>Upload my photo and put on sale</Button>
                             </Form>
                         </Card>
                     </Grid>
