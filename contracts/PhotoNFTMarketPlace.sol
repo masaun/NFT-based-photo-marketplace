@@ -19,6 +19,7 @@ contract PhotoNFTMarketplace is PhotoNFTTradable {
     /** 
      * @notice - Buy function is that buy NFT token and ownership transfer. (Reference from IERC721.sol)
      * @notice - msg.sender buy NFT with ETH (msg.value)
+     * @notice - PhotoID is always 1. Because each photoNFT is unique.
      */
     function buyPhotoNFT(PhotoNFT _photoNFT) public payable returns (bool) {
         PhotoNFT photoNFT = _photoNFT;
@@ -34,8 +35,8 @@ contract PhotoNFTMarketplace is PhotoNFTTradable {
         seller.transfer(buyAmount);
 
         /// Approve a buyer address as a receiver before NFT's transferFrom method is executed
-        uint photoId = 0;        /// [Note]: This time each asset is unique (only 1). Therefore, photoId is always "0"
         address buyer = msg.sender;
+        uint photoId = 1;  /// [Note]: PhotoID is always 1. Because each photoNFT is unique.
         photoNFT.approve(buyer, photoId);
 
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
