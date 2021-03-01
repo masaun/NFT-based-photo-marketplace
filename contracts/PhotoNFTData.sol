@@ -51,7 +51,7 @@ contract PhotoNFTData is PhotoNFTDataStorages {
 
         /// Update metadata of a photoNFT of photo
         Photo storage photo = photos[photoIndex];
-        require (_newOwner == address(0), "A new owner address should be not empty");
+        require (_newOwner != address(0), "A new owner address should be not empty");
         photo.ownerAddress = _newOwner;  
     }
 
