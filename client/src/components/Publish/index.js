@@ -90,7 +90,8 @@ export default class Publish extends Component {
           console.log('=== ipfsHash ===', this.state.ipfsHash);
 
           const nftName = valueNFTName;
-          const nftSymbol = valueNFTSymbol;
+          const nftSymbol = "NFT-MARKETPLACE";  /// [Note]: All NFT's symbol are common symbol
+          //const nftSymbol = valueNFTSymbol;
           const _photoPrice = valuePhotoPrice;
           console.log('=== nftName ===', nftName);
           console.log('=== nftSymbol ===', nftSymbol);
@@ -266,8 +267,8 @@ export default class Publish extends Component {
                               p={20} 
                               borderColor={"#E8E8E8"}
                         >
-                            <h2>Publish</h2>
-                            <p>Please upload your photo from here!</p>
+                            <h2>Publish and Put on Sale</h2>
+                            <p>Please upload your photo and put on sale from here!</p>
 
                             <Form onSubmit={this.onSubmit}>
                                 <Field label="Photo NFT Name">
@@ -281,6 +282,7 @@ export default class Publish extends Component {
                                     />
                                 </Field> 
 
+                                {/*
                                 <Field label="Photo NFT Symbol">
                                     <Input
                                         type="text"
@@ -291,6 +293,7 @@ export default class Publish extends Component {
                                         onChange={this.handleNFTSymbol}                                        
                                     />
                                 </Field>
+                                */}
 
                                 <Field label="Photo Price (unit: ETH)">
                                     <Input
@@ -311,7 +314,7 @@ export default class Publish extends Component {
                                     />
                                 </Field>
 
-                                <Button size={'medium'} type='submit'>Upload my photo and put on sale</Button>
+                                <Button size={'medium'} width={1} type='submit'>Upload my photo and put on sale</Button>
                             </Form>
                         </Card>
                     </Grid>

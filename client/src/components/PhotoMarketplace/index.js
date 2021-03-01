@@ -22,7 +22,7 @@ export default class PhotoMarketplace extends Component {
           allPhotos: []
         };
 
-        this.handlePhotoNFTAddress = this.handlePhotoNFTAddress.bind(this);
+        //this.handlePhotoNFTAddress = this.handlePhotoNFTAddress.bind(this);
 
         this.buyPhotoNFT = this.buyPhotoNFT.bind(this);
         this.addReputation = this.addReputation.bind(this);
@@ -31,23 +31,23 @@ export default class PhotoMarketplace extends Component {
     ///--------------------------
     /// Handler
     ///-------------------------- 
-    handlePhotoNFTAddress(event) {
-        this.setState({ valuePhotoNFTAddress: event.target.value });
-    }
+    // handlePhotoNFTAddress(event) {
+    //     this.setState({ valuePhotoNFTAddress: event.target.value });
+    // }
 
 
     ///---------------------------------
     /// Functions of buying a photo NFT 
     ///---------------------------------
     buyPhotoNFT = async (e) => {
-        const { web3, accounts, photoNFTMarketplace, photoNFTData, valuePhotoNFTAddress } = this.state;
+        const { web3, accounts, photoNFTMarketplace, photoNFTData } = this.state;
+        //const { web3, accounts, photoNFTMarketplace, photoNFTData, valuePhotoNFTAddress } = this.state;
 
-        //console.log('=== value of buyPhotoNFT ===', e.target.value);
+        console.log('=== value of buyPhotoNFT ===', e.target.value);
 
-        //const _photoNFT = e.target.value;
-
-        const PHOTO_NFT = valuePhotoNFTAddress;
-        this.setState({ valuePhotoNFTAddress: "" });
+        const PHOTO_NFT = e.target.value;
+        //const PHOTO_NFT = valuePhotoNFTAddress;
+        //this.setState({ valuePhotoNFTAddress: "" });
 
         /// Get instance by using created photoNFT address
         let PhotoNFT = {};
@@ -239,8 +239,6 @@ export default class PhotoMarketplace extends Component {
                               p={20} 
                               borderColor={"#E8E8E8"}
                       >
-                        <h4>Photo name: { photo.photoNFTName } ({ photo.photoNFTSymbol })</h4>
-
                         <Image
                           alt="random unsplash image"
                           borderRadius={8}
@@ -251,18 +249,21 @@ export default class PhotoMarketplace extends Component {
 
                         <span style={{ padding: "20px" }}></span>
 
+                        <p>Photo Name: { photo.photoNFTName }</p>
+
                         <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
 
                         <p>NFT Address: { photo.photoNFT }</p>
 
                         <p>Owner: { photo.ownerAddress }</p>
 
-                        <p>Reputation Count: { photo.reputation }</p>
+                        {/* <p>Reputation Count: { photo.reputation }</p> */}
                         
                         <br />
 
-                        <hr />
+                        {/* <hr /> */}
 
+                        {/* 
                         <Field label="Please input a NFT Address as a confirmation to buy">
                             <Input
                                 type="text"
@@ -273,14 +274,15 @@ export default class PhotoMarketplace extends Component {
                                 onChange={this.handlePhotoNFTAddress}                                        
                             />
                         </Field>
+                        */}
 
-                        <Button size={'small'} onClick={this.buyPhotoNFT}> Buy </Button>
+                        <Button size={'medium'} width={1} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
 
                         {/* <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button> */}
 
-                        <span style={{ padding: "5px" }}></span>
+                        {/* <span style={{ padding: "5px" }}></span> */}
 
-                        <Button size={'small'} onClick={this.addReputation}> Rep </Button> 
+                        {/* <Button size={'small'} onClick={this.addReputation}> Rep </Button> */}
 
                         <span style={{ padding: "5px" }}></span>
                       </Card>
