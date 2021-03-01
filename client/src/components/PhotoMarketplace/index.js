@@ -239,8 +239,6 @@ export default class PhotoMarketplace extends Component {
                               p={20} 
                               borderColor={"#E8E8E8"}
                       >
-                        <h4>Photo name: { photo.photoNFTName } ({ photo.photoNFTSymbol })</h4>
-
                         <Image
                           alt="random unsplash image"
                           borderRadius={8}
@@ -251,13 +249,15 @@ export default class PhotoMarketplace extends Component {
 
                         <span style={{ padding: "20px" }}></span>
 
+                        <p>Photo Name: { photo.photoNFTName }</p>
+
                         <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
 
                         <p>NFT Address: { photo.photoNFT }</p>
 
                         <p>Owner: { photo.ownerAddress }</p>
 
-                        <p>Reputation Count: { photo.reputation }</p>
+                        {/* <p>Reputation Count: { photo.reputation }</p> */}
                         
                         <br />
 
@@ -274,13 +274,13 @@ export default class PhotoMarketplace extends Component {
                             />
                         </Field>
 
-                        <Button size={'small'} onClick={this.buyPhotoNFT}> Buy </Button>
+                        <Button size={'medium'} width={1} onClick={this.buyPhotoNFT}> Buy </Button>
 
                         {/* <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button> */}
 
-                        <span style={{ padding: "5px" }}></span>
+                        {/* <span style={{ padding: "5px" }}></span> */}
 
-                        <Button size={'small'} onClick={this.addReputation}> Rep </Button> 
+                        {/* <Button size={'small'} onClick={this.addReputation}> Rep </Button> */}
 
                         <span style={{ padding: "5px" }}></span>
                       </Card>
