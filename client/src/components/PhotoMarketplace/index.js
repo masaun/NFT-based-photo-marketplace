@@ -22,7 +22,7 @@ export default class PhotoMarketplace extends Component {
           allPhotos: []
         };
 
-        this.handlePhotoNFTAddress = this.handlePhotoNFTAddress.bind(this);
+        //this.handlePhotoNFTAddress = this.handlePhotoNFTAddress.bind(this);
 
         this.buyPhotoNFT = this.buyPhotoNFT.bind(this);
         this.addReputation = this.addReputation.bind(this);
@@ -31,23 +31,23 @@ export default class PhotoMarketplace extends Component {
     ///--------------------------
     /// Handler
     ///-------------------------- 
-    handlePhotoNFTAddress(event) {
-        this.setState({ valuePhotoNFTAddress: event.target.value });
-    }
+    // handlePhotoNFTAddress(event) {
+    //     this.setState({ valuePhotoNFTAddress: event.target.value });
+    // }
 
 
     ///---------------------------------
     /// Functions of buying a photo NFT 
     ///---------------------------------
     buyPhotoNFT = async (e) => {
-        const { web3, accounts, photoNFTMarketplace, photoNFTData, valuePhotoNFTAddress } = this.state;
+        const { web3, accounts, photoNFTMarketplace, photoNFTData } = this.state;
+        //const { web3, accounts, photoNFTMarketplace, photoNFTData, valuePhotoNFTAddress } = this.state;
 
-        //console.log('=== value of buyPhotoNFT ===', e.target.value);
+        console.log('=== value of buyPhotoNFT ===', e.target.value);
 
-        //const _photoNFT = e.target.value;
-
-        const PHOTO_NFT = valuePhotoNFTAddress;
-        this.setState({ valuePhotoNFTAddress: "" });
+        const PHOTO_NFT = e.target.value;
+        //const PHOTO_NFT = valuePhotoNFTAddress;
+        //this.setState({ valuePhotoNFTAddress: "" });
 
         /// Get instance by using created photoNFT address
         let PhotoNFT = {};
@@ -261,8 +261,9 @@ export default class PhotoMarketplace extends Component {
                         
                         <br />
 
-                        <hr />
+                        {/* <hr /> */}
 
+                        {/* 
                         <Field label="Please input a NFT Address as a confirmation to buy">
                             <Input
                                 type="text"
@@ -273,8 +274,9 @@ export default class PhotoMarketplace extends Component {
                                 onChange={this.handlePhotoNFTAddress}                                        
                             />
                         </Field>
+                        */}
 
-                        <Button size={'medium'} width={1} onClick={this.buyPhotoNFT}> Buy </Button>
+                        <Button size={'medium'} width={1} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
 
                         {/* <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button> */}
 
