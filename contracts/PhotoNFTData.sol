@@ -42,6 +42,19 @@ contract PhotoNFTData is PhotoNFTDataStorages {
         photoAddresses = _photoAddresses;     
     }
 
+    /**
+     * @notice - Update owner address of a photoNFT by transferring ownership
+     */
+    function updateOwnerOfPhotoNFT(PhotoNFT _photoNFT, address _newOwner) public returns (bool) {
+        /// Identify photo's index
+        uint photoIndex = getPhotoIndex(_photoNFT);
+
+        /// Update metadata of a photoNFT of photo
+        Photo storage photo = photos[photoIndex];
+        require (_newOwner != address(0), "A new owner address should be not empty");
+        photo.ownerAddress = _newOwner;  
+    }
+
 
     ///-----------------
     /// Getter methods
@@ -51,11 +64,27 @@ contract PhotoNFTData is PhotoNFTDataStorages {
         return photo;
     }
 
-    function getPhotoByNFTAddress(address photoAddress) public view returns (Photo memory _photo) {
+    function getPhotoIndex(PhotoNFT photoNFT) public view returns (uint _photoIndex) {
+        address PHOTO_NFT = address(photoNFT);
+
         /// Identify member's index
         uint photoIndex;
         for (uint i=0; i < photoAddresses.length; i++) {
-            if (photoAddresses[i] == photoAddress) {
+            if (photoAddresses[i] == PHOTO_NFT) {
+                photoIndex = i;
+            }
+        }
+
+        return photoIndex;   
+    }
+
+    function getPhotoByNFTAddress(PhotoNFT photoNFT) public view returns (Photo memory _photo) {
+        address PHOTO_NFT = address(photoNFT);
+
+        /// Identify member's index
+        uint photoIndex;
+        for (uint i=0; i < photoAddresses.length; i++) {
+            if (photoAddresses[i] == PHOTO_NFT) {
                 photoIndex = i;
             }
         }
