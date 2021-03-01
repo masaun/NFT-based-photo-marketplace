@@ -34,13 +34,15 @@ contract PhotoNFTTradable {
      */
     function openTrade(PhotoNFT photoNFT, uint256 _photoId, uint256 _photoPrice) public {
         photoNFT.transferFrom(msg.sender, address(this), _photoId);
+
+        tradeCounter += 1;    /// [Note]: New. Trade count is started from "1". This is to align photoId
         trades[tradeCounter] = Trade({
             seller: msg.sender,
             photoId: _photoId,
             photoPrice: _photoPrice,
             status: "Open"
         });
-        tradeCounter += 1;
+        //tradeCounter += 1;  /// [Note]: Original
         emit TradeStatusChange(tradeCounter - 1, "Open");
     }
 
