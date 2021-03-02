@@ -253,7 +253,7 @@ export default class PhotoMarketplace extends Component {
 
                         <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
 
-                        <p>NFT Address: { photo.photoNFT }</p>
+                        {/* <p>NFT Address: { photo.photoNFT }</p> */}
 
                         <p>Owner: { photo.ownerAddress }</p>
 
