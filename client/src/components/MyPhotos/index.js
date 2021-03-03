@@ -25,7 +25,8 @@ export default class MyPhotos extends Component {
 
         //this.handlePhotoNFTAddress = this.handlePhotoNFTAddress.bind(this);
 
-        this.buyPhotoNFT = this.buyPhotoNFT.bind(this);
+        this.putOnSale = this.putOnSale.bind(this);
+        this.cancelOnSale = this.cancelOnSale.bind(this);
     }
 
     ///--------------------------
@@ -36,18 +37,15 @@ export default class MyPhotos extends Component {
     // }
 
 
-    ///---------------------------------
-    /// Functions of buying a photo NFT 
-    ///---------------------------------
-    buyPhotoNFT = async (e) => {
-        const { web3, accounts, photoNFTMarketplace, photoNFTData } = this.state;
-        //const { web3, accounts, photoNFTMarketplace, photoNFTData, valuePhotoNFTAddress } = this.state;
+    ///---------------------------------------------------------
+    /// Functions put a photo NFT on sale or cancel it on sale 
+    ///---------------------------------------------------------
+    putOnSale = async (e) => {
+        const { web3, accounts, photoNFTMarketplace, photoNFTData, PHOTO_NFT_MARKETPLACE } = this.state;
 
         console.log('=== value of buyPhotoNFT ===', e.target.value);
 
         const PHOTO_NFT = e.target.value;
-        //const PHOTO_NFT = valuePhotoNFTAddress;
-        //this.setState({ valuePhotoNFTAddress: "" });
 
         /// Get instance by using created photoNFT address
         let PhotoNFT = {};
@@ -58,11 +56,34 @@ export default class MyPhotos extends Component {
         const photoId = 1;  /// [Note]: PhotoID is always 1. Because each photoNFT is unique.
         const owner = await photoNFT.methods.ownerOf(photoId).call();
         console.log('=== owner of photoId ===', owner);  /// [Expect]: Owner should be the PhotoNFTMarketplace.sol (This also called as a proxy/escrow contract)
+            
+        /// Put on sale (by a seller who is also called as owner)
+        const txReceipt1 = await photoNFT.methods.approve(PHOTO_NFT_MARKETPLACE, photoId).send({ from: accounts[0] });
+        //const txReceipt2 = await photoNFTMarketplace.methods.openTrade(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] });
+        //console.log('=== response of openTrade ===', txReceipt2);
+    }
 
-        const photo = await photoNFTData.methods.getPhotoByNFTAddress(PHOTO_NFT).call();
-        const buyAmount = await photo.photoPrice;
-        const txReceipt1 = await photoNFTMarketplace.methods.buyPhotoNFT(PHOTO_NFT).send({ from: accounts[0], value: buyAmount });
-        console.log('=== response of buyPhotoNFT ===', txReceipt1);
+    cancelOnSale = async (e) => {
+        const { web3, accounts, photoNFTMarketplace, photoNFTData, PHOTO_NFT_MARKETPLACE } = this.state;
+
+        console.log('=== value of buyPhotoNFT ===', e.target.value);
+
+        const PHOTO_NFT = e.target.value;
+
+        /// Get instance by using created photoNFT address
+        let PhotoNFT = {};
+        PhotoNFT = require("../../../../build/contracts/PhotoNFT.json"); 
+        let photoNFT = new web3.eth.Contract(PhotoNFT.abi, PHOTO_NFT);
+
+        /// Check owner of photoId
+        const photoId = 1;  /// [Note]: PhotoID is always 1. Because each photoNFT is unique.
+        const owner = await photoNFT.methods.ownerOf(photoId).call();
+        console.log('=== owner of photoId ===', owner);  /// [Expect]: Owner should be the PhotoNFTMarketplace.sol (This also called as a proxy/escrow contract)
+            
+        /// Put on sale (by a seller who is also called as owner)
+        const txReceipt1 = await photoNFT.methods.approve(PHOTO_NFT_MARKETPLACE, photoId).send({ from: accounts[0] });
+        const txReceipt2 = await photoNFTMarketplace.methods.cancelTrade(PHOTO_NFT, photoId).send({ from: accounts[0] });
+        console.log('=== response of cancelTrade ===', txReceipt2);
     }
 
 
@@ -131,6 +152,7 @@ export default class MyPhotos extends Component {
 
             let instancePhotoNFTMarketplace = null;
             let instancePhotoNFTData = null;
+            let PHOTO_NFT_MARKETPLACE = null;
             let deployedNetwork = null;
 
             // Create instance of contracts
@@ -141,6 +163,7 @@ export default class MyPhotos extends Component {
                   PhotoNFTMarketplace.abi,
                   deployedNetwork && deployedNetwork.address,
                 );
+                PHOTO_NFT_MARKETPLACE = deployedNetwork.address;
                 console.log('=== instancePhotoNFTMarketplace ===', instancePhotoNFTMarketplace);
               }
             }
@@ -244,13 +267,11 @@ export default class MyPhotos extends Component {
                               
                               <br />
 
-                              <Button size={'medium'} width={1} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
-
-                              {/* <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button> */}
-
-                              {/* <span style={{ padding: "5px" }}></span> */}
-
-                              {/* <Button size={'small'} onClick={this.addReputation}> Rep </Button> */}
+                              { photo.status == "Cancelled" ? 
+                                  <Button size={'medium'} width={1} value={ photo.photoNFT } onClick={this.putOnSale}> Put on sale </Button>
+                              :
+                                  <Button size={'medium'} width={1} value={ photo.photoNFT } onClick={this.cancelOnSale}> Cancel on sale </Button>
+                              }
 
                               <span style={{ padding: "5px" }}></span>
                             </Card>
