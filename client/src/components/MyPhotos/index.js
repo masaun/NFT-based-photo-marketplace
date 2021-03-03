@@ -16,6 +16,7 @@ export default class MyPhotos extends Component {
           storageValue: 0,
           web3: null,
           accounts: null,
+          currentAccount: null,
           route: window.location.pathname.replace("/", ""),
 
           /////// NFT
@@ -25,7 +26,6 @@ export default class MyPhotos extends Component {
         //this.handlePhotoNFTAddress = this.handlePhotoNFTAddress.bind(this);
 
         this.buyPhotoNFT = this.buyPhotoNFT.bind(this);
-        this.addReputation = this.addReputation.bind(this);
     }
 
     ///--------------------------
@@ -63,23 +63,6 @@ export default class MyPhotos extends Component {
         const buyAmount = await photo.photoPrice;
         const txReceipt1 = await photoNFTMarketplace.methods.buyPhotoNFT(PHOTO_NFT).send({ from: accounts[0], value: buyAmount });
         console.log('=== response of buyPhotoNFT ===', txReceipt1);
-    }
-
-
-    ///--------------------------
-    /// Functions of reputation 
-    ///---------------------------
-    addReputation = async () => {
-        const { accounts, photoNFTMarketplace } = this.state;
-
-        let _from2 = "0x2cb2418B11B66E331fFaC7FFB0463d91ef8FE8F5"
-        let _to2 = accounts[0]
-        let _tokenId2 = 1
-        const response_1 = await photoNFTMarketplace.methods.reputation(_from2, _to2, _tokenId2).send({ from: accounts[0] })
-        console.log('=== response of reputation function ===', response_1);      // Debug
-
-        const response_2 = await photoNFTMarketplace.methods.getReputationCount(_tokenId2).call()
-        console.log('=== response of getReputationCount function ===', response_2);      // Debug
     }
 
 
@@ -137,6 +120,8 @@ export default class MyPhotos extends Component {
 
             // Use web3 to get the user's accounts.
             const accounts = await web3.eth.getAccounts();
+            const currentAccount = accounts[0];
+
             // Get the contract instance.
             const networkId = await web3.eth.net.getId();
             const networkType = await web3.eth.net.getNetworkType();
@@ -183,6 +168,7 @@ export default class MyPhotos extends Component {
                     networkType, 
                     hotLoaderDisabled,
                     isMetaMask, 
+                    currentAccount: currentAccount,
                     photoNFTMarketplace: instancePhotoNFTMarketplace,
                     photoNFTData: instancePhotoNFTData }, () => {
                       this.refreshValues(instancePhotoNFTMarketplace);
@@ -221,7 +207,7 @@ export default class MyPhotos extends Component {
     }
 
     render() {
-        const { web3, allPhotos } = this.state;
+        const { web3, allPhotos, currentAccount } = this.state;
 
         return (
             <div className={styles.contracts}>
@@ -231,42 +217,47 @@ export default class MyPhotos extends Component {
                 return (
                   <div key={key} className="">
                     <div className={styles.widgets}>
-                      {/* <Card width={'360px'} bg="primary"> */}
-                      <Card width={"360px"} 
-                              maxWidth={"360px"} 
-                              mx={"auto"} 
-                              my={5} 
-                              p={20} 
-                              borderColor={"#E8E8E8"}
-                      >
-                        <Image
-                          alt="random unsplash image"
-                          borderRadius={8}
-                          height="100%"
-                          maxWidth='100%'
-                          src={ `https://ipfs.io/ipfs/${photo.ipfsHashOfPhoto}` }
-                        />
 
-                        <span style={{ padding: "20px" }}></span>
+                        { currentAccount == photo.ownerAddress ? 
+                            <Card width={"360px"} 
+                                    maxWidth={"360px"} 
+                                    mx={"auto"} 
+                                    my={5} 
+                                    p={20} 
+                                    borderColor={"#E8E8E8"}
+                            >
+                              <Image
+                                alt="random unsplash image"
+                                borderRadius={8}
+                                height="100%"
+                                maxWidth='100%'
+                                src={ `https://ipfs.io/ipfs/${photo.ipfsHashOfPhoto}` }
+                              />
 
-                        <p>Photo Name: { photo.photoNFTName }</p>
+                              <span style={{ padding: "20px" }}></span>
 
-                        <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
+                              <p>Photo Name: { photo.photoNFTName }</p>
 
-                        <p>Owner: { photo.ownerAddress }</p>
-                        
-                        <br />
+                              <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
 
-                        <Button size={'medium'} width={1} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
+                              <p>Owner: { photo.ownerAddress }</p>
+                              
+                              <br />
 
-                        {/* <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button> */}
+                              <Button size={'medium'} width={1} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
 
-                        {/* <span style={{ padding: "5px" }}></span> */}
+                              {/* <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button> */}
 
-                        {/* <Button size={'small'} onClick={this.addReputation}> Rep </Button> */}
+                              {/* <span style={{ padding: "5px" }}></span> */}
 
-                        <span style={{ padding: "5px" }}></span>
-                      </Card>
+                              {/* <Button size={'small'} onClick={this.addReputation}> Rep </Button> */}
+
+                              <span style={{ padding: "5px" }}></span>
+                            </Card>
+                        :
+                            ''
+                        }
+
                     </div>
                   </div>
                 )
