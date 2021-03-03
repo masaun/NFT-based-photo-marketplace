@@ -56,7 +56,7 @@ contract PhotoNFTTradable {
             msg.sender == trade.seller,
             "Trade can be open only by seller."
         );
-        photoNFT.transferFrom(address(this), trade.seller, trade.photoId);
+        photoNFT.transferFrom(msg.sender, address(this), trade.photoId);
         trades[_photoId].status = "Open";
         emit TradeStatusChange(_photoId, "Open");
     }
