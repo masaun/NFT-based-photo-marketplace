@@ -16,7 +16,7 @@ contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
 
     PhotoNFTData public photoNFTData;
 
-    constructor(PhotoNFTData _photoNFTData) public {
+    constructor(PhotoNFTData _photoNFTData) public PhotoNFTTradable(_photoNFTData) {
         photoNFTData = _photoNFTData;
         address payable PHOTO_NFT_MARKETPLACE = address(uint160(address(this)));
     }
@@ -46,8 +46,9 @@ contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
         address ownerBeforeOwnershipTransferred = photoNFT.ownerOf(photoId);
 
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
-        transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);        
+        transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);    
         photoNFTData.updateOwnerOfPhotoNFT(photoNFT, buyer);
+        photoNFTData.updateStatus(photoNFT, "Cancelled");
 
         /// Event for checking result of transferring ownership of a photoNFT
         address ownerAfterOwnershipTransferred = photoNFT.ownerOf(photoId);

@@ -34,6 +34,7 @@ contract PhotoNFTData is PhotoNFTDataStorages {
             ownerAddress: _ownerAddress,
             photoPrice: _photoPrice,
             ipfsHashOfPhoto: _ipfsHashOfPhoto,
+            status: "Open",
             reputation: 0
         });
         photos.push(photo);
@@ -53,6 +54,18 @@ contract PhotoNFTData is PhotoNFTDataStorages {
         Photo storage photo = photos[photoIndex];
         require (_newOwner != address(0), "A new owner address should be not empty");
         photo.ownerAddress = _newOwner;  
+    }
+
+    /**
+     * @notice - Update status ("Open" or "Cancelled")
+     */
+    function updateStatus(PhotoNFT _photoNFT, string memory _newStatus) public returns (bool) {
+        /// Identify photo's index
+        uint photoIndex = getPhotoIndex(_photoNFT);
+
+        /// Update metadata of a photoNFT of photo
+        Photo storage photo = photos[photoIndex];
+        photo.status = _newStatus;  
     }
 
 
