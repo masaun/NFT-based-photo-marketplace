@@ -7,7 +7,7 @@ package-lock.json
 bridge.log
 
 # lol macs
-.DS_Store/
+.DS_Store
 
 # dependencies
 /node_modules
