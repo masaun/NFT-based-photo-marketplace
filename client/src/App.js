@@ -3,6 +3,7 @@ import getWeb3, { getGanacheWeb3, Web3 } from "./utils/getWeb3";
 import Header from "./components/Header/index.js";
 import Footer from "./components/Footer/index.js";
 import Publish from "./components/Publish/index.js";
+import MyPhotos from "./components/MyPhotos/index.js";
 import PhotoMarketplace from "./components/PhotoMarketplace/index.js";
 import ipfs from './components/ipfs/ipfsApi.js'
 
@@ -85,6 +86,14 @@ class App extends Component {
     );
   }
 
+  renderMyPhotos() {
+    return (
+      <div className={styles.wrapper}>
+        <MyPhotos />
+      </div>
+    );
+  }
+
   renderPhotoMarketPlace() {
     return (
       <div className={styles.wrapper}>
@@ -98,7 +107,8 @@ class App extends Component {
       <div className={styles.App}>
         <Header />
           {this.state.route === 'publish' && this.renderPublish()}
-          {this.state.route === 'photo_marketplace' && this.renderPhotoMarketPlace()}
+          {this.state.route === 'my-photos' && this.renderMyPhotos()}
+          {this.state.route === 'photo-marketplace' && this.renderPhotoMarketPlace()}
         <Footer />
       </div>
     );
