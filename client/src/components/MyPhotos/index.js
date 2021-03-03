@@ -44,6 +44,7 @@ export default class MyPhotos extends Component {
         const { web3, accounts, photoNFTMarketplace, photoNFTData, PHOTO_NFT_MARKETPLACE } = this.state;
 
         console.log('=== value of putOnSale ===', e.target.value);
+        console.log('=== PHOTO_NFT_MARKETPLACE ===', PHOTO_NFT_MARKETPLACE);
 
         const PHOTO_NFT = e.target.value;
 
@@ -152,7 +153,7 @@ export default class MyPhotos extends Component {
 
             let instancePhotoNFTMarketplace = null;
             let instancePhotoNFTData = null;
-            let PHOTO_NFT_MARKETPLACE = null;
+            let PHOTO_NFT_MARKETPLACE;
             let deployedNetwork = null;
 
             // Create instance of contracts
@@ -193,7 +194,8 @@ export default class MyPhotos extends Component {
                     isMetaMask, 
                     currentAccount: currentAccount,
                     photoNFTMarketplace: instancePhotoNFTMarketplace,
-                    photoNFTData: instancePhotoNFTData }, () => {
+                    photoNFTData: instancePhotoNFTData,
+                    PHOTO_NFT_MARKETPLACE: PHOTO_NFT_MARKETPLACE }, () => {
                       this.refreshValues(instancePhotoNFTMarketplace);
                       setInterval(() => {
                         this.refreshValues(instancePhotoNFTMarketplace);
