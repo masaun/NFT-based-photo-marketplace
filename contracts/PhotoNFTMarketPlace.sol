@@ -16,7 +16,7 @@ contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
 
     PhotoNFTData public photoNFTData;
 
-    constructor(PhotoNFTData _photoNFTData) public {
+    constructor(PhotoNFTData _photoNFTData) public PhotoNFTTradable(_photoNFTData) {
         photoNFTData = _photoNFTData;
         address payable PHOTO_NFT_MARKETPLACE = address(uint160(address(this)));
     }

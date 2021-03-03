@@ -2,6 +2,7 @@ pragma solidity ^0.5.16;
 pragma experimental ABIEncoderV2;
 
 import { PhotoNFT } from "./PhotoNFT.sol";
+import { PhotoNFTData } from "./PhotoNFTData.sol";
 
 
 /**
@@ -12,6 +13,7 @@ contract PhotoNFTTradable {
     event TradeStatusChange(uint256 ad, bytes32 status);
 
     PhotoNFT public photoNFT;
+    PhotoNFTData public photoNFTData;
 
     struct Trade {
         address seller;
@@ -23,7 +25,8 @@ contract PhotoNFTTradable {
 
     uint256 tradeCounter;
 
-    constructor() public {
+    constructor(PhotoNFTData _photoNFTData) public {
+        photoNFTData = _photoNFTData;
         tradeCounter = 0;
     }
 
@@ -51,6 +54,8 @@ contract PhotoNFTTradable {
      * @dev Opens a trade by the seller.
      */
     function openTrade(PhotoNFT photoNFT, uint256 _photoId) public {
+        photoNFTData.updateStatus(photoNFT, "Open");
+
         Trade storage trade = trades[_photoId];
         require(
             msg.sender == trade.seller,
@@ -65,6 +70,8 @@ contract PhotoNFTTradable {
      * @dev Cancels a trade by the seller.
      */
     function cancelTrade(PhotoNFT photoNFT, uint256 _photoId) public {
+        photoNFTData.updateStatus(photoNFT, "Cancelled");
+        
         Trade storage trade = trades[_photoId];
         require(
             msg.sender == trade.seller,
