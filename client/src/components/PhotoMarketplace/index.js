@@ -16,6 +16,7 @@ export default class PhotoMarketplace extends Component {
           storageValue: 0,
           web3: null,
           accounts: null,
+          currentAccount: null,          
           route: window.location.pathname.replace("/", ""),
 
           /////// NFT
@@ -137,6 +138,8 @@ export default class PhotoMarketplace extends Component {
 
             // Use web3 to get the user's accounts.
             const accounts = await web3.eth.getAccounts();
+            const currentAccount = accounts[0];
+
             // Get the contract instance.
             const networkId = await web3.eth.net.getId();
             const networkType = await web3.eth.net.getNetworkType();
@@ -183,6 +186,7 @@ export default class PhotoMarketplace extends Component {
                     networkType, 
                     hotLoaderDisabled,
                     isMetaMask, 
+                    currentAccount: currentAccount, 
                     photoNFTMarketplace: instancePhotoNFTMarketplace,
                     photoNFTData: instancePhotoNFTData }, () => {
                       this.refreshValues(instancePhotoNFTMarketplace);
@@ -221,7 +225,7 @@ export default class PhotoMarketplace extends Component {
     }
 
     render() {
-        const { web3, allPhotos } = this.state;
+        const { web3, allPhotos, currentAccount } = this.state;
 
         return (
             <div className={styles.contracts}>
@@ -231,61 +235,66 @@ export default class PhotoMarketplace extends Component {
                 return (
                   <div key={key} className="">
                     <div className={styles.widgets}>
-                      {/* <Card width={'360px'} bg="primary"> */}
-                      <Card width={"360px"} 
-                              maxWidth={"360px"} 
-                              mx={"auto"} 
-                              my={5} 
-                              p={20} 
-                              borderColor={"#E8E8E8"}
-                      >
-                        <Image
-                          alt="random unsplash image"
-                          borderRadius={8}
-                          height="100%"
-                          maxWidth='100%'
-                          src={ `https://ipfs.io/ipfs/${photo.ipfsHashOfPhoto}` }
-                        />
 
-                        <span style={{ padding: "20px" }}></span>
+                        { currentAccount != photo.ownerAddress && photo.status == "Open" ?
+                            <Card width={"360px"} 
+                                      maxWidth={"360px"} 
+                                      mx={"auto"} 
+                                      my={5} 
+                                      p={20} 
+                                      borderColor={"#E8E8E8"}
+                            >
+                                <Image
+                                  alt="random unsplash image"
+                                  borderRadius={8}
+                                  height="100%"
+                                  maxWidth='100%'
+                                  src={ `https://ipfs.io/ipfs/${photo.ipfsHashOfPhoto}` }
+                                />
 
-                        <p>Photo Name: { photo.photoNFTName }</p>
+                                <span style={{ padding: "20px" }}></span>
 
-                        <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
+                                <p>Photo Name: { photo.photoNFTName }</p>
 
-                        {/* <p>NFT Address: { photo.photoNFT }</p> */}
+                                <p>Price: { web3.utils.fromWei(`${photo.photoPrice}`, 'ether') } ETH</p>
 
-                        <p>Owner: { photo.ownerAddress }</p>
+                                {/* <p>NFT Address: { photo.photoNFT }</p> */}
 
-                        {/* <p>Reputation Count: { photo.reputation }</p> */}
-                        
-                        <br />
+                                <p>Owner: { photo.ownerAddress }</p>
 
-                        {/* <hr /> */}
+                                {/* <p>Reputation Count: { photo.reputation }</p> */}
+                                
+                                <br />
 
-                        {/* 
-                        <Field label="Please input a NFT Address as a confirmation to buy">
-                            <Input
-                                type="text"
-                                width={1}
-                                placeholder="e.g) 0x6d7d6fED69E7769C294DE41a28aF9E118567Bc81"
-                                required={true}
-                                value={this.state.valuePhotoNFTAddress} 
-                                onChange={this.handlePhotoNFTAddress}                                        
-                            />
-                        </Field>
-                        */}
+                                {/* <hr /> */}
 
-                        <Button size={'medium'} width={1} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
+                                {/* 
+                                <Field label="Please input a NFT Address as a confirmation to buy">
+                                    <Input
+                                        type="text"
+                                        width={1}
+                                        placeholder="e.g) 0x6d7d6fED69E7769C294DE41a28aF9E118567Bc81"
+                                        required={true}
+                                        value={this.state.valuePhotoNFTAddress} 
+                                        onChange={this.handlePhotoNFTAddress}                                        
+                                    />
+                                </Field>
+                                */}
 
-                        {/* <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button> */}
+                                <Button size={'medium'} width={1} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button>
 
-                        {/* <span style={{ padding: "5px" }}></span> */}
+                                {/* <Button size={'small'} value={ photo.photoNFT } onClick={this.buyPhotoNFT}> Buy </Button> */}
 
-                        {/* <Button size={'small'} onClick={this.addReputation}> Rep </Button> */}
+                                {/* <span style={{ padding: "5px" }}></span> */}
 
-                        <span style={{ padding: "5px" }}></span>
-                      </Card>
+                                {/* <Button size={'small'} onClick={this.addReputation}> Rep </Button> */}
+
+                                <span style={{ padding: "5px" }}></span>
+                            </Card>
+                        :
+                            "" 
+                        }
+
                     </div>
                   </div>
                 )
