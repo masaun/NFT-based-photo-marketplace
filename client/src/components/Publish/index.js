@@ -125,7 +125,7 @@ export default class Publish extends Component {
             /// [Note]: Promise (nested-structure) is needed for executing those methods below (Or, rewrite by async/await)
             photoNFT.methods.approve(PHOTO_NFT_MARKETPLACE, photoId).send({ from: accounts[0] }).once('receipt', (receipt) => {
                 /// Put on sale (by a seller who is also called as owner)
-                photoNFTMarketplace.methods.openTrade(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] }).once('receipt', (receipt) => {})
+                photoNFTMarketplace.methods.openTradeWhenCreateNewPhotoNFT(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] }).once('receipt', (receipt) => {})
             })
           })
         })

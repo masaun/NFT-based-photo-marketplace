@@ -43,7 +43,7 @@ export default class MyPhotos extends Component {
     putOnSale = async (e) => {
         const { web3, accounts, photoNFTMarketplace, photoNFTData, PHOTO_NFT_MARKETPLACE } = this.state;
 
-        console.log('=== value of buyPhotoNFT ===', e.target.value);
+        console.log('=== value of putOnSale ===', e.target.value);
 
         const PHOTO_NFT = e.target.value;
 
@@ -59,14 +59,14 @@ export default class MyPhotos extends Component {
             
         /// Put on sale (by a seller who is also called as owner)
         const txReceipt1 = await photoNFT.methods.approve(PHOTO_NFT_MARKETPLACE, photoId).send({ from: accounts[0] });
-        //const txReceipt2 = await photoNFTMarketplace.methods.openTrade(PHOTO_NFT, photoId, photoPrice).send({ from: accounts[0] });
-        //console.log('=== response of openTrade ===', txReceipt2);
+        const txReceipt2 = await photoNFTMarketplace.methods.openTrade(PHOTO_NFT, photoId).send({ from: accounts[0] });
+        console.log('=== response of openTrade ===', txReceipt2);
     }
 
     cancelOnSale = async (e) => {
         const { web3, accounts, photoNFTMarketplace, photoNFTData, PHOTO_NFT_MARKETPLACE } = this.state;
 
-        console.log('=== value of buyPhotoNFT ===', e.target.value);
+        console.log('=== value of cancelOnSale ===', e.target.value);
 
         const PHOTO_NFT = e.target.value;
 
@@ -80,8 +80,8 @@ export default class MyPhotos extends Component {
         const owner = await photoNFT.methods.ownerOf(photoId).call();
         console.log('=== owner of photoId ===', owner);  /// [Expect]: Owner should be the PhotoNFTMarketplace.sol (This also called as a proxy/escrow contract)
             
-        /// Put on sale (by a seller who is also called as owner)
-        const txReceipt1 = await photoNFT.methods.approve(PHOTO_NFT_MARKETPLACE, photoId).send({ from: accounts[0] });
+        /// Cancel on sale
+        //const txReceipt1 = await photoNFT.methods.approve(PHOTO_NFT_MARKETPLACE, photoId).send({ from: accounts[0] });
         const txReceipt2 = await photoNFTMarketplace.methods.cancelTrade(PHOTO_NFT, photoId).send({ from: accounts[0] });
         console.log('=== response of cancelTrade ===', txReceipt2);
     }

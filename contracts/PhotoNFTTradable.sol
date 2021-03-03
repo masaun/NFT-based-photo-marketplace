@@ -28,11 +28,12 @@ contract PhotoNFTTradable {
     }
 
     /**
+     * @notice - This method is only executed when a seller create a new PhotoNFT
      * @dev Opens a new trade. Puts _photoId in escrow.
      * @param _photoId The id for the photoId to trade.
      * @param _photoPrice The amount of currency for which to trade the photoId.
      */
-    function openTrade(PhotoNFT photoNFT, uint256 _photoId, uint256 _photoPrice) public {
+    function openTradeWhenCreateNewPhotoNFT(PhotoNFT photoNFT, uint256 _photoId, uint256 _photoPrice) public {
         photoNFT.transferFrom(msg.sender, address(this), _photoId);
 
         tradeCounter += 1;    /// [Note]: New. Trade count is started from "1". This is to align photoId
@@ -47,10 +48,24 @@ contract PhotoNFTTradable {
     }
 
     /**
+     * @dev Opens a trade by the seller.
+     */
+    function openTrade(PhotoNFT photoNFT, uint256 _photoId) public {
+        Trade storage trade = trades[_photoId];
+        require(
+            msg.sender == trade.seller,
+            "Trade can be open only by seller."
+        );
+        photoNFT.transferFrom(address(this), trade.seller, trade.photoId);
+        trades[_photoId].status = "Open";
+        emit TradeStatusChange(_photoId, "Open");
+    }
+
+    /**
      * @dev Cancels a trade by the seller.
      */
     function cancelTrade(PhotoNFT photoNFT, uint256 _photoId) public {
-        Trade memory trade = trades[_photoId];
+        Trade storage trade = trades[_photoId];
         require(
             msg.sender == trade.seller,
             "Trade can be cancelled only by seller."
@@ -70,9 +85,16 @@ contract PhotoNFTTradable {
         Trade memory trade = getTrade(_photoId);
         require(trade.status == "Open", "Trade is not Open.");
 
+        _updateSeller(_photoNFT, _photoId, _buyer);
+
         photoNFT.transferFrom(address(this), _buyer, trade.photoId);
-        getTrade(_photoId).status = "Executed";
-        emit TradeStatusChange(_photoId, "Executed");
+        getTrade(_photoId).status = "Cancelled";
+        emit TradeStatusChange(_photoId, "Cancelled");
+    }
+
+    function _updateSeller(PhotoNFT photoNFT, uint256 _photoId, address _newSeller) internal {
+        Trade storage trade = trades[_photoId];
+        trade.seller = _newSeller;
     }
 
 

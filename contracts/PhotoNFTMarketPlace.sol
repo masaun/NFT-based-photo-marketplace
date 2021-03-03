@@ -46,7 +46,7 @@ contract PhotoNFTMarketplace is PhotoNFTTradable, PhotoNFTMarketplaceEvents {
         address ownerBeforeOwnershipTransferred = photoNFT.ownerOf(photoId);
 
         /// Transfer Ownership of the PhotoNFT from a seller to a buyer
-        transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);        
+        transferOwnershipOfPhotoNFT(photoNFT, photoId, buyer);    
         photoNFTData.updateOwnerOfPhotoNFT(photoNFT, buyer);
         photoNFTData.updateStatus(photoNFT, "Cancelled");
 
