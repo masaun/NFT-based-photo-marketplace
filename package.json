@@ -11,22 +11,8 @@
     "migrate:local": "truffle migrate --reset --network local",
     "migrate:ropsten": "truffle migrate --reset --network ropsten"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/rrecuero/zepkit.git"
-  },
-  "keywords": [
-    "zeppelinos",
-    "openzeppelin",
-    "truffle",
-    "react"
-  ],
-  "author": "Ramon Recuero <ramon@dapis.io>",
+  "author": "masaun",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/rrecuero/zepkit/issues"
-  },
-  "homepage": "https://github.com/rrecuero/zepkit#readme",
   "dependencies": {
     "dotenv": "^8.2.0",
     "@truffle/hdwallet-provider": "^1.2.0"
